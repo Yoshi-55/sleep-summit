@@ -66,3 +66,16 @@
 - Sidekiqやcronで定期的に起床・睡眠時間のリマインド通知を送信  
 - 通知内容・頻度はユーザー設定で調整可能に  
 
+---
+## 使用予定技術
+### RubyやRailsの詳細情報  
+- Ruby 3.1.x、Rails 7 APIモードを使用  
+- PostgreSQLをDBに採用  
+- Sidekiqで非同期処理、RSpecでテスト予定  
+
+### 使用Gem（主要なもの）  
+- **Devise**：ユーザー認証を簡単に安全に実装  
+- **line-bot-api**：LINE通知用APIクライアント  
+- **Sidekiq**：バックグラウンドジョブ処理  
+- **pg**：PostgreSQL用DBドライバ  
+- **Chartkick**（検討中）：グラフ表示補助  
