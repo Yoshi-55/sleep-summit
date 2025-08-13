@@ -79,3 +79,6 @@
 - **Sidekiq**：バックグラウンドジョブ処理  
 - **pg**：PostgreSQL用DBドライバ  
 - **Chartkick**（検討中）：グラフ表示補助  
+
+### 画面遷移図
+https://www.figma.com/design/zZkNgGON7zrTQuTi67yt1d/Sleep-Summit?node-id=0-1&t=AVlGwjVE7OLlMx4X-1
