@@ -80,5 +80,41 @@
 - **pg**：PostgreSQL用DBドライバ  
 - **Chartkick**（検討中）：グラフ表示補助  
 
+---
 ### 画面遷移図
 https://www.figma.com/design/zZkNgGON7zrTQuTi67yt1d/Sleep-Summit?node-id=0-1&t=AVlGwjVE7OLlMx4X-1
+---
+### ER図
+https://www.mermaidchart.com/app/projects/d407c7c4-f5e3-4018-9df8-e2186c016c46/diagrams/05ed6f75-7201-425d-b705-349f547ce8ab/version/v0.1/edit
+
+```mermaid
+
+erDiagram
+    USERS {
+        bigint id PK
+        string name
+        string email
+        string encrypted_password
+    }
+
+    SLEEP_RECORDS {
+        bigint id PK
+        bigint user_id FK
+        date_time wake_time
+        date_time bed_time
+    }
+
+    WEEKLY_STATS {
+        bigint id PK
+        bigint user_id FK
+        date week_start
+        float avg_sleep_hours
+        float avg_wake_hours
+    }
+
+    USERS ||--o{ SLEEP_RECORDS : ""
+    USERS ||--o{ WEEKLY_STATS : ""
+
+```
+---
+
