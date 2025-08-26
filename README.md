@@ -100,8 +100,8 @@ erDiagram
     SLEEP_RECORDS {
         bigint id PK
         bigint user_id FK
-        string record_type
-        datetime recorded_at
+        date_time wake_time
+        date_time bed_time
     }
 
     WEEKLY_STATS {
