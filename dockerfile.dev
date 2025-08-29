@@ -1,0 +1,23 @@
+FROM ruby:3.3.8
+
+ENV LANG=C.UTF-8
+ENV TZ=Asia/Tokyo
+ENV NODE_VERSION=20
+
+RUN apt-get update -qq && apt-get install -y \
+  build-essential \
+  libpq-dev \
+  curl \
+  gnupg \
+  ca-certificates \
+  wget \
+  vim
+
+RUN curl -fsSL https://deb.nodesource.com/setup_${NODE_VERSION}.x | bash - \
+  && apt-get install -y nodejs
+
+WORKDIR /sleep-summit
+
+RUN gem install bundler --version 3.4.25
+
+COPY . .
