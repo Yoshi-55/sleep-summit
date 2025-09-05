@@ -1,0 +1,33 @@
+
+.fade-in-delay {
+  opacity: 0;
+  animation: fadeInDelay 1.5s ease-out 3s forwards;
+}
+
+@keyframes fadeInDelay {
+  to {
+    opacity: 1;
+  }
+}
+.fade-in-left {
+  opacity: 0;
+  transform: translateX(-40px);
+  animation: fadeInLeft 2.5s ease-out forwards;
+}
+.fade-in-right {
+  opacity: 0;
+  transform: translateX(40px);
+  animation: fadeInRight 2.5s ease-out forwards;
+}
+@keyframes fadeInRight {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@keyframes fadeInLeft {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
