@@ -1,5 +1,44 @@
-<h1>Home#index</h1>
-<p>Find me in app/views/home/index.html.erb</p>
+<div class="mx-[5vw]">
+  <%= stylesheet_link_tag 'fadein', media: 'all' %>
 
+  <h1 class="text-5xl font-bold mt-40 mb-8">
+    <span class="fade-in-left inline-block">
+      毎日の習慣が、<br>綺麗な山をつくる。
+    </span>
+    <hr>
+    <p class="text-xl text-right mt-4">
+      <span class="fade-in-right inline-block">
+        起きた時間と眠る時間を簡単記録、続けるほど山は美しく育っていく。
+      </span>
+    </p>
+  </h1>
 
-<h2>Sleep Summit test deploy!!</h2>
+  <p class="fade-in-delay inline-block">
+    Sleep Summitは、起床と睡眠の記録をもとに毎日の生活リズムを山の形で表現。
+    <br>健康的な生活習慣を続けるほど美しい山が描かれ、視覚的にあなたの健康をサポートします。
+  </p>
+</div>
+
+<!-- 下矢印 -->
+<div class="w-full text-center mt-40">
+  <i class="ph ph-caret-double-down text-5xl fade-in-delay inline-block"></i>
+</div>
+
+<!-- How to Use -->
+<div class="w-full flex flex-col md:flex-row justify-center items-center mt-20 pb-32 fade-in-delay">
+  <div class="flex-1 text-left md:ml-[10vw]">
+    <h3 class="text-2xl font-bold mb-4 text-center">使い方</h3>
+    <ul class="text-lg mb-8 list-disc pl-5 max-w-[400px]">
+      <li>「起きた」ボタンを押して起床時間を記録</li>
+      <li>「眠る」ボタンを押して就寝時間を記録</li>
+      <li>記録が増えるほど、山のグラフが美しく育つ</li>
+      <li>生活リズムを可視化して、健康習慣をサポート</li>
+    </ul>
+  </div>
+
+  <div class="flex-1 flex justify-center md:mr-[5vw]">
+    <img src="/assets/sample.png"
+         alt="使い方イメージ"
+         class="max-w-[240px] rounded-xl shadow-md" />
+  </div>
+</div>
