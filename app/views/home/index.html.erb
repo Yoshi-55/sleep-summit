@@ -1,25 +1,37 @@
 <div class="mx-[5vw]">
+
   <%= stylesheet_link_tag 'fadein', media: 'all' %>
 
-  <h1 class="text-5xl font-bold mt-40 mb-8">
-    <span class="fade-in-left inline-block">
+  <div class="mt-40">
+    <h1 class="text-5xl font-bold fade-in-left block">
       毎日の習慣が、<br>綺麗な山をつくる。
-    </span>
-    <hr>
-    <p class="text-xl text-right mt-4">
-      <span class="fade-in-right inline-block">
-        起きた時間と眠る時間を簡単記録、続けるほど山は美しく育っていく。
-      </span>
-    </p>
-  </h1>
+    </h1>
 
-  <p class="fade-in-delay inline-block">
+    <hr class="my-2">
+
+    <p class="text-xl text-right fade-in-right">
+      起きた時間と眠る時間を簡単記録、続けるほど山は美しく育っていく。
+    </p>
+  </div>
+
+  <div class="text-center fade-in-delay mt-30">
+    <button class="btn btn-lg" onclick="my_modal_2.showModal()">はじめる</button>
+  </div>
+    <dialog id="my_modal_2" class="modal">
+    <div class="modal-box">
+        <h3 class="text-lg font-bold">新規、ログインの切り替えボタン</h3>
+        <p class="py-4">新規、ログインフォーム</p>
+      </div>
+      <form method="dialog" class="modal-backdrop">
+        <button>close</button>
+      </form>
+    </dialog>
+
+
+  <p class="fade-in-delay mt-30">
     Sleep Summitは、起床と睡眠の記録をもとに毎日の生活リズムを山の形で表現。
     <br>健康的な生活習慣を続けるほど美しい山が描かれ、視覚的にあなたの健康をサポートします。
   </p>
 </div>
 
 
-<div class="w-full text-center mt-40">
-  <i class="ph ph-caret-double-down text-5xl fade-in-delay inline-block"></i>
-</div>
