@@ -14,6 +14,7 @@ en:
       new:
         title: "Sign up"
         email: "Email"
+        name: "Name"
         password: "Password"
         password_confirmation: "Password confirmation"
         submit: "Sign up"
@@ -22,7 +23,7 @@ en:
     or: "or"
 
   navbar:
-    welcome: "Welcome, %{email}"
+    welcome: "Welcome, %{name}"
     logout: "Logout"
     login: "Login"
     sign_up: "Sign Up"
