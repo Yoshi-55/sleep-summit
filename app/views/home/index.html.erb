@@ -15,18 +15,10 @@
   </div>
 
   <div class="text-center fade-in-delay mt-30">
-    <button class="btn btn-lg" onclick="my_modal_2.showModal()">はじめる</button>
-  </div>
-    <dialog id="my_modal_2" class="modal">
-    <div class="modal-box">
-        <h3 class="text-lg font-bold">新規、ログインの切り替えボタン</h3>
-        <p class="py-4">新規、ログインフォーム</p>
-      </div>
-      <form method="dialog" class="modal-backdrop">
-        <button>close</button>
-      </form>
-    </dialog>
+    <%= link_to "はじめる", new_user_registration_path, class: "btn btn-lg" %>
 
+    <%# 🚧ログイン済みの場合はダッシュボードへ遷移。ダッシュボード作成時に記述！ %>
+  </div>
 
   <p class="fade-in-delay mt-30">
     Sleep Summitは、起床と睡眠の記録をもとに毎日の生活リズムを山の形で表現。
