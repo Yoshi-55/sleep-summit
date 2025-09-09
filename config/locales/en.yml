@@ -20,8 +20,9 @@ en:
         already_have_account: "Already have an account?"
         login_link: "Log in"
     or: "or"
-    navbar:
-      welcome: "Welcome, %{email}"
-      logout: "Logout"
-      login: "Login"
-      sign_up: "Sign Up"
+
+  navbar:
+    welcome: "Welcome, %{email}"
+    logout: "Logout"
+    login: "Login"
+    sign_up: "Sign Up"
