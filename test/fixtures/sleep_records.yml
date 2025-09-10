@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  bed_time: 2025-09-10 11:25:12
+  wake_time: 2025-09-10 11:25:12
+  note: MyText
+
+two:
+  user: two
+  bed_time: 2025-09-10 11:25:12
+  wake_time: 2025-09-10 11:25:12
+  note: MyText
