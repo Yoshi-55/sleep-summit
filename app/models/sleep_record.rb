@@ -2,7 +2,6 @@ class SleepRecord < ApplicationRecord
   belongs_to :user
 
   validates :bed_time, presence: true
-  validates :wake_time, presence: true
   validate :wake_time_after_bed_time
 
   validates :note, length: { maximum: 100 }, allow_blank: true
