@@ -22,6 +22,12 @@
 
   <body class="pt-16">
     <%= render 'shared/header' %>
+    <% flash.each do |key, message| %>
+      <div class="flash <%= key %>">
+        <%= message %>
+      </div>
+    <% end %>
+
   <div class="fixed inset-0 w-full h-full min-h-screen -z-10 pointer-events-none" style="background: url('<%= asset_path('bg-summit.svg') %>') center/contain no-repeat;"></div>
     <%= yield %>
     <%= render 'shared/dock' %>
