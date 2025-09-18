@@ -6,5 +6,5 @@ Rails.application.routes.draw do
   end
   root "home#index"
 
-  resources :sleep_records, only: [:index, :create, :update]
+  resources :sleep_records, only: [ :index, :create, :update ]
 end
