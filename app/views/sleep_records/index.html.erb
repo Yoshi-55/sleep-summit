@@ -1,0 +1,44 @@
+<div class="flex justify-center gap-4 mt-10 mb-10">
+
+  <%= button_to "就寝",
+        sleep_records_path,
+        method: :post,
+        class: "btn btn-lg",
+        disabled: @unwoken_record.present? %>
+
+  <%= button_to "起床",
+        (@unwoken_record ? sleep_record_path(@unwoken_record) : "#"),
+        method: :patch,
+        class: "btn btn-lg",
+        disabled: @unwoken_record.nil? %>
+</div>
+
+<h2 class="text-xl font-bold mt-6">山型起床・睡眠グラフ</h2>
+<%= line_chart [{ name: "起床/睡眠", data: @series }],
+      xtitle: "日時",
+      ytitle: "時間（h）",
+      discrete: false %>
+
+<h2 class="text-xl font-bold mt-6">睡眠/起床記録</h2>
+<table class="table-auto w-full mt-4">
+  <thead>
+    <tr>
+      <th>日</th>
+      <th>就寝時刻</th>
+      <th>起床時刻</th>
+      <th>起きていた時間（h）</th>
+      <th>睡眠時間（h）</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @record_cumulative.each do |record| %>
+      <tr>
+        <td><%= record[:day] %></td>
+        <td><%= record[:bed_time]&.strftime("%Y-%m-%d %H:%M") || "-" %></td>
+        <td><%= record[:wake_time]&.strftime("%Y-%m-%d %H:%M") || "-" %></td>
+        <td><%= record[:awake_time].round(2) %></td>
+        <td><%= record[:sleep_time].round(2) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
