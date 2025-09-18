@@ -1,6 +1,6 @@
 class SleepRecordsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_unwoken_record, only: [:update]
+  before_action :set_unwoken_record, only: [ :update ]
 
   def index
     @sleep_records = current_user.sleep_records.order(:bed_time)
@@ -53,14 +53,14 @@ class SleepRecordsController < ApplicationController
       next_bed_time = records[index + 1]&.bed_time
       if next_bed_time && record.wake_time
         total_hours = ((next_bed_time - record.wake_time)/1.hour).round(2)
-        series << [record.wake_time.iso8601, cumulative_value]
-        series << [next_bed_time.iso8601, cumulative_value + total_hours]
+        series << [ record.wake_time.iso8601, cumulative_value ]
+        series << [ next_bed_time.iso8601, cumulative_value + total_hours ]
         cumulative_value += total_hours
       end
       if record.wake_time && record.bed_time
         sleep_hours = ((record.wake_time - record.bed_time)/1.hour).round(2)
-        series << [record.bed_time.iso8601, cumulative_value]
-        series << [record.wake_time.iso8601, cumulative_value - sleep_hours]
+        series << [ record.bed_time.iso8601, cumulative_value ]
+        series << [ record.wake_time.iso8601, cumulative_value - sleep_hours ]
         cumulative_value -= sleep_hours
       end
     end
