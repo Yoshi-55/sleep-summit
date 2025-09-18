@@ -24,8 +24,14 @@
     <%= render 'shared/header' %>
     <%= render 'shared/flash' %>
 
-  <div class="fixed inset-0 w-full h-full min-h-screen -z-10 pointer-events-none" style="background: url('<%= asset_path('bg-summit.svg') %>') center/contain no-repeat;"></div>
-    <%= yield %>
+    <div class="fixed inset-0 w-full h-[calc(100vh-64px)] -z-10 pointer-events-none"
+      style="background: url('<%= asset_path('bg-summit.svg') %>') center/contain no-repeat;">
+    </div>
+
+    <main class="pb-16">
+      <%= yield %>
+    </main>
+
     <%= render 'shared/dock' %>
   </body>
 </html>

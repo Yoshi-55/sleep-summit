@@ -10,13 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_09_10_151124) do
+ActiveRecord::Schema[7.2].define(version: 2025_09_13_070358) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "sleep_records", force: :cascade do |t|
     t.bigint "user_id", null: false
-    t.datetime "bed_time", null: false
+    t.datetime "bed_time"
     t.datetime "wake_time"
     t.text "note"
     t.datetime "created_at", null: false
