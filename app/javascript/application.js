@@ -1,6 +1,10 @@
-// Entry point for the build script in your package.json
 import "@hotwired/turbo-rails"
 import "./controllers"
 
-import "./dock_active";
-import "chartkick/chart.js"
+import "./dock_active"
+
+import "chartkick/highcharts"
+import Highcharts from "highcharts"
+window.Highcharts = Highcharts
+
+import "./charts/sleep_chart"
