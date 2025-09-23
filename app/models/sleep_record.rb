@@ -51,15 +51,20 @@ class SleepRecord < ApplicationRecord
     cumulative_wake = 0.0
 
     recent_records.group_by { |r| r.bed_time.to_date }.map do |day, day_records|
-      day_records.each do |r|
-        if r.wake_time
-          sleep_hours = ((r.wake_time - r.bed_time)/1.hour).round(2)
-          cumulative_sleep += sleep_hours
+      day_records.each_with_index do |r, index|
+        next unless r.wake_time
 
-          next_bed_time = day_records.find { |nr| nr.bed_time > r.wake_time }&.bed_time
-          awake_hours = next_bed_time ? ((next_bed_time - r.wake_time)/1.hour).round(2) : 0
-          cumulative_wake += awake_hours
+        sleep_hours = ((r.wake_time - r.bed_time) / 1.hour).round(2)
+        cumulative_sleep += sleep_hours
+
+        next_bed_time = records.find { |nr| nr.bed_time > r.wake_time }&.bed_time
+
+        awake_hours = if next_bed_time
+                        ((next_bed_time - r.wake_time)/1.hour).round(2)
+        else
+                        ((Time.current - r.wake_time)/1.hour).round(2)
         end
+        cumulative_wake += awake_hours
       end
 
       {
