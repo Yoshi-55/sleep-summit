@@ -21,7 +21,7 @@ gem "jbuilder"
 
 gem "devise"
 
-gem "chartkick"
+# グラフ関連(日付グループ化のみgem、highchartsはyarnでインストール)
 gem "groupdate"
 
 # Use Redis adapter to run Action Cable in production
