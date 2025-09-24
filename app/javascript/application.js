@@ -1,8 +1,6 @@
 import "@hotwired/turbo-rails"
 import "./controllers"
 
-import "./dock_active"
-
 import "chartkick/highcharts"
 import Highcharts from "highcharts"
 window.Highcharts = Highcharts
