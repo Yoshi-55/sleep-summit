@@ -1,0 +1,28 @@
+<h2 class="text-xl font-bold mt-6">過去の睡眠/起床記録一覧</h2>
+
+<table class="table w-full text-center">
+  <thead>
+    <tr>
+      <th>日付</th>
+      <th>就寝時刻</th>
+      <th>起床時刻</th>
+      <th>メモ</th>
+      <th>累計睡眠時間（h）</th>
+      <th>累計起床時間（h）</th>
+      <th>累計活動時間（h）</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @records.each do |date, info| %>
+      <tr>
+        <td><%= date.strftime("%Y-%m-%d") %></td>
+        <td><%= info[:records].map { |r| r.bed_time.strftime("%H:%M") }.join(", ") %></td>
+        <td><%= info[:records].map { |r| r.wake_time&.strftime("%H:%M") || "未起床" }.join(", ") %></td>
+        <td><%= info[:records].map(&:note).reject(&:blank?).join(", ") %></td>
+        <td><%= info[:cumulative_sleep] %></td>
+        <td><%= info[:cumulative_wake] %></td>
+        <td><%= info[:cumulative_activity] %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
