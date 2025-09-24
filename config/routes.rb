@@ -10,5 +10,5 @@ Rails.application.routes.draw do
 
   get "history", to: "history#index"
 
-  resources :sleep_records, only: [:create, :update]
+  resources :sleep_records, only: [ :create, :update ]
 end
