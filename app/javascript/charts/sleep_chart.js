@@ -11,10 +11,23 @@ document.addEventListener("turbo:load", () => {
 
   new Chartkick.LineChart(chartElement, seriesData, {
     xtitle: "時間",
-    ytitle: "累積時間（h）",
+    ytitle: "累計活動時間（h）",
     discrete: false,
     library: {
-      chart: { backgroundColor: "transparent" },
+      chart: { backgroundColor: "transparent", type: "area" },
+      plotOptions: {
+        area: {
+          marker: {
+            enabled: true,
+            radius: 4,
+            symbol: "circle"
+          },
+          lineWidth: 2,
+          fillOpacity: 0.3,
+          threshold: -20,
+          negativeFillColor: "rgba(0,0,0,0)"
+        }
+      },
       xAxis: {
         lineColor: "#ffffff",
         tickColor: "#ffffff",
@@ -27,13 +40,6 @@ document.addEventListener("turbo:load", () => {
         labels: { style: { color: "#ffffff" } },
         title: { style: { color: "#ffffff", fontWeight: "bold" } },
         gridLineColor: "#ffffff"
-      },
-      plotOptions: {
-        series: {
-          color: "#1E90FF",
-          connectNulls: true,
-          marker: { radius: 4, symbol: 'circle' }
-        }
       }
     }
   });

@@ -3,7 +3,7 @@ class SleepRecord < ApplicationRecord
 
   validates :bed_time, presence: true
   validate :wake_time_after_bed_time
-  validates :note, length: { maximum: 100 }, allow_blank: true
+  # validates :note, length: { maximum: 100 }, allow_blank: true
 
   scope :unwoken, -> { where(wake_time: nil) }
 
