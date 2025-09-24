@@ -1,13 +1,15 @@
 <div class="dock text-2xl">
-  <button class="dock-active">
+  <%= link_to dashboard_path,
+    class: "#{current_page?(dashboard_path) ? 'dock-active' : ''}" do %>
     <i class="ph ph-house"></i>
     <span class="dock-label">Dashboard</span>
-  </button>
+  <% end %>
 
-  <button>
+  <%= link_to history_path,
+    class: "#{current_page?(history_path) ? 'dock-active' : ''}" do %>
     <i class="ph ph-clock-counter-clockwise"></i>
-    <span class="dock-label">Records</span>
-  </button>
+    <span class="dock-label">History</span>
+  <% end %>
 
   <button>
     <i class="ph ph-trophy"></i>
