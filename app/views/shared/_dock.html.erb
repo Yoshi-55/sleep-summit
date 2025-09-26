@@ -13,11 +13,12 @@
 
   <button>
     <i class="ph ph-trophy"></i>
-    <span class="dock-label">Ranking</span>
+    <span class="dock-label">Task</span>
   </button>
 
-  <button>
+  <%= link_to profile_path,
+    class: "#{current_page?(profile_path) ? 'dock-active' : ''}" do %>
     <i class="ph ph-user"></i>
     <span class="dock-label">Profile</span>
-  </button>
+  <% end %>
 </div>

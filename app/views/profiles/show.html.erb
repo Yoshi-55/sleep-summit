@@ -1,0 +1,10 @@
+<h2 class="text-xl font-bold mt-6">プロフィール</h2>
+<div class="mt-4">
+  <p><strong>ユーザー名:</strong> <%= @user.name %></p>
+
+  <%= button_to "ユーザー名変更", "#", class: "btn btn-primary mt-4", disabled: true %>
+  <%= button_to "ログアウト", "#", class: "btn btn-error mt-4", disabled: true %>
+  <%= button_to "ヘルプ・使い方", "#", class: "btn btn-info mt-4", disabled: true %>
+  <%= button_to "お問い合わせ", "#", class: "btn btn-info mt-4", disabled: true %>
+  <%= button_to "利用規約", "#", class: "btn btn-info mt-4", disabled: true %>
+</div>
