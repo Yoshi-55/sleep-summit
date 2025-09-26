@@ -1,6 +1,6 @@
 class SleepRecordsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_unwoken_record, only: [:update]
+  before_action :set_unwoken_record, only: [ :update ]
 
   def create
     if @unwoken_record
