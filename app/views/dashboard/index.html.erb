@@ -6,27 +6,33 @@
 <h2 class="text-xl font-bold mt-6 text-center">起床・睡眠グラフ</h2>
 <div id="sleep-chart" data-series='<%= @series.to_json.html_safe %>'></div>
 
-<h2 class="text-xl font-bold mt-6 text-center">睡眠/起床記録（直近7日間）</h2>
+<h2 class="text-xl font-bold mt-6 text-center">睡眠/起床記録（1週間）</h2>
 <table class="table w-full">
   <thead>
     <tr>
       <th>日付</th>
       <th>就寝時刻</th>
       <th>起床時刻</th>
-      <th>累積睡眠時間（h）</th>
-      <th>累積起床時間（h）</th>
-      <th>累計活動時間（h）</th>
+      <th>週/睡眠時間（h）</th>
+      <th>週/起床時間（h）</th>
+      <th>週/活動時間（h）</th>
     </tr>
   </thead>
   <tbody>
     <% @weekly_records.each do |record| %>
       <tr>
-        <td><%= record[:day].strftime("%Y-%m-%d") %></td>
-        <td><%= record[:bed_times].join(", ") %></td>
-        <td><%= record[:wake_times].join(", ") %></td>
-        <td><%= record[:cumulative_sleep_hours] %></td>
-        <td><%= record[:cumulative_wake_hours] %></td>
-        <td><%= (record[:cumulative_wake_hours] - record[:cumulative_sleep_hours]).round(2) %></td>
+  <td><%= record[:day].strftime("%Y-%m-%d（%a）") %></td>
+        <td><%= record[:bed_times].present? ? record[:bed_times].join(", ") : '-' %></td>
+        <td><%= record[:wake_times].present? ? record[:wake_times].join(", ") : '-' %></td>
+        <td><%= record[:cumulative_sleep_hours].nil? ? '-' : record[:cumulative_sleep_hours] %></td>
+        <td><%= record[:cumulative_wake_hours].nil? ? '-' : record[:cumulative_wake_hours] %></td>
+        <td>
+          <% if record[:cumulative_sleep_hours] && record[:cumulative_wake_hours] %>
+            <%= (record[:cumulative_wake_hours] - record[:cumulative_sleep_hours]).round(2) %>
+          <% else %>
+            -
+          <% end %>
+        </td>
       </tr>
     <% end %>
   </tbody>

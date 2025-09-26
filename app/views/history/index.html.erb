@@ -1,26 +1,37 @@
-<h2 class="text-xl font-bold mt-6">過去の睡眠/起床記録一覧</h2>
 
-<table class="table w-full text-center">
-  <thead>
-    <tr>
-      <th>日付</th>
-      <th>就寝時刻</th>
-      <th>起床時刻</th>
-      <th>累計睡眠時間（h）</th>
-      <th>累計起床時間（h）</th>
-      <th>累計活動時間（h）</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @records.each do |record| %>
-  <tr>
-    <td><%= record[:day].strftime("%Y-%m-%d") %></td>
-    <td><%= record[:bed_times].join(", ") %></td>
-    <td><%= record[:wake_times].join(", ") %></td>
-    <td><%= record[:cumulative_sleep_hours] %></td>
-    <td><%= record[:cumulative_wake_hours] %></td>
-    <td><%= (record[:cumulative_wake_hours] - record[:cumulative_sleep_hours]).round(2) %></td>
-  </tr>
+<h2 class="text-xl font-bold mt-6">過去の睡眠/起床記録一覧（月ごと）</h2>
+
+<% @monthly_records_list.each_with_index do |month_data, idx| %>
+  <h3 class="text-lg font-bold mt-8 mb-2"><%= month_data[:month].strftime("%Y年%m月") %></h3>
+  <div id="sleep-chart-<%= idx %>" data-series='<%= @monthly_series_list[idx][:series].to_json.html_safe %>' style="height: 300px; margin-bottom: 2rem;"></div>
+  <table class="table w-full text-center mb-8">
+    <thead>
+      <tr>
+        <th>日付</th>
+        <th>就寝時刻</th>
+        <th>起床時刻</th>
+        <th>月/累計睡眠時間（h）</th>
+        <th>月/累計起床時間（h）</th>
+        <th>月/累計活動時間（h）</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% month_data[:records].each do |record| %>
+        <tr>
+          <td><%= record[:day].strftime("%m-%d（%a）") %></td>
+          <td><%= record[:bed_times].present? ? record[:bed_times].join(", ") : '-' %></td>
+          <td><%= record[:wake_times].present? ? record[:wake_times].join(", ") : '-' %></td>
+          <td><%= record[:cumulative_sleep_hours].nil? ? '-' : record[:cumulative_sleep_hours] %></td>
+          <td><%= record[:cumulative_wake_hours].nil? ? '-' : record[:cumulative_wake_hours] %></td>
+          <td>
+            <% if record[:cumulative_sleep_hours] && record[:cumulative_wake_hours] %>
+              <%= (record[:cumulative_wake_hours] - record[:cumulative_sleep_hours]).round(2) %>
+            <% else %>
+              -
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
 <% end %>
-  </tbody>
-</table>

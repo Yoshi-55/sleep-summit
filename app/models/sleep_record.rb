@@ -1,4 +1,52 @@
 class SleepRecord < ApplicationRecord
+  def self.build_cumulative(records, days_range)
+  grouped = records.group_by { |r| r.wake_time&.to_date || r.bed_time.to_date }
+
+    cumulative_sleep = 0.0
+    cumulative_wake = 0.0
+
+    days_range.map do |day|
+      day_records = grouped[day] || []
+      if day_records.any? { |r| r.wake_time }
+        day_records.sort_by!(&:bed_time)
+        day_records.each do |r|
+          next unless r.wake_time
+          sleep_hours = ((r.wake_time - r.bed_time)/1.hour).round(2)
+          cumulative_sleep += sleep_hours
+
+          next_bed_time = records.find { |nr| nr.bed_time > r.wake_time }&.bed_time
+          awake_hours = if next_bed_time
+                          ((next_bed_time - r.wake_time)/1.hour).round(2)
+          else
+                          ((Time.current - r.wake_time)/1.hour).round(2)
+          end
+          cumulative_wake += awake_hours
+        end
+        {
+          day: day,
+          bed_times: day_records.map { |r| r.bed_time.strftime("%H:%M") },
+          wake_times: day_records.map { |r| r.wake_time&.strftime("%H:%M") },
+          cumulative_sleep_hours: cumulative_sleep.round(2),
+          cumulative_wake_hours: cumulative_wake.round(2)
+        }
+      else
+        {
+          day: day,
+          bed_times: [],
+          wake_times: [],
+          cumulative_sleep_hours: nil,
+          cumulative_wake_hours: nil
+        }
+      end
+    end
+  end
+  def self.build_monthly_cumulative(records, date: Date.today)
+    start_of_month = date.beginning_of_month
+    end_of_month = date.end_of_month
+    days_in_month = (start_of_month..end_of_month).to_a
+    monthly_records = records.select { |r| r.bed_time.to_date >= start_of_month && r.bed_time.to_date <= end_of_month }
+    build_cumulative(monthly_records, days_in_month)
+  end
   belongs_to :user
 
   validates :bed_time, presence: true
@@ -13,8 +61,11 @@ class SleepRecord < ApplicationRecord
 
   def self.build_series(records, days: nil)
     if days
-      cutoff = Time.current.beginning_of_day - (days - 1).days
-      records = records.select { |r| r.bed_time >= cutoff }
+      today = Date.today
+      start_of_week = today - ((today.wday == 0 ? 6 : today.wday - 1)) # 月曜始まり
+      cutoff = start_of_week.beginning_of_day
+      end_of_week = (start_of_week + days).beginning_of_day
+      records = records.select { |r| r.bed_time >= cutoff && r.bed_time < end_of_week }
     end
 
     cumulative_value = 0.0
@@ -42,39 +93,13 @@ class SleepRecord < ApplicationRecord
   end
 
   def self.build_weekly_cumulative(records, days: 7)
-    return [] if records.blank?
-
-    cutoff = Time.current.beginning_of_day - (days - 1).days
-    recent_records = records.select { |r| r.bed_time >= cutoff }.sort_by(&:bed_time)
-
-    cumulative_sleep = 0.0
-    cumulative_wake = 0.0
-
-    recent_records.group_by { |r| r.bed_time.to_date }.map do |day, day_records|
-      day_records.each_with_index do |r, index|
-        next unless r.wake_time
-
-        sleep_hours = ((r.wake_time - r.bed_time) / 1.hour).round(2)
-        cumulative_sleep += sleep_hours
-
-        next_bed_time = records.find { |nr| nr.bed_time > r.wake_time }&.bed_time
-
-        awake_hours = if next_bed_time
-                        ((next_bed_time - r.wake_time)/1.hour).round(2)
-        else
-                        ((Time.current - r.wake_time)/1.hour).round(2)
-        end
-        cumulative_wake += awake_hours
-      end
-
-      {
-        day: day,
-        bed_times: day_records.map { |r| r.bed_time.strftime("%H:%M") },
-        wake_times: day_records.map { |r| r.wake_time&.strftime("%H:%M") },
-        cumulative_sleep_hours: cumulative_sleep.round(2),
-        cumulative_wake_hours: cumulative_wake.round(2)
-      }
-    end.sort_by { |r| r[:day] }
+    today = Date.today
+    start_of_week = today - ((today.wday == 0 ? 6 : today.wday - 1)) # 月曜始まり
+    cutoff = start_of_week.beginning_of_day
+    end_of_week = (start_of_week + days).beginning_of_day
+    recent_records = records.select { |r| r.bed_time >= cutoff && r.bed_time < end_of_week }
+    week_days = (0...days).map { |i| start_of_week + i }
+    build_cumulative(recent_records, week_days)
   end
 
   private
