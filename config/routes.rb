@@ -10,5 +10,7 @@ Rails.application.routes.draw do
 
   get "history", to: "history#index"
 
+  get "profile", to: "profiles#show"
+
   resources :sleep_records, only: [ :create, :update ]
 end
