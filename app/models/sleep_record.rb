@@ -9,63 +9,28 @@ class SleepRecord < ApplicationRecord
   scope :finished, -> { where.not(bed_time: nil) }
 
   def self.build_cumulative(records, days_range)
-  grouped = records.group_by { |r| r.wake_time&.to_date || r.bed_time.to_date }
+    return [] if records.empty?
 
-    cumulative_sleep = 0.0
-    cumulative_wake = 0.0
+    sorted_records = records.with_wake_time.order(:wake_time)
+    records_by_date = records.group_by { |r| r.wake_time&.to_date }.compact
 
     days_range.map do |day|
-      day_records = grouped[day] || []
-      if day_records.any? { |r| r.wake_time }
-        day_records.sort_by!(&:bed_time)
-        day_records.each do |r|
-          next unless r.wake_time
-          sleep_hours = ((r.wake_time - r.bed_time)/1.hour).round(2)
-          cumulative_sleep += sleep_hours
+      day_records = records_by_date[day] || []
+      records_until_day = sorted_records.where("wake_time <= ?", day.end_of_day)
 
-          next_bed_time = records.find { |nr| nr.bed_time > r.wake_time }&.bed_time
-          awake_hours = if next_bed_time
-                          ((next_bed_time - r.wake_time)/1.hour).round(2)
-          else
-                          ((Time.current - r.wake_time)/1.hour).round(2)
-          end
-          cumulative_wake += awake_hours
-        end
-        {
-          day: day,
-          bed_times: day_records.map { |r| r.bed_time.strftime("%H:%M") },
-          wake_times: day_records.map { |r| r.wake_time&.strftime("%H:%M") },
-          cumulative_sleep_hours: cumulative_sleep.round(2),
-          cumulative_wake_hours: cumulative_wake.round(2)
-        }
-      else
-        {
-          day: day,
-          bed_times: [],
-          wake_times: [],
-          cumulative_sleep_hours: nil,
-          cumulative_wake_hours: nil
-        }
-      end
+      cumulative_sleep, cumulative_wake = calculate_cumulative_times(records_until_day)
+
+      day_records.any? ?
+        build_day_data(day_records, sorted_records, cumulative_sleep, cumulative_wake) :
+        build_empty_day_data(day, cumulative_sleep, cumulative_wake)
     end
   end
-  def self.build_monthly_cumulative(records, date: Date.today)
-    start_of_month = date.beginning_of_month
-    end_of_month = date.end_of_month
-    days_in_month = (start_of_month..end_of_month).to_a
-    monthly_records = records.select { |r| r.bed_time.to_date >= start_of_month && r.bed_time.to_date <= end_of_month }
-    build_cumulative(monthly_records, days_in_month)
-  end
-  belongs_to :user
 
-  validates :bed_time, presence: true
-  validate :wake_time_after_bed_time
-  # validates :note, length: { maximum: 100 }, allow_blank: true
-
-  scope :unwoken, -> { where(wake_time: nil) }
-
-  def self.total_sleep_hours(records)
-    records.select(&:wake_time).sum { |r| ((r.wake_time - r.bed_time)/1.hour).round(2) }
+  def self.build_weekly_cumulative(records, days: 7)
+    week_range = get_week_range(days)
+    recent_records = records.where(wake_time: week_range)
+    week_days = week_range.begin.to_date..(week_range.begin.to_date + days - 1)
+    build_cumulative(recent_records, week_days.to_a)
   end
 
   def self.build_series(records, days: nil)
