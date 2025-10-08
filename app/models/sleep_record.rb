@@ -67,6 +67,14 @@ class SleepRecord < ApplicationRecord
     cumulative_sleep
   end
 
+  def self.total_wake_hours(records)
+    return 0.0 if records.empty?
+
+    ordered_records = records.with_wake_time.order(:wake_time)
+    _, cumulative_wake = calculate_cumulative_times(ordered_records)
+    cumulative_wake
+  end
+
   private
 
   def wake_time_after_bed_time
