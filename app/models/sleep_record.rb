@@ -1,4 +1,13 @@
 class SleepRecord < ApplicationRecord
+  belongs_to :user
+
+  validates :wake_time, presence: true
+  validate :bed_time_after_wake_time
+
+  scope :unbedded, -> { where(bed_time: nil) }
+  scope :with_wake_time, -> { where.not(wake_time: nil) }
+  scope :finished, -> { where.not(bed_time: nil) }
+
   def self.build_cumulative(records, days_range)
   grouped = records.group_by { |r| r.wake_time&.to_date || r.bed_time.to_date }
 
