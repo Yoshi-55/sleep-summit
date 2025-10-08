@@ -34,32 +34,25 @@ class SleepRecord < ApplicationRecord
   end
 
   def self.build_series(records, days: nil)
-    if days
-      today = Date.today
-      start_of_week = today - ((today.wday == 0 ? 6 : today.wday - 1)) # 月曜始まり
-      cutoff = start_of_week.beginning_of_day
-      end_of_week = (start_of_week + days).beginning_of_day
-      records = records.select { |r| r.bed_time >= cutoff && r.bed_time < end_of_week }
-    end
+    filtered_records = days ? records.where(wake_time: get_week_range(days)) : records
+    ordered_records = filtered_records.with_wake_time.order(:wake_time)
 
     cumulative_value = 0.0
     series = []
 
-    records.sort_by(&:bed_time).each_with_index do |record, index|
-      next unless record.bed_time
-      wake_time = record.wake_time || Time.current
-      sleep_hours = ((wake_time - record.bed_time) / 1.hour).round(2)
+    ordered_records.includes(:user).each_with_index do |record, index|
+      series << [ record.wake_time.iso8601, cumulative_value ]
 
-      series << [ record.bed_time.iso8601, cumulative_value ]
-      cumulative_value -= sleep_hours
-      series << [ wake_time.iso8601, cumulative_value ]
+      bed_time = record.bed_time || Time.current
+      awake_hours = time_diff_hours(record.wake_time, bed_time)
+      cumulative_value += awake_hours
+      series << [ bed_time.iso8601, cumulative_value ]
 
-      next_bed_time = records[index + 1]&.bed_time
-      if next_bed_time
-        awake_hours = ((next_bed_time - wake_time) / 1.hour).round(2)
-        series << [ wake_time.iso8601, cumulative_value ]
-        cumulative_value += awake_hours
-        series << [ next_bed_time.iso8601, cumulative_value ]
+      next_record = ordered_records[index + 1]
+      if next_record&.wake_time && record.bed_time
+        sleep_hours = time_diff_hours(record.bed_time, next_record.wake_time)
+        cumulative_value -= sleep_hours
+        series << [ next_record.wake_time.iso8601, cumulative_value ]
       end
     end
 
