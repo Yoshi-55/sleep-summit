@@ -59,14 +59,12 @@ class SleepRecord < ApplicationRecord
     series
   end
 
-  def self.build_weekly_cumulative(records, days: 7)
-    today = Date.today
-    start_of_week = today - ((today.wday == 0 ? 6 : today.wday - 1)) # 月曜始まり
-    cutoff = start_of_week.beginning_of_day
-    end_of_week = (start_of_week + days).beginning_of_day
-    recent_records = records.select { |r| r.bed_time >= cutoff && r.bed_time < end_of_week }
-    week_days = (0...days).map { |i| start_of_week + i }
-    build_cumulative(recent_records, week_days)
+  def self.total_sleep_hours(records)
+    return 0.0 if records.empty?
+
+    ordered_records = records.with_wake_time.order(:wake_time)
+    cumulative_sleep, _ = calculate_cumulative_times(ordered_records)
+    cumulative_sleep
   end
 
   private
