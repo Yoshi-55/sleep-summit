@@ -169,5 +169,19 @@ class SleepRecord < ApplicationRecord
     time.strftime("%m/%d %H:%M")
   end
 
+  # -- バリデーション --
+
+  def bed_time_after_wake_time
+    return if wake_time.blank? || bed_time.blank?
+
+    if bed_time.to_date == wake_time.to_date
+      return if bed_time > wake_time
+    elsif bed_time.to_date == wake_time.to_date + 1.day
+      return
+    elsif bed_time.to_date > wake_time.to_date
+      return
+    end
+
+    errors.add(:bed_time, "無効な入力です。就寝時間は起床時間より後に設定してください。")
   end
 end
