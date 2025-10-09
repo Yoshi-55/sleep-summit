@@ -20,9 +20,11 @@ class SleepRecord < ApplicationRecord
 
       cumulative_sleep, cumulative_wake = calculate_cumulative_times(records_until_day)
 
-      day_records.any? ?
-        build_day_data(day_records, sorted_records, cumulative_sleep, cumulative_wake) :
+      if day_records.any?
+        build_day_data(day_records, sorted_records, cumulative_sleep, cumulative_wake)
+      else
         build_empty_day_data(day, cumulative_sleep, cumulative_wake)
+      end
     end
   end
 
