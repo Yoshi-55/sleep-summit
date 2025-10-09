@@ -155,5 +155,19 @@ class SleepRecord < ApplicationRecord
 
     result
   end
+
+  # -- フォーマット --
+
+  def self.format_cumulative(value)
+    return nil unless value.positive?
+    formatted = value.round(2)
+    formatted % 1 == 0 ? formatted.to_i.to_s : sprintf("%.2f", formatted)
+  end
+
+  def self.format_time(time)
+    return nil unless time
+    time.strftime("%m/%d %H:%M")
+  end
+
   end
 end
