@@ -111,5 +111,17 @@ class SleepRecord < ApplicationRecord
       cumulative_wake_hours: format_cumulative(cumulative_wake)
     }
   end
+
+  def self.build_empty_day_data(day, cumulative_sleep, cumulative_wake)
+    {
+      day: day,
+      wake_times: [],
+      bed_times: [],
+      daily_sleep_hours: nil,
+      daily_wake_hours: nil,
+      cumulative_sleep_hours: nil,
+      cumulative_wake_hours: nil
+    }
+  end
   end
 end
