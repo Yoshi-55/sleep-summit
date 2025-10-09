@@ -77,6 +77,24 @@ class SleepRecord < ApplicationRecord
 
   private
 
+  def self.calculate_cumulative_times(records)
+    return [ 0.0, 0.0 ] if records.empty?
 
+    cumulative_sleep = 0.0
+    cumulative_wake = 0.0
+    ordered_records = records.is_a?(ActiveRecord::Relation) ? records.to_a : records
+
+    ordered_records.each_with_index do |record, index|
+      end_time = record.bed_time || Time.current
+      cumulative_wake += time_diff_hours(record.wake_time, end_time)
+
+      next_record = ordered_records[index + 1]
+      if record.bed_time && next_record
+        cumulative_sleep += time_diff_hours(record.bed_time, next_record.wake_time)
+      end
+    end
+
+    [ cumulative_sleep, cumulative_wake ]
+  end
   end
 end
