@@ -123,5 +123,27 @@ class SleepRecord < ApplicationRecord
       cumulative_wake_hours: nil
     }
   end
+
+  def self.calculate_daily_sleep(first_record, all_records)
+    index = all_records.index(first_record)
+    return nil unless index&.positive?
+
+    prev_record = all_records[index - 1]
+    return nil unless prev_record.bed_time
+
+    time_diff_hours(prev_record.bed_time, first_record.wake_time)
+  end
+
+  def self.calculate_daily_wake(first_record, last_record)
+    end_time = last_record.bed_time || Time.current
+    time_diff_hours(first_record.wake_time, end_time)
+  end
+
+  def self.get_week_range(days)
+    today = Date.current
+    start_of_week = today.beginning_of_week(:monday)
+    start_of_week.beginning_of_day...(start_of_week + days.days).beginning_of_day
+  end
+
   end
 end
