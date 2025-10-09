@@ -145,5 +145,15 @@ class SleepRecord < ApplicationRecord
     start_of_week.beginning_of_day...(start_of_week + days.days).beginning_of_day
   end
 
+  # 時間差計算（日跨ぎ対応）
+  def self.time_diff_hours(start_time, end_time)
+    return 0.0 unless start_time && end_time
+
+    seconds = end_time.to_time - start_time.to_time
+    hours = seconds / 3600.0
+    result = [ hours, 0.0 ].max.round(2)
+
+    result
+  end
   end
 end
