@@ -96,5 +96,20 @@ class SleepRecord < ApplicationRecord
 
     [ cumulative_sleep, cumulative_wake ]
   end
+
+  def self.build_day_data(day_records, all_records, cumulative_sleep, cumulative_wake)
+    first_record = day_records.min_by(&:wake_time)
+    last_record = day_records.max_by(&:wake_time)
+
+    {
+      day: first_record.wake_time.to_date,
+      wake_times: [ format_time(first_record.wake_time) ],
+      bed_times: last_record.bed_time ? [ format_time(last_record.bed_time) ] : [],
+      daily_sleep_hours: calculate_daily_sleep(first_record, all_records),
+      daily_wake_hours: calculate_daily_wake(first_record, last_record),
+      cumulative_sleep_hours: format_cumulative(cumulative_sleep),
+      cumulative_wake_hours: format_cumulative(cumulative_wake)
+    }
+  end
   end
 end
