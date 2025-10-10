@@ -1,6 +1,5 @@
 <div class="min-h-screen">
   <div class="container mx-auto p-8">
-
     <div class="navbar mb-8">
       <div class="navbar-start">
         <h1 class="text-5xl font-bold text-base-content">Dashboard</h1>
@@ -11,25 +10,22 @@
         </span>
       </div>
     </div>
-
     <div class="flex flex-col lg:flex-row gap-6 mb-8">
       <!-- 左カラム -->
       <div class="w-full lg:flex-[7] flex flex-col gap-4">
-
         <!-- グラフ -->
         <div class="card bg-base-100 border border-base-300">
           <div class="card-body p-6">
             <div class="flex items-center justify-between mb-4">
-              <h3 class="text-2xl font-bold">活動パターン</h3>
+              <h3 class="text-2xl font-bold">活動グラフ</h3>
               <span class="badge badge-outline">１週間</span>
             </div>
             <div id="sleep-chart"
-                data-series='<%= @series.to_json.html_safe %>'
-                style="height: 350px;">
+              data-series='<%= @series.to_json.html_safe %>'
+              style="height: 350px;">
             </div>
           </div>
         </div>
-
         <!-- 統計 -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div class="card bg-base-100 border border-base-300 text-center p-4">
