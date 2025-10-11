@@ -2,17 +2,24 @@ class DashboardController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    sleep_records = current_user.sleep_records.order(:bed_time)
-    @unwoken_record = sleep_records.unwoken.first
+    week_start = Date.current.beginning_of_week(:sunday).beginning_of_day
+    week_end   = Date.current.end_of_week(:sunday).end_of_day
 
-    @series = SleepRecord.build_series(sleep_records, days: 7)
-    @weekly_records = SleepRecord.build_weekly_cumulative(sleep_records, days: 7)
+    @week_records = current_user.sleep_records.finished.where(wake_time: week_start..week_end).order(:wake_time)
+    # unwoken(未就寝)
+    @unwoken_record = current_user.sleep_records.unbedded.first
 
-    finished_records = sleep_records.select(&:wake_time)
-    @today_sleep = finished_records.find do |r|
-      r.bed_time.to_date == Date.current && r.wake_time.to_date == Date.current
-    end
-    @total_sleep_hours = SleepRecord.total_sleep_hours(finished_records)
-    @average_sleep_hours = finished_records.any? ? (@total_sleep_hours / finished_records.size).round(2) : 0
+    @series = SleepRecord.build_series(@week_records, range: week_start..week_end)
+
+    week_days = (week_start.to_date..week_end.to_date).to_a
+    @weekly_records = SleepRecord.build_cumulative(@week_records, week_days)
+
+    # 平均時間
+    @weekly_average_wake_hours  = SleepRecord.average_wake_hours(@week_records)
+    @weekly_average_sleep_hours = SleepRecord.average_sleep_hours(@week_records)
+
+    # 平均時刻
+    @weekly_average_wake_time = SleepRecord.average_time(@week_records.with_wake_time, :wake_time)
+    @weekly_average_bed_time  = SleepRecord.average_time(@week_records, :bed_time)
   end
 end

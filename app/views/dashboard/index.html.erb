@@ -1,39 +1,199 @@
-<div class="flex justify-center gap-4 mt-10 mb-10">
-  <%= button_to "就寝", sleep_records_path, method: :post, class: "btn btn-lg", disabled: @unwoken_record.present? %>
-  <%= button_to "起床", (@unwoken_record ? sleep_record_path(@unwoken_record) : "#"), method: :patch, class: "btn btn-lg", disabled: @unwoken_record.nil? %>
+<div class="min-h-screen">
+  <div class="container mx-auto p-8">
+    <div class="navbar mb-8">
+      <div class="navbar-start">
+        <h1 class="text-5xl font-bold text-base-content">Dashboard</h1>
+      </div>
+      <div class="navbar-end flex gap-2 items-center">
+        <span class="text-base-content/70 text-sm">
+          <%= t('navbar.welcome', name: current_user.name) %>
+        </span>
+      </div>
+    </div>
+    <div class="flex flex-col lg:flex-row gap-6 mb-8">
+      <!-- 左カラム -->
+      <div class="w-full lg:flex-[7] flex flex-col gap-4">
+        <!-- グラフ -->
+        <div class="card bg-base-100 border border-base-300">
+          <div class="card-body p-6">
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="text-2xl font-bold">活動グラフ</h3>
+              <span class="badge badge-outline">１週間</span>
+            </div>
+            <div id="sleep-chart"
+              data-series='<%= @series.to_json.html_safe %>'
+              style="height: 350px;">
+            </div>
+          </div>
+        </div>
+        <!-- 統計 -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="card bg-base-100 border border-base-300 text-center p-4">
+            <div class="text-xs text-base-content/70 mb-2">週/平均活動時間</div>
+            <div class="text-2xl font-bold text-success">
+              <%= @weekly_average_wake_hours ? sprintf("%.1f", @weekly_average_wake_hours) : '-' %>h
+            </div>
+          </div>
+          <div class="card bg-base-100 border border-base-300 text-center p-4">
+            <div class="text-xs text-base-content/70 mb-2">週/平均睡眠時間</div>
+            <div class="text-2xl font-bold text-info">
+              <%= @weekly_average_sleep_hours ? sprintf("%.1f", @weekly_average_sleep_hours) : '-' %>h
+            </div>
+          </div>
+          <div class="card bg-base-100 border border-base-300 text-center p-4">
+            <div class="text-xs text-base-content/70 mb-2">週/平均起床時刻</div>
+            <div class="text-2xl font-bold text-primary">
+              <%= @average_wake_time || "--:--" %>
+            </div>
+          </div>
+          <div class="card bg-base-100 border border-base-300 text-center p-4">
+            <div class="text-xs text-base-content/70 mb-2">週/平均就寝時刻</div>
+            <div class="text-2xl font-bold text-secondary">
+              <%= @average_bed_time || "--:--" %>
+            </div>
+          </div>
+        </div>
+
+        <!-- 記録テーブル -->
+      <div class="card bg-base-100 border border-base-300">
+        <details class="group [&_summary::-webkit-details-marker]:hidden">
+          <summary class="cursor-pointer p-4 font-bold text-xl bg-base-100 flex justify-between items-center rounded-t-lg">
+            1週間分の記録
+            <span class="transition-transform duration-300 group-open:rotate-180">⤵︎</span>
+          </summary>
+          <div class="overflow-x-auto p-4">
+            <table class="table table-zebra w-full border-t border-base-300">
+              <thead class="bg-base-200">
+                <tr>
+                  <th class="px-4 py-3 text-sm font-semibold text-base-content/70">日付</th>
+                  <th class="px-4 py-3 text-sm font-semibold text-base-content/70">起床時刻</th>
+                  <th class="px-4 py-3 text-sm font-semibold text-base-content/70">就寝時刻</th>
+                  <th class="px-4 py-3 text-sm font-semibold text-base-content/70">活動時間（h）</th>
+                  <th class="px-4 py-3 text-sm font-semibold text-base-content/70">睡眠時間（h）</th>
+                  <th class="px-4 py-3 text-sm font-semibold text-base-content/70">週累計活動（h）</th>
+                  <th class="px-4 py-3 text-sm font-semibold text-base-content/70">週累計睡眠（h）</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @weekly_records.each_with_index do |record, idx| %>
+                  <tr class="hover">
+                    <td class="px-4 py-3">
+                      <%= record[:day].is_a?(Date) ? record[:day].strftime("%m-%d (%a)") : '--' %>
+                    </td>
+                    <td class="px-4 py-3">
+                      <% if record[:wake_times].present? %>
+                        <% record[:wake_times].each do |time| %>
+                          <span class="badge badge-success badge-sm block mb-1">
+                            <%= time.split(' ').last %>
+                          </span>
+                        <% end %>
+                      <% else %>
+                        <span class="text-base-content/40">-</span>
+                      <% end %>
+                    </td>
+                    <td class="px-4 py-3">
+                      <% if record[:bed_times].present? %>
+                        <% record[:bed_times].each do |time| %>
+                          <span class="badge badge-secondary badge-sm block mb-1">
+                            <%= time.split(' ').last %>
+                          </span>
+                        <% end %>
+                      <% else %>
+                        <span class="text-base-content/40">-</span>
+                      <% end %>
+                    </td>
+                    <td class="px-4 py-3 text-accent font-semibold">
+                      <%= record[:daily_wake_hours] ? sprintf("%.1f", record[:daily_wake_hours]) : '-' %>
+                    </td>
+                    <td class="px-4 py-3 text-info font-semibold">
+                      <%= record[:daily_sleep_hours] ? sprintf("%.1f", record[:daily_sleep_hours]) : '-' %>
+                    </td>
+                    <td class="px-4 py-3 text-accent text-sm font-semibold">
+                      <%= record[:cumulative_wake_hours] || '-' %>
+                    </td>
+                    <td class="px-4 py-3 text-info text-sm font-semibold">
+                      <%= record[:cumulative_sleep_hours] || '-' %>
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        </details>
+      </div>
+
+
+      </div>
+
+      <!-- 右カラム -->
+      <div class="w-full lg:flex-[3] flex flex-col gap-6">
+
+        <!-- 記録カード -->
+        <div class="h-[240px] card bg-base-100 border border-base-300">
+          <div class="card-body p-4 flex flex-col justify-between">
+            <div class="text-center p-3 bg-base-200">
+              <div class="text-2xl font-mono font-bold text-base-content">
+                <%= Time.current.strftime("%H:%M") %>
+              </div>
+              <div class="text-xs text-base-content/70">
+                <%= Time.current.strftime("%Y/%m/%d") %>
+              </div>
+            </div>
+
+            <div class="space-y-3">
+              <%= button_to "起床記録", sleep_records_path,
+                  method: :post,
+                  class: "btn btn-primary btn-lg w-full #{'btn-disabled' if @unwoken_record.present?}",
+                  disabled: @unwoken_record.present? %>
+              <%= button_to "就寝記録",
+                  (@unwoken_record ? sleep_record_path(@unwoken_record) : "#"),
+                  method: :patch,
+                  class: "btn btn-secondary btn-lg w-full #{'btn-disabled' if @unwoken_record.nil?}",
+                  disabled: @unwoken_record.nil? %>
+            </div>
+          </div>
+        </div>
+
+        <!-- タスクエリア 仮作成 -->
+        <%# <div class="h-[360px] overflow-y-auto ">
+          <div class="card-body p-6">
+            <h3 class="text-2xl font-bold mb-6">今日のタスク</h3>
+
+            <div class="space-y-3">
+              <div class="card bg-base-100">
+                <div class="card-body flex-row items-center gap-3 p-3">
+                  <input type="checkbox" class="checkbox checkbox-primary" />
+                  <span class="flex-1">睡眠時間を8時間確保する</span>
+                  <span class="badge badge-primary badge-sm">重要</span>
+                </div>
+              </div>
+
+              <div class="card bg-base-100">
+                <div class="card-body flex-row items-center gap-3 p-3">
+                  <input type="checkbox" class="checkbox checkbox-secondary" />
+                  <span class="flex-1">就寝前のスマホ使用を控える</span>
+                  <span class="badge badge-secondary badge-sm">習慣</span>
+                </div>
+              </div>
+
+              <div class="card bg-base-100">
+                <div class="card-body flex-row items-center gap-3 p-3">
+                  <input type="checkbox" class="checkbox checkbox-accent" />
+                  <span class="flex-1">リラックスタイムを設ける</span>
+                  <span class="badge badge-accent badge-sm">推奨</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-6">
+              <button class="btn btn-outline btn-sm w-full">
+                + 新しいタスクを追加
+              </button>
+            </div>
+          </div>
+        </div> %>
+
+      </div>
+    </div>
+  </div>
 </div>
-
-<h2 class="text-xl font-bold mt-6 text-center">起床・睡眠グラフ</h2>
-<div id="sleep-chart" data-series='<%= @series.to_json.html_safe %>'></div>
-
-<h2 class="text-xl font-bold mt-6 text-center">睡眠/起床記録（1週間）</h2>
-<table class="table w-full">
-  <thead>
-    <tr>
-      <th>日付</th>
-      <th>就寝時刻</th>
-      <th>起床時刻</th>
-      <th>週/睡眠時間（h）</th>
-      <th>週/起床時間（h）</th>
-      <th>週/活動時間（h）</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @weekly_records.each do |record| %>
-      <tr>
-  <td><%= record[:day].strftime("%Y-%m-%d（%a）") %></td>
-        <td><%= record[:bed_times].present? ? record[:bed_times].join(", ") : '-' %></td>
-        <td><%= record[:wake_times].present? ? record[:wake_times].join(", ") : '-' %></td>
-        <td><%= record[:cumulative_sleep_hours].nil? ? '-' : record[:cumulative_sleep_hours] %></td>
-        <td><%= record[:cumulative_wake_hours].nil? ? '-' : record[:cumulative_wake_hours] %></td>
-        <td>
-          <% if record[:cumulative_sleep_hours] && record[:cumulative_wake_hours] %>
-            <%= (record[:cumulative_wake_hours] - record[:cumulative_sleep_hours]).round(2) %>
-          <% else %>
-            -
-          <% end %>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>

@@ -1,113 +1,205 @@
 class SleepRecord < ApplicationRecord
-  def self.build_cumulative(records, days_range)
-  grouped = records.group_by { |r| r.wake_time&.to_date || r.bed_time.to_date }
+  belongs_to :user
 
-    cumulative_sleep = 0.0
-    cumulative_wake = 0.0
+  validates :wake_time, presence: true
+  validate :bed_time_after_wake_time
+
+  scope :unbedded, -> { where(bed_time: nil) }
+  scope :with_wake_time, -> { where.not(wake_time: nil) }
+  scope :finished, -> { where.not(bed_time: nil) }
+
+  def self.average_sleep_hours(records)
+    return 0.0 if records.empty?
+    (total_sleep_hours(records) / records.size).round(2)
+  end
+
+  def self.average_wake_hours(records)
+    return 0.0 if records.empty?
+    (total_wake_hours(records) / records.size).round(2)
+  end
+
+  def self.average_time(records, column)
+    return nil if records.empty?
+
+    total_seconds = records.sum do |r|
+      t = r.send(column)
+      next 0 unless t
+
+      sec = t.hour * 3600 + t.min * 60 + t.sec
+      sec += 24 * 3600 if column == :bed_time && t.hour < 6
+      sec
+    end
+
+    avg_sec = total_seconds / records.size
+    avg_sec -= 24 * 3600 if avg_sec >= 24 * 3600
+
+    hours = (avg_sec / 3600).to_i
+    minutes = ((avg_sec % 3600) / 60).to_i
+    sprintf("%02d:%02d", hours, minutes)
+  end
+
+
+  def self.total_sleep_hours(records)
+    cumulative_times(records).first
+  end
+
+  def self.total_wake_hours(records)
+    cumulative_times(records).last
+  end
+
+
+  # 日別累計
+  def self.build_cumulative(records, days_range)
+    return [] if records.empty?
+
+    sorted = records.with_wake_time.order(:wake_time)
+    records_by_date = records.group_by { |r| r.wake_time&.to_date }.compact
 
     days_range.map do |day|
-      day_records = grouped[day] || []
-      if day_records.any? { |r| r.wake_time }
-        day_records.sort_by!(&:bed_time)
-        day_records.each do |r|
-          next unless r.wake_time
-          sleep_hours = ((r.wake_time - r.bed_time)/1.hour).round(2)
-          cumulative_sleep += sleep_hours
+      day_records = records_by_date[day] || []
+      until_day_records = sorted.select { |r| r.wake_time <= day.end_of_day }
+      sleep_total, wake_total = cumulative_times(until_day_records)
 
-          next_bed_time = records.find { |nr| nr.bed_time > r.wake_time }&.bed_time
-          awake_hours = if next_bed_time
-                          ((next_bed_time - r.wake_time)/1.hour).round(2)
-          else
-                          ((Time.current - r.wake_time)/1.hour).round(2)
-          end
-          cumulative_wake += awake_hours
-        end
-        {
-          day: day,
-          bed_times: day_records.map { |r| r.bed_time.strftime("%H:%M") },
-          wake_times: day_records.map { |r| r.wake_time&.strftime("%H:%M") },
-          cumulative_sleep_hours: cumulative_sleep.round(2),
-          cumulative_wake_hours: cumulative_wake.round(2)
-        }
+      if day_records.any?
+        build_day_data(day_records, sorted, sleep_total, wake_total)
       else
-        {
-          day: day,
-          bed_times: [],
-          wake_times: [],
-          cumulative_sleep_hours: nil,
-          cumulative_wake_hours: nil
-        }
+        build_empty_day_data(day, sleep_total, wake_total)
       end
     end
   end
-  def self.build_monthly_cumulative(records, date: Date.today)
-    start_of_month = date.beginning_of_month
-    end_of_month = date.end_of_month
-    days_in_month = (start_of_month..end_of_month).to_a
-    monthly_records = records.select { |r| r.bed_time.to_date >= start_of_month && r.bed_time.to_date <= end_of_month }
-    build_cumulative(monthly_records, days_in_month)
-  end
-  belongs_to :user
 
-  validates :bed_time, presence: true
-  validate :wake_time_after_bed_time
-  # validates :note, length: { maximum: 100 }, allow_blank: true
-
-  scope :unwoken, -> { where(wake_time: nil) }
-
-  def self.total_sleep_hours(records)
-    records.select(&:wake_time).sum { |r| ((r.wake_time - r.bed_time)/1.hour).round(2) }
-  end
-
-  def self.build_series(records, days: nil)
-    if days
-      today = Date.today
-      start_of_week = today - ((today.wday == 0 ? 6 : today.wday - 1)) # 月曜始まり
-      cutoff = start_of_week.beginning_of_day
-      end_of_week = (start_of_week + days).beginning_of_day
-      records = records.select { |r| r.bed_time >= cutoff && r.bed_time < end_of_week }
+  # グラフ用データ
+  def self.build_series(records, range: nil, days: nil)
+    filtered = if range
+      records.where(wake_time: range)
+    elsif days
+      records.where(wake_time: get_week_range(days))
+    else
+      records
     end
+    ordered = filtered.with_wake_time.order(:wake_time)
 
-    cumulative_value = 0.0
     series = []
+    cumulative = 0.0
 
-    records.sort_by(&:bed_time).each_with_index do |record, index|
-      next unless record.bed_time
-      wake_time = record.wake_time || Time.current
-      sleep_hours = ((wake_time - record.bed_time) / 1.hour).round(2)
+    ordered.each_with_index do |record, i|
+      series << [ record.wake_time.iso8601, cumulative ]
 
-      series << [ record.bed_time.iso8601, cumulative_value ]
-      cumulative_value -= sleep_hours
-      series << [ wake_time.iso8601, cumulative_value ]
+      bed_time = record.bed_time || Time.current
+      awake_hours = time_diff_hours(record.wake_time, bed_time)
+      cumulative += awake_hours
+      series << [ bed_time.iso8601, cumulative ]
 
-      next_bed_time = records[index + 1]&.bed_time
-      if next_bed_time
-        awake_hours = ((next_bed_time - wake_time) / 1.hour).round(2)
-        series << [ wake_time.iso8601, cumulative_value ]
-        cumulative_value += awake_hours
-        series << [ next_bed_time.iso8601, cumulative_value ]
+      next_rec = ordered[i + 1]
+      if record.bed_time && next_rec&.wake_time
+        sleep_hours = time_diff_hours(record.bed_time, next_rec.wake_time)
+        cumulative -= sleep_hours
+        series << [ next_rec.wake_time.iso8601, cumulative ]
       end
     end
 
     series
   end
 
-  def self.build_weekly_cumulative(records, days: 7)
-    today = Date.today
-    start_of_week = today - ((today.wday == 0 ? 6 : today.wday - 1)) # 月曜始まり
-    cutoff = start_of_week.beginning_of_day
-    end_of_week = (start_of_week + days).beginning_of_day
-    recent_records = records.select { |r| r.bed_time >= cutoff && r.bed_time < end_of_week }
-    week_days = (0...days).map { |i| start_of_week + i }
-    build_cumulative(recent_records, week_days)
-  end
-
   private
 
-  def wake_time_after_bed_time
-    return if bed_time.blank? || wake_time.blank?
-    if wake_time <= bed_time
-      errors.add(:wake_time, "無効な入力です。起床時間は就寝時間より後に設定してください。")
+    # 日別データ
+    def self.build_day_data(day_records, all_records, cumulative_sleep, cumulative_wake)
+      first = day_records.min_by(&:wake_time)
+      last = day_records.max_by(&:wake_time)
+
+      {
+        day: first.wake_time.to_date,
+        wake_times: [ format_time(first.wake_time) ],
+        bed_times: last.bed_time ? [ format_time(last.bed_time) ] : [],
+        daily_sleep_hours: daily_sleep(first, all_records),
+        daily_wake_hours: daily_wake(first, last),
+        cumulative_sleep_hours: format_cumulative(cumulative_sleep),
+        cumulative_wake_hours: format_cumulative(cumulative_wake)
+      }
     end
-  end
+
+    def self.build_empty_day_data(day, cumulative_sleep, cumulative_wake)
+      {
+        day: day,
+        wake_times: [],
+        bed_times: [],
+        daily_sleep_hours: nil,
+        daily_wake_hours: nil,
+        cumulative_sleep_hours: nil,
+        cumulative_wake_hours: nil
+      }
+    end
+
+    # 日ごとの睡眠/活動
+    def self.daily_sleep(first, all_records)
+      idx = all_records.index(first)
+      return nil unless idx&.positive?
+
+      prev = all_records[idx - 1]
+      return nil unless prev.bed_time
+
+      time_diff_hours(prev.bed_time, first.wake_time)
+    end
+
+    def self.daily_wake(first, last)
+      end_time = last.bed_time || Time.current
+      time_diff_hours(first.wake_time, end_time)
+    end
+
+    # 総睡眠・総起床計算
+    def self.cumulative_times(records)
+      return [ 0.0, 0.0 ] if records.empty?
+
+      sleep_total = 0.0
+      wake_total = 0.0
+      ordered = records.is_a?(ActiveRecord::Relation) ? records.to_a : records
+
+      ordered.each_with_index do |rec, i|
+        end_time = rec.bed_time || Time.current
+        wake_total += time_diff_hours(rec.wake_time, end_time)
+
+        next_rec = ordered[i + 1]
+        sleep_total += time_diff_hours(rec.bed_time, next_rec.wake_time) if rec.bed_time && next_rec
+      end
+
+      [ sleep_total, wake_total ]
+    end
+
+    # 時間差計算（hours, 2桁で丸め）
+    def self.time_diff_hours(start_time, end_time)
+      return 0.0 unless start_time && end_time
+
+      seconds = end_time.to_time - start_time.to_time
+      [ (seconds / 3600.0).round(2), 0.0 ].max
+    end
+
+    def self.format_time(time)
+      time&.strftime("%m/%d %H:%M")
+    end
+
+    def self.format_cumulative(value)
+      return nil unless value.positive?
+      v = value.round(2)
+      v % 1 == 0 ? v.to_i.to_s : sprintf("%.2f", v)
+    end
+
+    def self.get_week_range(days)
+      today = Date.current
+      start_of_week = today.beginning_of_week(:monday)
+      start_of_week.beginning_of_day...(start_of_week + days.days).beginning_of_day
+    end
+
+
+    def bed_time_after_wake_time
+      return if wake_time.blank? || bed_time.blank?
+
+      if bed_time >= wake_time
+        return
+      elsif bed_time.to_date > wake_time.to_date
+        return
+      end
+
+      errors.add(:bed_time, "無効な入力です。就寝時間は起床時間より後に設定してください。")
+    end
 end
