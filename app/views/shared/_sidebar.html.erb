@@ -1,0 +1,26 @@
+<div class="sidebar fixed left-0 top-0 h-full w-44 flex flex-col bg-base-100 border-r border-base-300 z-20">
+  <div class="flex items-center justify-center h-16">
+    <span class="font-bold text-xl text-primary">SleepSummit</span>
+  </div>
+  <nav class="flex-1 flex flex-col gap-2 text-lg pl-2 pr-2">
+    <%= link_to dashboard_path,
+      class: "group flex items-center w-full px-2 py-2 rounded transition #{current_page?(dashboard_path) ? 'bg-primary/10 text-primary font-bold' : 'hover:bg-base-300/10 text-base-content'}" do %>
+      <i class="ph ph-house text-lg"></i>
+      <span class="ml-2">Home</span>
+    <% end %>
+
+    <%= link_to history_path,
+      class: "group flex items-center w-full px-2 py-2 rounded transition #{current_page?(history_path) ? 'bg-primary/10 text-primary font-bold' : 'hover:bg-base-300/10 text-base-content'}" do %>
+      <i class="ph ph-clock-counter-clockwise text-lg"></i>
+      <span class="ml-2">History</span>
+    <% end %>
+  </nav>
+  <div class="mt-auto flex items-center justify-center h-12 mb-2">
+    <%= button_to destroy_user_session_path,
+      method: :delete,
+      class: "group flex items-center text-base-content hover:text-error transition text-left focus:outline-none px-2 py-2 rounded" do %>
+      <i class="ph ph-sign-out text-lg"></i>
+      <span class="ml-2">Logout</span>
+    <% end %>
+  </div>
+</div>
