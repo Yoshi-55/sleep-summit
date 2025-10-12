@@ -1,19 +1,13 @@
+<% content_for :page_title do %>
+  History
+<% end %>
 <div class="min-h-screen">
-  <div class="container mx-auto p-8">
-    <div class="navbar mb-4">
-      <div class="navbar-start">
-        <h1 class="text-5xl font-bold text-base-content">History</h1>
-      </div>
-      <div class="navbar-end flex gap-2 items-center">
-        <span class="text-base-content/70 text-sm">
-          <%= t('navbar.welcome', name: current_user.name) %>
-        </span>
-      </div>
-    </div>
+  <div class="container mx-auto p-6">
+    <%= render 'shared/navbar' %>
 
     <!-- 活動グラフ -->
     <div class="card bg-base-100 border border-base-300 mb-6">
-      <div class="card-body p-6">
+      <div class="card-body p-4">
         <div class="flex items-center justify-between mb-4">
           <h3 class="text-2xl font-bold">活動グラフ</h3>
           <span class="badge badge-outline">月</span>
@@ -26,7 +20,7 @@
     </div>
 
     <!-- 月間統計 -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
       <div class="card bg-base-100 border border-base-300 text-center p-4">
         <div class="text-xs text-base-content/70 mb-2">月/平均活動時間</div>
         <div class="text-2xl font-bold text-success">

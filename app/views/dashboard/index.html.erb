@@ -1,24 +1,19 @@
+<% content_for :page_title do %>
+  Dashboard
+<% end %>
 <div class="min-h-screen">
-  <div class="container mx-auto p-8">
-    <div class="navbar mb-4">
-      <div class="navbar-start">
-        <h1 class="text-5xl font-bold text-base-content">Dashboard</h1>
-      </div>
-      <div class="navbar-end flex gap-2 items-center">
-        <span class="text-base-content/70 text-sm">
-          <%= t('navbar.welcome', name: current_user.name) %>
-        </span>
-      </div>
-    </div>
+  <div class="container mx-auto p-6">
+    <%= render 'shared/navbar' %>
+
     <div class="flex flex-col lg:flex-row gap-6 mb-8">
       <!-- 左カラム -->
-      <div class="w-full lg:flex-[7] flex flex-col gap-4">
+      <div class="w-full lg:flex-[7] flex flex-col gap-6">
         <!-- グラフ -->
         <div class="card bg-base-100 border border-base-300">
-          <div class="card-body p-6">
+          <div class="card-body p-4">
             <div class="flex items-center justify-between mb-4">
               <h3 class="text-2xl font-bold">活動グラフ</h3>
-              <span class="badge badge-outline">週</span>
+              <span class="badge badge-outline">１週間</span>
             </div>
             <div id="sleep-chart"
               data-series='<%= @series.to_json.html_safe %>'
@@ -27,7 +22,7 @@
           </div>
         </div>
         <!-- 統計 -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           <div class="card bg-base-100 border border-base-300 text-center p-4">
             <div class="text-xs text-base-content/70 mb-2">週/平均活動時間</div>
             <div class="text-2xl font-bold text-success">
@@ -43,13 +38,13 @@
           <div class="card bg-base-100 border border-base-300 text-center p-4">
             <div class="text-xs text-base-content/70 mb-2">週/平均起床時刻</div>
             <div class="text-2xl font-bold text-primary">
-              <%= @weekly_average_wake_time || "--:--" %>
+              <%= @average_wake_time || "--:--" %>
             </div>
           </div>
           <div class="card bg-base-100 border border-base-300 text-center p-4">
             <div class="text-xs text-base-content/70 mb-2">週/平均就寝時刻</div>
             <div class="text-2xl font-bold text-secondary">
-              <%= @weekly_average_bed_time || "--:--" %>
+              <%= @average_bed_time || "--:--" %>
             </div>
           </div>
         </div>
