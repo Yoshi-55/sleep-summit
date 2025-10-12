@@ -1,6 +1,6 @@
 <div class="min-h-screen">
   <div class="container mx-auto p-8">
-    <div class="navbar mb-8">
+    <div class="navbar mb-4">
       <div class="navbar-start">
         <h1 class="text-5xl font-bold text-base-content">Dashboard</h1>
       </div>
@@ -18,7 +18,7 @@
           <div class="card-body p-6">
             <div class="flex items-center justify-between mb-4">
               <h3 class="text-2xl font-bold">活動グラフ</h3>
-              <span class="badge badge-outline">１週間</span>
+              <span class="badge badge-outline">週</span>
             </div>
             <div id="sleep-chart"
               data-series='<%= @series.to_json.html_safe %>'
@@ -43,13 +43,13 @@
           <div class="card bg-base-100 border border-base-300 text-center p-4">
             <div class="text-xs text-base-content/70 mb-2">週/平均起床時刻</div>
             <div class="text-2xl font-bold text-primary">
-              <%= @average_wake_time || "--:--" %>
+              <%= @weekly_average_wake_time || "--:--" %>
             </div>
           </div>
           <div class="card bg-base-100 border border-base-300 text-center p-4">
             <div class="text-xs text-base-content/70 mb-2">週/平均就寝時刻</div>
             <div class="text-2xl font-bold text-secondary">
-              <%= @average_bed_time || "--:--" %>
+              <%= @weekly_average_bed_time || "--:--" %>
             </div>
           </div>
         </div>
@@ -153,46 +153,6 @@
             </div>
           </div>
         </div>
-
-        <!-- タスクエリア 仮作成 -->
-        <%# <div class="h-[360px] overflow-y-auto ">
-          <div class="card-body p-6">
-            <h3 class="text-2xl font-bold mb-6">今日のタスク</h3>
-
-            <div class="space-y-3">
-              <div class="card bg-base-100">
-                <div class="card-body flex-row items-center gap-3 p-3">
-                  <input type="checkbox" class="checkbox checkbox-primary" />
-                  <span class="flex-1">睡眠時間を8時間確保する</span>
-                  <span class="badge badge-primary badge-sm">重要</span>
-                </div>
-              </div>
-
-              <div class="card bg-base-100">
-                <div class="card-body flex-row items-center gap-3 p-3">
-                  <input type="checkbox" class="checkbox checkbox-secondary" />
-                  <span class="flex-1">就寝前のスマホ使用を控える</span>
-                  <span class="badge badge-secondary badge-sm">習慣</span>
-                </div>
-              </div>
-
-              <div class="card bg-base-100">
-                <div class="card-body flex-row items-center gap-3 p-3">
-                  <input type="checkbox" class="checkbox checkbox-accent" />
-                  <span class="flex-1">リラックスタイムを設ける</span>
-                  <span class="badge badge-accent badge-sm">推奨</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="mt-6">
-              <button class="btn btn-outline btn-sm w-full">
-                + 新しいタスクを追加
-              </button>
-            </div>
-          </div>
-        </div> %>
-
       </div>
     </div>
   </div>
