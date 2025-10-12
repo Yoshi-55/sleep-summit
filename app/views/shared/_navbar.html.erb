@@ -1,0 +1,24 @@
+<div class="navbar p-4">
+  <div class="navbar-start">
+    <h1 class="text-5xl font-bold text-base-content"><%= yield :page_title %></h1>
+  </div>
+  <div class="navbar-end flex gap-2 items-center">
+    <div class="dropdown dropdown-end">
+      <div tabindex="0" role="button" class="btn btn-ghost flex items-center gap-2">
+        <span class="text-sm font-medium">Welcome, <%= current_user.name %></span>
+        <div class="w-10 rounded-full overflow-hidden">
+          <img
+            alt="Tailwind CSS Navbar component"
+            src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+        </div>
+      </div>
+      <ul
+        tabindex="-1"
+        class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
+        <li><%= link_to "Profile", profile_path %></li>
+        <li><a>Settings</a></li>
+        <li><a>Logout</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
