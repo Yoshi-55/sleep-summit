@@ -1,10 +1,19 @@
-<h2 class="text-xl font-bold mt-6">プロフィール</h2>
-<div class="mt-4">
-  <p><strong>ユーザー名:</strong> <%= @user.name %></p>
+<% content_for :page_title do %>
+  Profile
+<% end %>
+<div class="min-h-screen">
+  <div class="container mx-auto p-6">
 
-  <%= button_to "ユーザー名変更", "#", class: "btn btn-primary mt-4", disabled: true %>
-  <%= button_to "ログアウト", "#", class: "btn btn-error mt-4", disabled: true %>
-  <%= button_to "ヘルプ・使い方", "#", class: "btn btn-info mt-4", disabled: true %>
-  <%= button_to "お問い合わせ", "#", class: "btn btn-info mt-4", disabled: true %>
-  <%= button_to "利用規約", "#", class: "btn btn-info mt-4", disabled: true %>
+    <%= render 'shared/navbar' %>
+
+    <div class="card bg-base-100 border border-base-300 p-8 max-w-lg mx-auto">
+      <div class="flex flex-col items-center">
+        <img
+          src="<%= 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiLuW2xcJlrbLdQDiw-wTCsElgoQIvbaXRZ40pCZX9vxYuLh1W3njnzZ_SZddy3nVpXeTDZqdKX6rI-MQBECmDwL80RPHDA4d5_lBe89Z8YTbBw9LSlnkTYFbKFmLvObN6tMyyCx7kPVQiMVILHoqH-ze4DDH1n6tf6PIo06l_6w95xdmZ40m7X7Bzx9g/s664/rennai_kaeruka.png' %>"
+          alt="User Avatar"
+          class="w-20 h-20 rounded-full mb-4"/>
+        <p><strong>ユーザー名:</strong> <%= @user.name %></p>
+      </div>
+    </div>
+  </div>
 </div>
