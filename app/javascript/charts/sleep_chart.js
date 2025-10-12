@@ -19,6 +19,7 @@ document.addEventListener("turbo:load", () => {
           type: "area",
           zoomType: "x"
         },
+        colors: ["rgb(72, 125, 0)"],
         tooltip: {
           formatter: function() {
             const date = new Date(this.x);
@@ -36,20 +37,20 @@ document.addEventListener("turbo:load", () => {
           area: {
             marker: {
               enabled: true,
-              radius: 2.5,
+              radius: 3.5,
               symbol: "circle"
             },
-            lineWidth: 2,
+            lineWidth: 3,
             fillOpacity: 0.3,
             threshold: 0,
             negativeFillColor: "rgba(0,0,0,0)"
           }
         },
         xAxis: {
-          lineColor: "#ffffff",
-          tickColor: "#ffffff",
+          lineColor: "#cdcdcd",
+          tickColor: "#cdcdcd",
           labels: {
-            style: { color: "#ffffff" },
+            style: { color: "#cdcdcd" },
             formatter: function() {
               const date = new Date(this.value);
               if (isNaN(date)) return '';
@@ -66,20 +67,20 @@ document.addEventListener("turbo:load", () => {
 
               // 00:00 のときだけ日付も表示
               if (timeStr === '00:00') {
-                return `${m}-${d}（${w}）`;
+                return `${m}/${d}(${w})`;
               } else {
                 return timeStr;
               }
             }
           },
-          title: { style: { color: "#ffffff", fontWeight: "bold" } }
+          title: { style: { color: "#cdcdcd", fontWeight: "bold" } }
         },
         yAxis: {
-          lineColor: "#ffffff",
-          tickColor: "#ffffff",
-          labels: { style: { color: "#ffffff" } },
-          title: { style: { color: "#ffffff", fontWeight: "bold" } },
-          gridLineColor: "#ffffff"
+          lineColor: "#cdcdcd",
+          tickColor: "#cdcdcd",
+          labels: { style: { color: "#cdcdcd" } },
+          title: { style: { color: "#cdcdcd", fontWeight: "bold" } },
+          gridLineColor: "#cdcdcd"
         }
       }
     });
