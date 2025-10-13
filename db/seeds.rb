@@ -1,13 +1,19 @@
 require 'date'
 
+# 開発：docker-compose exec web bundle exec bundle exec rails db:seed  で実行
+#                                                            db:reset リセットする場合はこれを実行
+
 puts "ユーザー作成開始..."
 
-User.create!(
-  [
-    { name: "Guest1", email: "test1@example.com", password: "password" },
-    { name: "Guest2", email: "test2@example.com", password: "password" }
-  ]
-)
+[
+  { name: "Guest1", email: "test1111@example.com", password: "password" },
+  { name: "Guest2", email: "test2222@example.com", password: "password" }
+].each do |attrs|
+  User.find_or_create_by!(email: attrs[:email]) do |user|
+    user.name     = attrs[:name]
+    user.password = attrs[:password]
+  end
+end
 
 puts "ユーザー作成完了！"
 
@@ -18,7 +24,7 @@ User.find_each do |user|
   end_date   = Date.yesterday
   prev_bed_time = nil
 
-  (start_date..end_date).each do |date|
+  (start_date..end_date).each do |date|    # 起床時刻: 5〜9時
     wake_time = Time.zone.local(date.year, date.month, date.day, rand(5..9), rand(0..59))
 
     wake_time = [ wake_time, prev_bed_time + 6.hours ].max if prev_bed_time
@@ -31,11 +37,13 @@ User.find_each do |user|
 
     bed_time += 1.day if bed_time <= wake_time
 
-    SleepRecord.create!(
-      user: user,
-      wake_time: wake_time,
-      bed_time: bed_time
-    )
+    unless SleepRecord.exists?(user_id: user.id, wake_time: wake_time.beginning_of_day..wake_time.end_of_day)
+      SleepRecord.create!(
+        user: user,
+        wake_time: wake_time,
+        bed_time: bed_time
+      )
+    end
 
     prev_bed_time = bed_time
   end
