@@ -59,7 +59,7 @@ class SleepRecord < ApplicationRecord
                   &.order(wake_time: :desc)
                   &.first
 
-    all_records = [prev_record, *sorted].compact
+    all_records = [ prev_record, *sorted ].compact
     records_by_date = records.group_by { |r| r.wake_time&.to_date }.compact
 
     days_range.map do |day|
