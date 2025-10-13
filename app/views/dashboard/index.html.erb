@@ -26,13 +26,13 @@
           <div class="card bg-base-100 border border-base-300 text-center p-4">
             <div class="text-xs text-base-content/70 mb-2">週/平均活動時間</div>
             <div class="text-2xl font-bold text-success">
-              <%= @weekly_average_wake_hours ? sprintf("%.1f", @weekly_average_wake_hours) : '-' %>h
+              <%= @weekly_average_wake_hours ? sprintf("%.2f", @weekly_average_wake_hours) : '-' %>h
             </div>
           </div>
           <div class="card bg-base-100 border border-base-300 text-center p-4">
             <div class="text-xs text-base-content/70 mb-2">週/平均睡眠時間</div>
             <div class="text-2xl font-bold text-info">
-              <%= @weekly_average_sleep_hours ? sprintf("%.1f", @weekly_average_sleep_hours) : '-' %>h
+              <%= @weekly_average_sleep_hours ? sprintf("%.2f", @weekly_average_sleep_hours) : '-' %>h
             </div>
           </div>
           <div class="card bg-base-100 border border-base-300 text-center p-4">
@@ -78,8 +78,8 @@
                     <td class="px-4 py-3">
                       <% if record[:wake_times].present? %>
                         <% record[:wake_times].each do |time| %>
-                          <span class="badge badge-success badge-sm block mb-1">
-                            <%= time.split(' ').last %>
+                          <span class="badge badge-success badge-sm mb-1">
+                            <%= Time.parse(time).strftime("%m/%d_%H:%M") %>
                           </span>
                         <% end %>
                       <% else %>
@@ -89,8 +89,8 @@
                     <td class="px-4 py-3">
                       <% if record[:bed_times].present? %>
                         <% record[:bed_times].each do |time| %>
-                          <span class="badge badge-secondary badge-sm block mb-1">
-                            <%= time.split(' ').last %>
+                          <span class="badge badge-secondary badge-sm mb-1">
+                            <%= Time.parse(time).strftime("%m/%d_%H:%M") %>
                           </span>
                         <% end %>
                       <% else %>
@@ -98,10 +98,10 @@
                       <% end %>
                     </td>
                     <td class="px-4 py-3 text-accent font-semibold">
-                      <%= record[:daily_wake_hours] ? sprintf("%.1f", record[:daily_wake_hours]) : '-' %>
+                      <%= record[:daily_wake_hours] ? sprintf("%.2f", record[:daily_wake_hours]) : '-' %>
                     </td>
                     <td class="px-4 py-3 text-info font-semibold">
-                      <%= record[:daily_sleep_hours] ? sprintf("%.1f", record[:daily_sleep_hours]) : '-' %>
+                      <%= record[:daily_sleep_hours] ? sprintf("%.2f", record[:daily_sleep_hours]) : '-' %>
                     </td>
                     <td class="px-4 py-3 text-accent text-sm font-semibold">
                       <%= record[:cumulative_wake_hours] || '-' %>
