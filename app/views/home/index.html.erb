@@ -15,9 +15,10 @@
   </div>
 
   <div class="text-center fade-in-delay mt-30">
-    <%= link_to "はじめる", new_user_registration_path, class: "btn btn-lg" %>
-
-    <%# 🚧ログイン済みの場合はダッシュボードへ遷移。ダッシュボード作成時に記述！ %>
+    <div class="flex flex-col items-center gap-4">
+      <%= link_to "はじめる", new_user_registration_path, class: "btn btn-lg w-60" %>
+      <%= link_to "ログイン", new_user_session_path, class: "btn btn-outline btn-lg w-60" %>
+    </div>
   </div>
 
   <p class="fade-in-delay mt-30">
