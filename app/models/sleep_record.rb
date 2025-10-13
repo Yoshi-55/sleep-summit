@@ -53,15 +53,29 @@ class SleepRecord < ApplicationRecord
     return [] if records.empty?
 
     sorted = records.with_wake_time.order(:wake_time)
+
+    prev_record = records.first&.user&.sleep_records
+                  &.where("wake_time < ?", sorted.first.wake_time)
+                  &.order(wake_time: :desc)
+                  &.first
+
+    all_records = [prev_record, *sorted].compact
     records_by_date = records.group_by { |r| r.wake_time&.to_date }.compact
 
     days_range.map do |day|
       day_records = records_by_date[day] || []
-      until_day_records = sorted.select { |r| r.wake_time <= day.end_of_day }
+      until_day_records = all_records.select { |r| r.wake_time <= day.end_of_day }
       sleep_total, wake_total = cumulative_times(until_day_records)
 
+      if day == days_range.first && day_records.any?
+        first_record = day_records.first
+        first_sleep = daily_sleep(first_record, sorted)
+        sleep_total += first_sleep if first_sleep
+      end
+
       if day_records.any?
-        build_day_data(day_records, sorted, sleep_total, wake_total)
+        build_day_data(day_records, all_records, sleep_total, wake_total)
+
       else
         build_empty_day_data(day, sleep_total, wake_total)
       end
