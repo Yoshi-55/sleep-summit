@@ -1,8 +1,8 @@
 # ⚠️デプロイ後サンプルデータ作成用
 # ⚠️MVP使用後はrootと本コントローラーをコメントアウトor削除する
 class SeedsController < ApplicationController
-# 環境変数で管理
-  http_basic_authenticate_with name: ENV.fetch('SEED_USER', 'admin'), password: ENV.fetch('SEED_PASSWORD', 'secret')
+  # 環境変数で管理
+  http_basic_authenticate_with name: ENV.fetch("SEED_USER", "admin"), password: ENV.fetch("SEED_PASSWORD", "secret")
 
   def sample_data
     sample_users = [
