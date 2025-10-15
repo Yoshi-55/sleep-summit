@@ -47,7 +47,7 @@ RSpec.describe User, type: :model do
   describe "sleep_recordsとの関連" do
     it "ユーザー削除時にsleep_recordsも削除されること" do
       user = FactoryBot.create(:user)
-      user.sleep_records.create(wake_time: Time.current, bed_time: Time.current + 8.hours)
+      FactoryBot.create(:sleep_record, user: user)
       expect { user.destroy }.to change { SleepRecord.count }.by(-1)
     end
   end
