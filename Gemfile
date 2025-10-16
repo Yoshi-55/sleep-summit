@@ -21,6 +21,11 @@ gem "jbuilder"
 
 gem "devise"
 
+gem "devise-i18n"
+gem "devise-i18n-views"
+gem "rails-i18n"
+
+
 # グラフ関連(日付グループ化のみgem、highchartsはyarnでインストール)
 gem "groupdate"
 
