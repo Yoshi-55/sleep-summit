@@ -9,6 +9,7 @@ ja:
         current_password: 現在のパスワード
         current_sign_in_at: 現在のログイン時刻
         current_sign_in_ip: 現在のログインIPアドレス
+        name: 名前
         email: Eメール
         encrypted_password: 暗号化パスワード
         failed_attempts: 失敗したログイン試行回数
@@ -133,6 +134,7 @@ ja:
       send_instructions: アカウントのロック解除方法を数分以内にメールでご連絡します。
       send_paranoid_instructions: アカウントが見つかった場合、アカウントのロック解除方法を数分以内にメールでご連絡します。
       unlocked: アカウントをロック解除しました。
+    or: または
   errors:
     messages:
       already_confirmed: は既に登録済みです。ログインしてください。
