@@ -1,0 +1,52 @@
+ja:
+  dashboard:
+    index:
+      page_title: "記録"
+      activity_graph: "活動グラフ"
+      week: "１週間"
+      weekly_average_wake_hours: "週/平均活動時間"
+      weekly_average_sleep_hours: "週/平均睡眠時間"
+      weekly_average_wake_time: "週/平均起床時刻"
+      weekly_average_bed_time: "週/平均就寝時刻"
+      this_week_records: "1週間分の記録"
+      date: "日付"
+      wake_time: "起床時刻"
+      bed_time: "就寝時刻"
+      daily_wake_hours: "活動時間（h）"
+      daily_sleep_hours: "睡眠時間（h）"
+      cumulative_wake_hours: "週累計活動（h）"
+      cumulative_sleep_hours: "週累計睡眠（h）"
+      wake_record: "起床記録"
+      bed_record: "就寝記録"
+  history:
+    index:
+      page_title: "履歴"
+      activity_graph: "活動グラフ"
+      year: "年"
+      month: "月"
+      show: "表示"
+      month_average_wake_hours: "月/平均活動時間"
+      month_average_sleep_hours: "月/平均睡眠時間"
+      month_average_wake_time: "月/平均起床時刻"
+      month_average_bed_time: "月/平均就寝時刻"
+      this_month_records: "今月の記録"
+      date: "日付"
+      wake_time: "起床時刻"
+      bed_time: "就寝時刻"
+      daily_wake_hours: "活動時間（h）"
+      daily_sleep_hours: "睡眠時間（h）"
+      cumulative_wake_hours: "月累計活動（h）"
+      cumulative_sleep_hours: "月累計睡眠（h）"
+  profiles:
+    show:
+      page_title: "プロフィール"
+      user_name: "ユーザー名"
+  navbar:
+    welcome: "ようこそ, %{name} さん"
+    profile: "プロフィール"
+    settings: "設定（未実装）"
+    logout: "ログアウト"
+    logout_confirm: "本当にログアウトしますか？"
+  sidebar:
+    dashboard: "記録"
+    history: "履歴"
