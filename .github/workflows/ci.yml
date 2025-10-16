@@ -81,6 +81,10 @@ jobs:
         run: |
           npx @tailwindcss/cli -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/application.css --minify
 
+      - name: Build assets (JavaScript via esbuild)
+        run: |
+          npx esbuild app/javascript/*.* --bundle --sourcemap --format=esm --outdir=app/assets/builds --public-path=/assets
+
 
 
       - name: Run tests
