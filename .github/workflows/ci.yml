@@ -69,6 +69,20 @@ jobs:
           ruby-version: .ruby-version
           bundler-cache: true
 
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install JS packages
+        run: yarn install --frozen-lockfile
+
+      - name: Build assets (Tailwind CSS)
+        run: |
+          npx @tailwindcss/cli -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/application.css --minify
+
+
+
       - name: Run tests
         env:
           RAILS_ENV: test
