@@ -1,7 +1,8 @@
+
 <div class="flex justify-center items-center min-h-screen bg-[url('/path/to/bg.jpg')] bg-cover bg-center">
   <div class="card w-96 shadow-xl p-6 rounded-lg backdrop-blur-md border border-white/20">
     <h2 class="text-2xl font-bold mb-4 text-center">
-      <%= t('devise.registrations.new.title') %>
+      <%= t('devise.shared.links.sign_up') %>
     </h2>
 
     <% if resource.errors.any? %>
@@ -14,35 +15,34 @@
 
     <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
       <div class="form-control mb-4">
-        <%= f.label :name, t('devise.registrations.new.name'), class: "label" %>
+        <%= f.label :name, t('activerecord.attributes.user.name'), class: "label" %>
         <%= f.text_field :name, class: "input input-bordered w-full" %>
       </div>
 
       <div class="form-control mb-4">
-        <%= f.label :email, t('devise.registrations.new.email'), class: "label" %>
+        <%= f.label :email, t('activerecord.attributes.user.email'), class: "label" %>
         <%= f.email_field :email, autofocus: true, class: "input input-bordered w-full" %>
       </div>
 
       <div class="form-control mb-4">
-        <%= f.label :password, t('devise.registrations.new.password'), class: "label" %>
+        <%= f.label :password, t('activerecord.attributes.user.password'), class: "label" %>
         <%= f.password_field :password, autocomplete: "new-password", class: "input input-bordered w-full" %>
       </div>
 
       <div class="form-control mb-4">
-        <%= f.label :password_confirmation, t('devise.registrations.new.password_confirmation'), class: "label" %>
+        <%= f.label :password_confirmation, t('activerecord.attributes.user.password_confirmation'), class: "label" %>
         <%= f.password_field :password_confirmation, class: "input input-bordered w-full" %>
       </div>
 
       <div class="form-control">
-        <%= f.submit t('devise.registrations.new.submit'), class: "btn btn-primary w-full" %>
+        <%= f.submit t('devise.shared.links.sign_up'), class: "btn btn-primary w-full" %>
       </div>
     <% end %>
 
     <div class="divider"><%= t('devise.or') %></div>
 
     <p class="text-center">
-      <%= t('devise.registrations.new.already_have_account') %>  
-      <%= link_to t('devise.registrations.new.login_link'), new_user_session_path, class: "text-blue-500 hover:underline" %>
+      <%= link_to t('devise.shared.links.sign_in'), new_user_session_path, class: "text-blue-500 hover:underline" %>
     </p>
   </div>
 </div>
