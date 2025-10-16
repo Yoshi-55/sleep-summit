@@ -1,5 +1,5 @@
 <% content_for :page_title do %>
-  History
+  <%= t('history.index.page_title') %>
 <% end %>
 <div class="min-h-screen">
   <div class="container mx-auto p-6">
@@ -9,13 +9,13 @@
     <div class="card bg-base-100 border border-base-300 mb-6">
       <div class="card-body p-4">
         <div class="flex items-center justify-between mb-4">
-          <h3 class="text-2xl font-bold">活動グラフ</h3>
+          <h3 class="text-2xl font-bold"><%= t('history.index.activity_graph') %></h3>
           <%= form_with url: history_path, method: :get, local: true, class: "flex gap-2 items-center" do %>
             <%= select_tag :year, options_for_select((2025..Date.current.year).to_a.reverse, @selected_year), class: "select select-bordered select-sm w-20" %>
-            <label for="year" class="text-xs">年</label>
+            <label for="year" class="text-xs"><%= t('history.index.year') %></label>
             <%= select_tag :month, options_for_select((1..12).to_a, @selected_month), class: "select select-bordered select-sm w-16" %>
-            <label for="month" class="text-xs">月</label>
-            <%= submit_tag "表示", class: "btn btn-primary btn-sm" %>
+            <label for="month" class="text-xs"><%= t('history.index.month') %></label>
+            <%= submit_tag t('history.index.show'), class: "btn btn-primary btn-sm" %>
           <% end %>
         </div>
         <div id="sleep-chart"
@@ -28,25 +28,25 @@
     <!-- 月間統計 -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
       <div class="card bg-base-100 border border-base-300 text-center p-4">
-        <div class="text-xs text-base-content/70 mb-2">月/平均活動時間</div>
+        <div class="text-xs text-base-content/70 mb-2"><%= t('history.index.month_average_wake_hours') %></div>
         <div class="text-2xl font-bold text-success">
           <%= @month_average_wake_hours ? sprintf("%.2f", @month_average_wake_hours) : '-' %>h
         </div>
       </div>
       <div class="card bg-base-100 border border-base-300 text-center p-4">
-        <div class="text-xs text-base-content/70 mb-2">月/平均睡眠時間</div>
+        <div class="text-xs text-base-content/70 mb-2"><%= t('history.index.month_average_sleep_hours') %></div>
         <div class="text-2xl font-bold text-info">
           <%= @month_average_sleep_hours ? sprintf("%.2f", @month_average_sleep_hours) : '-' %>h
         </div>
       </div>
       <div class="card bg-base-100 border border-base-300 text-center p-4">
-        <div class="text-xs text-base-content/70 mb-2">月/平均起床時刻</div>
+        <div class="text-xs text-base-content/70 mb-2"><%= t('history.index.month_average_wake_time') %></div>
         <div class="text-2xl font-bold text-success">
           <%= @month_average_wake_time || '-' %>
         </div>
       </div>
       <div class="card bg-base-100 border border-base-300 text-center p-4">
-        <div class="text-xs text-base-content/70 mb-2">月/平均就寝時刻</div>
+        <div class="text-xs text-base-content/70 mb-2"><%= t('history.index.month_average_bed_time') %></div>
         <div class="text-2xl font-bold text-info">
           <%= @month_average_bed_time || '-' %>
         </div>
@@ -57,20 +57,20 @@
     <div class="card bg-base-100 border border-base-300">
       <details class="group [&_summary::-webkit-details-marker]:hidden">
         <summary class="cursor-pointer p-4 font-bold text-xl bg-base-100 flex justify-between items-center rounded-t-lg">
-          今月の記録
+          <%= t('history.index.this_month_records') %>
           <span class="transition-transform duration-300 group-open:rotate-180">⤵︎</span>
         </summary>
         <div class="overflow-x-auto p-4">
           <table class="table table-zebra w-full border-t border-base-300">
             <thead class="bg-base-200">
               <tr>
-                <th>日付</th>
-                <th>起床時刻</th>
-                <th>就寝時刻</th>
-                <th>活動時間（h）</th>
-                <th>睡眠時間（h）</th>
-                <th>月累計活動（h）</th>
-                <th>月累計睡眠（h）</th>
+                <th><%= t('history.index.date') %></th>
+                <th><%= t('history.index.wake_time') %></th>
+                <th><%= t('history.index.bed_time') %></th>
+                <th><%= t('history.index.daily_wake_hours') %></th>
+                <th><%= t('history.index.daily_sleep_hours') %></th>
+                <th><%= t('history.index.cumulative_wake_hours') %></th>
+                <th><%= t('history.index.cumulative_sleep_hours') %></th>
               </tr>
             </thead>
             <tbody>
