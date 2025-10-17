@@ -136,11 +136,11 @@
             </div>
 
             <div class="space-y-3">
-              <%= button_to "起床記録", sleep_records_path,
+              <%= button_to I18n.t('dashboard.index.wake_record'), sleep_records_path,
                   method: :post,
                   class: "btn btn-primary btn-lg w-full #{'btn-disabled' if @unwoken_record.present?}",
                   disabled: @unwoken_record.present? %>
-              <%= button_to "就寝記録",
+              <%= button_to I18n.t('dashboard.index.bed_record'),
                   (@unwoken_record ? sleep_record_path(@unwoken_record) : "#"),
                   method: :patch,
                   class: "btn btn-secondary btn-lg w-full #{'btn-disabled' if @unwoken_record.nil?}",
