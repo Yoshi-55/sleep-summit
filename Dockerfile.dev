@@ -20,7 +20,10 @@ nodejs \
 yarn \
 vim \
 chromium-driver \
-chromium
+chromium \
+fonts-ipafont \
+fonts-ipaexfont \
+fonts-noto-cjk
 
 RUN mkdir /sleep-summit
 
