@@ -6,12 +6,12 @@ Rails.application.routes.draw do
   end
   root "home#index"
 
-  get "dashboard", to: "dashboard#index"
+  get "dashboard", to: "dashboard#index", as: :dashboard
 
-  get "history", to: "history#index"
+  get "history", to: "history#index", as: :history
 
-  get "profile", to: "users#show"
-  get "profile/edit", to: "users#edit"
+  get "profile", to: "users#show", as: :profile
+  get "profile/edit", to: "users#edit", as: :edit_profile
 
   if Rails.env.production?
     get "/seed_sample_data", to: "seeds#sample_data"
