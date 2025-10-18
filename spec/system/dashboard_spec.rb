@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe "Dashboard", type: :system do
-  let(:user) { FactoryBot.create(:user, email: "test@example.com", password: "password", name: "テストユーザー") }
+  let(:user) { FactoryBot.create(:user) }
 
   before do
     SleepRecord.where(user: user).delete_all
@@ -11,6 +11,18 @@ RSpec.describe "Dashboard", type: :system do
     click_button I18n.t('devise.shared.links.sign_in')
     expect(page).to have_content(I18n.t('dashboard.index.page_title'))
     visit dashboard_path
+  end
+
+  it "ページタイトルがI18nで表示されること" do
+    expect(page).to have_content(I18n.t('dashboard.index.page_title'))
+  end
+
+  it "グラフが表示されること" do
+    expect(page).to have_selector("#sleep-chart")
+  end
+
+  it "１週間の記録が表示されること" do
+    expect(page).to have_content(I18n.t('dashboard.index.this_week_records'))
   end
 
   it "起床記録ボタンが表示されていて押せること" do
