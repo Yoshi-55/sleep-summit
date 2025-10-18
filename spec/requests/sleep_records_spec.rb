@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe "SleepRecords", type: :request do
-  let(:user) { FactoryBot.create(:user, email: "test@example.com", password: "password") }
+  let(:user) { FactoryBot.create(:user) }
 
   before do
     sign_in user
