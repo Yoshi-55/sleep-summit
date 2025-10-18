@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   get "history", to: "history#index"
 
   get "profile", to: "users#show"
+  get "profile/edit", to: "users#edit"
 
   if Rails.env.production?
     get "/seed_sample_data", to: "seeds#sample_data"
