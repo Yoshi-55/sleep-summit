@@ -41,6 +41,15 @@ ja:
     show:
       page_title: "プロフィール"
       user_name: "ユーザー名"
+    edit:
+      page_title: "プロフィール編集"
+      name_label: "名前"
+      avatar_label: "プロフィールアイコン"
+      submit: "保存"
+      cancel: "キャンセル"
+    update:
+      success: "プロフィールを更新しました"
+      error: "プロフィールの更新に失敗しました"
   navbar:
     welcome: "ようこそ, %{name} さん"
     profile: "プロフィール"
