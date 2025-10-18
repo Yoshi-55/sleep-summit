@@ -10,7 +10,7 @@ Rails.application.routes.draw do
 
   get "history", to: "history#index"
 
-  get "profile", to: "profiles#show"
+  get "profile", to: "users#show"
 
   if Rails.env.production?
     get "/seed_sample_data", to: "seeds#sample_data"
