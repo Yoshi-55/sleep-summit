@@ -12,6 +12,7 @@ Rails.application.routes.draw do
 
   get "profile", to: "users#show", as: :profile
   get "profile/edit", to: "users#edit", as: :edit_profile
+  resource :profile, only: [ :update ], controller: "users"
 
   if Rails.env.production?
     get "/seed_sample_data", to: "seeds#sample_data"
