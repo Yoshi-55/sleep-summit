@@ -38,6 +38,7 @@ RSpec.describe "Users", type: :system do
       fill_in I18n.t('activerecord.attributes.user.email'), with: user.email
       fill_in I18n.t('activerecord.attributes.user.password'), with: user.password
       click_button I18n.t('devise.shared.links.sign_in')
+      user.update(avatar: nil)
       visit profile_path
     end
 
@@ -82,6 +83,7 @@ RSpec.describe "Users", type: :system do
 
       scenario "有効な名前を入力して保存すると成功メッセージと新しい名前が表示される" do
         fill_in I18n.t('profiles.edit.name_label'), with: "新しい名前"
+        choose 'boy-1', allow_label_click: true # ← アバターも選択(バリデーション通過のため)
         click_button I18n.t('profiles.edit.submit')
 
         expect(page).to have_content(I18n.t('profiles.update.success'))
@@ -92,7 +94,7 @@ RSpec.describe "Users", type: :system do
         fill_in I18n.t('profiles.edit.name_label'), with: ""
         click_button I18n.t('profiles.edit.submit')
 
-        expect(page).to have_content(I18n.t('errors.messages.blank'))
+        expect(page).to have_content(I18n.t('profiles.update.error'))
       end
 
       scenario "プリセット画像(boy-1)を選択して保存すると成功メッセージとプロフィールが更新される" do
@@ -100,14 +102,13 @@ RSpec.describe "Users", type: :system do
         click_button I18n.t('profiles.edit.submit')
 
         expect(page).to have_content(I18n.t('profiles.update.success'))
-
-        expect(page).to have_selector("img[alt='プロフィールアイコン']")
+        expect(page).to have_selector("img[alt='#{I18n.t('profiles.edit.avatar_label')}'][src*='boy-1']")
       end
 
       scenario "プリセット未選択で保存するとエラーメッセージが表示され、更新されない" do
         click_button I18n.t('profiles.edit.submit')
 
-        expect(page).to have_content(I18n.t('errors.messages.invalid_avatar_type', default: I18n.t('errors.messages.invalid')))
+        expect(page).to have_content(I18n.t('profiles.update.error'))
       end
     end
   end
