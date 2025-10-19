@@ -1,22 +1,37 @@
-<h1><%= t('profiles.edit.page_title') %></h1>
+<% content_for :page_title do %>
+  <%= t('profiles.edit.page_title') %>
+<% end %>
 
-<%= form_with model: current_user, url: profile_path, method: :patch, local: true do |f| %>
+<div class="min-h-screen">
+  <div class="container mx-auto p-6">
+
+    <%= render 'shared/navbar' %>
+
+    <div class="card bg-base-100 border border-base-300 p-8 max-w-lg mx-auto">
+      <div class="flex flex-col items-center">
+        <%= form_with model: current_user, url: profile_path, method: :patch, local: true do |f| %>
   <div>
     <%= f.label :name, t('profiles.edit.name_label') %>
-    <%= f.text_field :name %>
+    <%= f.text_field :name, class: "input input-bordered w-full mb-4" %>
   </div>
 
   <div>
     <%= f.label :avatar, t('profiles.edit.avatar_label') %>
-    <div>
-      <% ["default", "boy-1"].each do |img| %>
-        <label>
-          <%= f.radio_button :avatar, img, id: img %>
-          <%= image_tag "avatars/#{img}", size: "50x50" %>
+    <div class="flex gap-6 mt-2">
+      <% ["default", "boy-1", "boy-2", "girl-1", "girl-2"].each do |img| %>
+        <label class="flex flex-col items-center cursor-pointer">
+          <%= f.radio_button :avatar, img, id: img, class: "radio radio-primary mb-2" %>
+          <%= image_tag "avatars/#{img}", size: "50x50", class: "rounded-full border border-base-300" %>
         </label>
       <% end %>
     </div>
-  </div>
+      </div>
 
-  <%= f.submit t('profiles.edit.submit') %>
-<% end %>
+      <div class="mt-6 flex justify-center">
+        <%= f.submit t('profiles.edit.submit'), class: "btn btn-primary" %>
+      </div>
+    <% end %>
+      </div>
+    </div>
+  </div>
+</div>
