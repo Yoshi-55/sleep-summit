@@ -13,7 +13,11 @@
         <% else %>
           <%= image_tag "avatars/default.png", alt: t('profiles.edit.avatar_label'), class: "w-20 h-20 rounded-full mb-4" %>
         <% end %>
-        <p><strong><%= t('profiles.show.user_name') %>:</strong> <%= @user.name %></p>
+        <%= t('profiles.show.user_name') %>: <%= @user.name %>
+
+        <div class="mt-6">
+          <%= link_to t('profiles.edit.page_title'), edit_profile_path, class: "btn btn-primary" %>
+        </div>
       </div>
     </div>
   </div>
