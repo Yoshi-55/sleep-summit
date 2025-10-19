@@ -9,9 +9,9 @@
           <%= t('navbar.welcome', name: current_user.name) %>
         </span>
         <div class="w-10 rounded-full overflow-hidden">
-          <img
-            alt="icon （仮）"
-            src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiLuW2xcJlrbLdQDiw-wTCsElgoQIvbaXRZ40pCZX9vxYuLh1W3njnzZ_SZddy3nVpXeTDZqdKX6rI-MQBECmDwL80RPHDA4d5_lBe89Z8YTbBw9LSlnkTYFbKFmLvObN6tMyyCx7kPVQiMVILHoqH-ze4DDH1n6tf6PIo06l_6w95xdmZ40m7X7Bzx9g/s664/rennai_kaeruka.png" />
+          <label>
+            <%= image_tag "avatars/#{current_user.avatar || 'default.png'}", size: "50x50" %>
+          </label>
         </div>
       </div>
       <ul
