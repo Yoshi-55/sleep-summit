@@ -1,1 +1,22 @@
 <h1><%= t('profiles.edit.page_title') %></h1>
+
+<%= form_with model: current_user, url: profile_path, method: :patch, local: true do |f| %>
+  <div>
+    <%= f.label :name, t('profiles.edit.name_label') %>
+    <%= f.text_field :name %>
+  </div>
+
+  <div>
+    <%= f.label :avatar, t('profiles.edit.avatar_label') %>
+    <div>
+      <% ["default", "boy-1"].each do |img| %>
+        <label>
+          <%= f.radio_button :avatar, img, id: img %>
+          <%= image_tag "avatars/#{img}", size: "50x50" %>
+        </label>
+      <% end %>
+    </div>
+  </div>
+
+  <%= f.submit t('profiles.edit.submit') %>
+<% end %>
