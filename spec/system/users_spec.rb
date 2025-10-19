@@ -95,8 +95,8 @@ RSpec.describe "Users", type: :system do
         expect(page).to have_content(I18n.t('errors.messages.blank'))
       end
 
-      scenario "png画像を選択して保存すると成功メッセージと新しいアイコンが表示される" do
-        attach_file I18n.t('profiles.edit.avatar_label'), Rails.root.join('spec/fixtures/files/sample_avatar.png')
+      scenario "プリセット画像(boy-1)を選択して保存すると成功メッセージとプロフィールが更新される" do
+        choose 'boy-1', allow_label_click: true
         click_button I18n.t('profiles.edit.submit')
 
         expect(page).to have_content(I18n.t('profiles.update.success'))
@@ -104,8 +104,7 @@ RSpec.describe "Users", type: :system do
         expect(page).to have_selector("img[alt='プロフィールアイコン']")
       end
 
-      scenario "許可されていない拡張子(gif)を選択するとバリデーションエラーが表示される" do
-        attach_file I18n.t('profiles.edit.avatar_label'), Rails.root.join('spec/fixtures/files/invalid_avatar.gif')
+      scenario "プリセット未選択で保存するとエラーメッセージが表示され、更新されない" do
         click_button I18n.t('profiles.edit.submit')
 
         expect(page).to have_content(I18n.t('errors.messages.invalid_avatar_type', default: I18n.t('errors.messages.invalid')))
