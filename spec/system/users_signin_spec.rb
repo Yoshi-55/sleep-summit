@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe "ユーザーログイン", type: :system do
   let(:user) { FactoryBot.create(:user) }
 
-  scenario "ログインできること" do
+  it "ログインできること" do
     visit new_user_session_path
     fill_in I18n.t('activerecord.attributes.user.email'), with: user.email
     fill_in I18n.t('activerecord.attributes.user.password'), with: user.password

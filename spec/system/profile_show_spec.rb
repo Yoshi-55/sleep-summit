@@ -12,15 +12,15 @@ RSpec.describe "プロフィール表示", type: :system do
     visit profile_path
   end
 
-  scenario "自分のプロフィールページが表示できる" do
+  it "自分のプロフィールページが表示できる" do
     expect(page).to have_content(user.name)
   end
 
-  scenario "メールアドレスが表示されないこと" do
+  it "メールアドレスが表示されないこと" do
     expect(page).not_to have_content(user.email)
   end
 
-  scenario "ページタイトルがI18nで表示される" do
+  it "ページタイトルがI18nで表示される" do
     expect(page).to have_content(I18n.t('profiles.show.page_title'))
   end
 end
