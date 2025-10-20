@@ -14,7 +14,16 @@ class UsersController < ApplicationController
     if @user.update(user_params)
       redirect_to profile_path, notice: I18n.t("profiles.update.success")
     else
-      redirect_to edit_profile_path, alert: I18n.t("profiles.update.error")
+        if @user.errors[:avatar].present?
+          flash[:alert] = I18n.t("profiles.update.avatar_error")
+        elsif @user.errors[:name].include?(I18n.t("errors.messages.blank"))
+          flash[:alert] = I18n.t("profiles.update.name_error")
+        elsif @user.errors[:name].any? { |msg| msg.include?(I18n.t("errors.messages.too_long", count: 20)) }
+          flash[:alert] = I18n.t("profiles.update.name_length_error")
+        else
+          flash[:alert] = I18n.t("profiles.update.error")
+        end
+      redirect_to edit_profile_path
     end
   end
 
