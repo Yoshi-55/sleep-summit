@@ -50,6 +50,9 @@ ja:
     update:
       success: "プロフィールを更新しました"
       error: "プロフィールの更新に失敗しました"
+      avatar_error: "プロフィールアイコンを選択してください"
+      name_error: "名前を入力してください"
+      name_length_error: "名前は20文字以内で入力してください"
   navbar:
     welcome: "ようこそ, %{name} さん"
     profile: "プロフィール"
