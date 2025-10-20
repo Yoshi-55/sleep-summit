@@ -10,6 +10,22 @@ RSpec.describe User, type: :model do
       end
     end
 
+    context "名前が空欄の場合" do
+      it "バリデーションに失敗し、エラーメッセージが正しいこと" do
+        user = FactoryBot.build(:user, name: "")
+        expect(user).not_to be_valid
+        expect(user.errors[:name]).to include(I18n.t("errors.messages.blank"))
+      end
+    end
+
+    context "名前が21文字以上の場合" do
+      it "バリデーションに失敗し、エラーメッセージが正しいこと" do
+        user = FactoryBot.build(:user, name: "あ" * 21)
+        expect(user).not_to be_valid
+        expect(user.errors[:name]).to include(I18n.t("errors.messages.too_long", count: 20))
+      end
+    end
+
     context "メールアドレスがない場合" do
       it "バリデーションに失敗すること" do
         user = FactoryBot.build(:user, email: nil)
