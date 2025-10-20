@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe "ユーザー新規登録", type: :system do
-  scenario "ユーザー登録できること" do
+  it "ユーザー登録できること" do
     visit new_user_registration_path
     fill_in I18n.t('activerecord.attributes.user.name'), with: "admin"
     fill_in I18n.t('activerecord.attributes.user.email'), with: "test@example.com"
