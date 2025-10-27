@@ -9,10 +9,11 @@ class DashboardController < ApplicationController
     # unwoken(未就寝)
     @unwoken_record = current_user.sleep_records.unbedded.first
 
-    @series = SleepRecord.build_series(@week_records, range: week_start..week_end)
-
+    aggregator = SleepRecordAggregator.new(@week_records)
     week_days = (week_start.to_date..week_end.to_date).to_a
-    @weekly_records = SleepRecord.build_cumulative(@week_records, week_days)
+    @weekly_records = aggregator.build_cumulative(week_days)
+
+    @series = SleepRecordChartBuilder.new(@week_records).build_series(range: week_start..week_end)
 
     # 日ごと集計して平均を計算（累計 ÷ 記録のある日数）
     valid_days = @weekly_records.select { |d| d[:daily_sleep_hours].present? && d[:daily_wake_hours].present? }
@@ -32,7 +33,7 @@ class DashboardController < ApplicationController
     valid_wake_records  = @week_records.select { |r| r.wake_time.present? }
     valid_sleep_records = @week_records.select { |r| r.wake_time.present? && r.bed_time.present? }
 
-    @weekly_average_wake_time = SleepRecord.average_time(valid_wake_records, :wake_time)
-    @weekly_average_bed_time  = SleepRecord.average_time(valid_sleep_records, :bed_time)
+    @weekly_average_wake_time = SleepRecordAggregator.new(valid_wake_records).average_time(:wake_time)
+    @weekly_average_bed_time  = SleepRecordAggregator.new(valid_sleep_records).average_time(:bed_time)
   end
 end
