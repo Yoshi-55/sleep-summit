@@ -1,6 +1,6 @@
 services:
   db:
-    image: postgres
+    image: postgres:17
     restart: always
     environment:
       TZ: Asia/Tokyo
@@ -36,3 +36,4 @@ volumes:
   bundle_data:
   postgresql_data:
   node_modules:
+
