@@ -12,11 +12,17 @@ class SleepRecord < ApplicationRecord
 
   def bed_time_after_wake_time
     return if wake_time.blank? || bed_time.blank?
-    if bed_time >= wake_time
-      return
-    elsif bed_time.to_date > wake_time.to_date
+    if bed_time == wake_time
+      errors.add(:bed_time, "無効な入力です。就寝時刻は起床時刻より後に設定してください。")
       return
     end
-    errors.add(:bed_time, "無効な入力です。就寝時間は起床時間より後に設定してください。")
+    if bed_time < wake_time
+      # 前日夜→翌朝のみ許容
+      if bed_time.to_date == (wake_time.to_date - 1)
+        nil
+      else
+        errors.add(:bed_time, "無効な入力です。就寝時刻は起床時刻より後に設定してください。")
+      end
+    end
   end
 end
