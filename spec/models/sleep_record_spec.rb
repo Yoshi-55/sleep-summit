@@ -21,7 +21,8 @@ RSpec.describe SleepRecord, type: :model do
 
     context "bed_timeがwake_timeより前の場合" do
       it "無効である" do
-        record = FactoryBot.build(:sleep_record, wake_time: Time.current, bed_time: Time.current - 1.hour)
+        past_time = 1.day.ago
+        record = FactoryBot.build(:sleep_record, wake_time: past_time, bed_time: past_time - 1.hour)
         expect(record).not_to be_valid
         expect(record.errors[:bed_time]).not_to be_empty
       end
@@ -29,7 +30,8 @@ RSpec.describe SleepRecord, type: :model do
 
     context "bed_timeがwake_timeより後の場合" do
       it "有効である" do
-        record = FactoryBot.build(:sleep_record, wake_time: Time.current, bed_time: Time.current + 1.hour)
+        past_time = 1.day.ago
+        record = FactoryBot.build(:sleep_record, wake_time: past_time, bed_time: past_time + 1.hour)
         expect(record).to be_valid
       end
     end

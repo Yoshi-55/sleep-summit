@@ -3,12 +3,22 @@ class SleepRecord < ApplicationRecord
 
   validates :wake_time, presence: true
   validate :bed_time_after_wake_time
+  validate :times_not_in_future
 
   scope :unbedded, -> { where(bed_time: nil) }
   scope :with_wake_time, -> { where.not(wake_time: nil) }
   scope :finished, -> { where.not(bed_time: nil) }
 
   private
+
+  def times_not_in_future
+    if wake_time.present? && wake_time > Time.current
+      errors.add(:wake_time, "未来の時刻は設定できません")
+    end
+    if bed_time.present? && bed_time > Time.current
+      errors.add(:bed_time, "未来の時刻は設定できません")
+    end
+  end
 
   def bed_time_after_wake_time
     return if wake_time.blank? || bed_time.blank?

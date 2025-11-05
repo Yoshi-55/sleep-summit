@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :sleep_record do
-    wake_time { Time.current }
-    bed_time { Time.current + 8.hours }
+    wake_time { 1.day.ago.change(hour: 6, min: 0) }
+    bed_time { 1.day.ago.change(hour: 23, min: 0) }
     association :user
 
     trait :unbedded do
