@@ -5,13 +5,13 @@ class SleepRecordsController < ApplicationController
 
   def new
     @sleep_record = current_user.sleep_records.build
-    
+
     if params[:date].present?
       date = Date.parse(params[:date])
       @sleep_record.wake_time = Time.zone.local(date.year, date.month, date.day, 6, 0)
       @sleep_record.bed_time = Time.zone.local(date.year, date.month, date.day, 22, 0)
     end
-    
+
     session[:return_to] = request.referer
   end
 
@@ -63,13 +63,13 @@ class SleepRecordsController < ApplicationController
   def create_from_form
     wake_time_param = params[:sleep_record][:wake_time]
     bed_time_param = params[:sleep_record][:bed_time]
-    
+
     attributes = {}
     attributes[:wake_time] = Time.zone.parse(wake_time_param) if wake_time_param.present?
     attributes[:bed_time] = Time.zone.parse(bed_time_param) if bed_time_param.present?
-    
+
     @sleep_record = current_user.sleep_records.build(attributes)
-    
+
     if @sleep_record.save
       return_path = session.delete(:return_to) || authenticated_root_path
       redirect_to return_path, notice: "記録を作成しました"
@@ -92,11 +92,11 @@ class SleepRecordsController < ApplicationController
   def update_sleep_record
     wake_time_param = params[:sleep_record][:wake_time]
     bed_time_param = params[:sleep_record][:bed_time]
-    
+
     attributes = {}
     attributes[:wake_time] = Time.zone.parse(wake_time_param) if wake_time_param.present?
     attributes[:bed_time] = Time.zone.parse(bed_time_param) if bed_time_param.present?
-    
+
     if @sleep_record.update(attributes)
       return_path = session.delete(:return_to) || authenticated_root_path
       redirect_to return_path, notice: "記録を更新しました"

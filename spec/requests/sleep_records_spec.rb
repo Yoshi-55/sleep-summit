@@ -32,7 +32,7 @@ RSpec.describe "SleepRecords", type: :request do
         wake_time = 2.days.ago.change(hour: 6, min: 0)
         bed_time = wake_time + 1.hour
         record = FactoryBot.create(:sleep_record, user: user, wake_time: wake_time, bed_time: bed_time)
-        
+
         new_wake_time = 3.days.ago.change(hour: 7, min: 0)
         new_bed_time = new_wake_time + 2.hours
 
@@ -53,7 +53,7 @@ RSpec.describe "SleepRecords", type: :request do
         wake_time = 2.days.ago.change(hour: 6, min: 0)
         bed_time = wake_time + 1.hour
         record = FactoryBot.create(:sleep_record, user: user, wake_time: wake_time, bed_time: bed_time)
-        
+
         future_time = 1.day.from_now
 
         patch sleep_record_path(record), params: {
@@ -88,7 +88,7 @@ RSpec.describe "SleepRecords", type: :request do
       wake_time = 2.days.ago.change(hour: 6, min: 0)
       bed_time = wake_time + 1.hour
       record = FactoryBot.create(:sleep_record, user: user, wake_time: wake_time, bed_time: bed_time)
-      
+
       get edit_sleep_record_path(record)
       expect(response).to have_http_status(:success)
     end
