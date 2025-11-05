@@ -19,5 +19,5 @@ Rails.application.routes.draw do
   end
 
 
-  resources :sleep_records, only: [ :create, :update ]
+  resources :sleep_records, only: [ :new, :create, :update, :edit ]
 end
