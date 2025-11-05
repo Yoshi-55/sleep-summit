@@ -42,10 +42,18 @@ class SleepRecordAggregator
   def build_cumulative(days_range)
     return [] if @records.empty?
     sorted = @records.select { |r| r.wake_time.present? }.sort_by(&:wake_time)
+    
     prev_record = if sorted.first
       user = sorted.first.user
-      user.sleep_records.where("wake_time < ?", sorted.first.wake_time).order(wake_time: :desc).first
+      range_start = days_range.first
+      if range_start == range_start.beginning_of_month
+        nil
+      else
+        month_start = range_start.beginning_of_month
+        user.sleep_records.where("wake_time >= ? AND wake_time < ?", month_start, sorted.first.wake_time).order(wake_time: :desc).first
+      end
     end
+    
     all_records = [ prev_record, *sorted ].compact
     records_by_date = @records.group_by { |r| r.wake_time&.to_date }.compact
     days_range.map do |day|
@@ -72,6 +80,7 @@ class SleepRecordAggregator
     first = day_records.min_by(&:wake_time)
     last = day_records.max_by(&:wake_time)
     {
+      id: first.id,
       day: first.wake_time.to_date,
       wake_times: [ format_time(first.wake_time) ],
       bed_times: last.bed_time ? [ format_time(last.bed_time) ] : [],
