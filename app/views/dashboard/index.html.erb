@@ -51,7 +51,7 @@
 
         <!-- 記録テーブル -->
       <div class="card bg-base-100 border border-base-300">
-        <details class="group [&_summary::-webkit-details-marker]:hidden">
+        <details class="group [&_summary::-webkit-details-marker]:hidden" open>
           <summary class="cursor-pointer p-4 font-bold text-xl bg-base-100 flex justify-between items-center rounded-t-lg">
             <%= t('dashboard.index.this_week_records') %>
             <span class="transition-transform duration-300 group-open:rotate-180">⤵︎</span>
@@ -67,6 +67,7 @@
                   <th class="px-4 py-3 text-sm font-semibold text-base-content/70"><%= t('dashboard.index.daily_sleep_hours') %></th>
                   <th class="px-4 py-3 text-sm font-semibold text-base-content/70"><%= t('dashboard.index.cumulative_wake_hours') %></th>
                   <th class="px-4 py-3 text-sm font-semibold text-base-content/70"><%= t('dashboard.index.cumulative_sleep_hours') %></th>
+                  <th class="px-4 py-3 text-sm font-semibold text-base-content/70">操作</th>
                 </tr>
               </thead>
               <tbody>
@@ -109,6 +110,13 @@
                     <td class="px-4 py-3 text-info text-sm font-semibold">
                       <%= record[:cumulative_sleep_hours] || '-' %>
                     </td>
+                    <td class="px-4 py-3">
+                      <% if record[:id].present? %>
+                        <%= link_to '編集', edit_sleep_record_path(record[:id]), class: "btn btn-xs btn-outline" %>
+                      <% else %>
+                        <%= link_to '追加', new_sleep_record_path(date: record[:day]), class: "btn btn-xs btn-outline btn-primary" %>
+                      <% end %>
+                    </td>
                   </tr>
                 <% end %>
               </tbody>
@@ -143,6 +151,7 @@
               <%= button_to I18n.t('dashboard.index.bed_record'),
                   (@unwoken_record ? sleep_record_path(@unwoken_record) : "#"),
                   method: :patch,
+                  params: { record_type: 'bed_time' },
                   class: "btn btn-secondary btn-lg w-full #{'btn-disabled' if @unwoken_record.nil?}",
                   disabled: @unwoken_record.nil? %>
             </div>
