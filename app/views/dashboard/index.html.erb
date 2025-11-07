@@ -5,9 +5,9 @@
   <div class="container mx-auto p-6">
     <%= render 'shared/navbar' %>
 
-    <div class="flex flex-col lg:flex-row gap-6 mb-8">
+    <div class="flex flex-col lg:flex-row gap-3 sm:gap-4 lg:gap-6 mb-6 sm:mb-8">
       <!-- 左カラム -->
-      <div class="w-full lg:flex-[7] flex flex-col gap-6">
+      <div class="w-full lg:flex-[7] flex flex-col gap-3 sm:gap-4 lg:gap-6">
         <!-- グラフ -->
         <div class="card bg-base-100 border border-base-300">
           <div class="card-body p-4">
@@ -17,143 +17,246 @@
             </div>
             <div id="sleep-chart"
               data-series='<%= @series.to_json.html_safe %>'
-              style="height: 350px;">
-            </div>
-          </div>
-        </div>
-        <!-- 統計 -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div class="card bg-base-100 border border-base-300 text-center p-4">
-            <div class="text-xs text-base-content/70 mb-2"><%= t('dashboard.index.weekly_average_wake_hours') %></div>
-            <div class="text-2xl font-bold text-success">
-              <%= @weekly_average_wake_hours ? sprintf("%.2f", @weekly_average_wake_hours) : '-' %>h
-            </div>
-          </div>
-          <div class="card bg-base-100 border border-base-300 text-center p-4">
-            <div class="text-xs text-base-content/70 mb-2"><%= t('dashboard.index.weekly_average_sleep_hours') %></div>
-            <div class="text-2xl font-bold text-info">
-              <%= @weekly_average_sleep_hours ? sprintf("%.2f", @weekly_average_sleep_hours) : '-' %>h
-            </div>
-          </div>
-          <div class="card bg-base-100 border border-base-300 text-center p-4">
-            <div class="text-xs text-base-content/70 mb-2"><%= t('dashboard.index.weekly_average_wake_time') %></div>
-            <div class="text-2xl font-bold text-primary">
-              <%= @weekly_average_wake_time || "--:--" %>
-            </div>
-          </div>
-          <div class="card bg-base-100 border border-base-300 text-center p-4">
-            <div class="text-xs text-base-content/70 mb-2"><%= t('dashboard.index.weekly_average_bed_time') %></div>
-            <div class="text-2xl font-bold text-secondary">
-              <%= @weekly_average_bed_time || "--:--" %>
+              class="h-[250px] sm:h-[300px] lg:h-[350px]">
             </div>
           </div>
         </div>
 
-        <!-- 記録テーブル -->
-      <div class="card bg-base-100 border border-base-300">
-        <details class="group [&_summary::-webkit-details-marker]:hidden" open>
-          <summary class="cursor-pointer p-4 font-bold text-xl bg-base-100 flex justify-between items-center rounded-t-lg">
-            <%= t('dashboard.index.this_week_records') %>
-            <span class="transition-transform duration-300 group-open:rotate-180">⤵︎</span>
-          </summary>
-          <div class="overflow-x-auto p-4">
-            <table class="table table-zebra w-full border-t border-base-300">
-              <thead class="bg-base-200">
-                <tr>
-                  <th class="px-4 py-3 text-sm font-semibold text-base-content/70"><%= t('dashboard.index.date') %></th>
-                  <th class="px-4 py-3 text-sm font-semibold text-base-content/70"><%= t('dashboard.index.wake_time') %></th>
-                  <th class="px-4 py-3 text-sm font-semibold text-base-content/70"><%= t('dashboard.index.bed_time') %></th>
-                  <th class="px-4 py-3 text-sm font-semibold text-base-content/70"><%= t('dashboard.index.daily_wake_hours') %></th>
-                  <th class="px-4 py-3 text-sm font-semibold text-base-content/70"><%= t('dashboard.index.daily_sleep_hours') %></th>
-                  <th class="px-4 py-3 text-sm font-semibold text-base-content/70"><%= t('dashboard.index.cumulative_wake_hours') %></th>
-                  <th class="px-4 py-3 text-sm font-semibold text-base-content/70"><%= t('dashboard.index.cumulative_sleep_hours') %></th>
-                  <th class="px-4 py-3 text-sm font-semibold text-base-content/70">操作</th>
-                </tr>
-              </thead>
-              <tbody>
-                <% @weekly_records.each_with_index do |record, idx| %>
-                  <tr class="hover">
-                    <td class="px-4 py-3">
-                      <%= record[:day].is_a?(Date) ? record[:day].strftime("%m-%d (%a)") : '--' %>
-                    </td>
-                    <td class="px-4 py-3">
-                      <% if record[:wake_times].present? %>
-                        <% record[:wake_times].each do |time| %>
-                          <span class="badge badge-success badge-sm mb-1">
-                            <%= Time.parse(time).strftime("%m/%d_%H:%M") %>
-                          </span>
-                        <% end %>
-                      <% else %>
-                        <span class="text-base-content/40">-</span>
-                      <% end %>
-                    </td>
-                    <td class="px-4 py-3">
-                      <% if record[:bed_times].present? %>
-                        <% record[:bed_times].each do |time| %>
-                          <span class="badge badge-secondary badge-sm mb-1">
-                            <%= Time.parse(time).strftime("%m/%d_%H:%M") %>
-                          </span>
-                        <% end %>
-                      <% else %>
-                        <span class="text-base-content/40">-</span>
-                      <% end %>
-                    </td>
-                    <td class="px-4 py-3 text-accent font-semibold">
-                      <%= record[:daily_wake_hours] ? sprintf("%.2f", record[:daily_wake_hours]) : '-' %>
-                    </td>
-                    <td class="px-4 py-3 text-info font-semibold">
-                      <%= record[:daily_sleep_hours] ? sprintf("%.2f", record[:daily_sleep_hours]) : '-' %>
-                    </td>
-                    <td class="px-4 py-3 text-accent text-sm font-semibold">
-                      <%= record[:cumulative_wake_hours] || '-' %>
-                    </td>
-                    <td class="px-4 py-3 text-info text-sm font-semibold">
-                      <%= record[:cumulative_sleep_hours] || '-' %>
-                    </td>
-                    <td class="px-4 py-3">
-                      <% if record[:id].present? %>
-                        <%= link_to '編集', edit_sleep_record_path(record[:id]), class: "btn btn-xs btn-outline" %>
-                      <% else %>
-                        <%= link_to '追加', new_sleep_record_path(date: record[:day]), class: "btn btn-xs btn-outline btn-primary" %>
-                      <% end %>
-                    </td>
-                  </tr>
-                <% end %>
-              </tbody>
-            </table>
-          </div>
-        </details>
-      </div>
-
-
-      </div>
-
-      <!-- 右カラム -->
-      <div class="w-full lg:flex-[3] flex flex-col gap-6">
-
-        <!-- 記録カード -->
-        <div class="h-[240px] card bg-base-100 border border-base-300">
-          <div class="card-body p-4 flex flex-col justify-between">
-            <div class="text-center p-3 bg-base-200">
-              <div class="text-2xl font-mono font-bold text-base-content">
-                <%= Time.current.strftime("%H:%M") %>
-              </div>
-              <div class="text-xs text-base-content/70">
-                <%= Time.current.strftime("%Y/%m/%d") %>
-              </div>
-            </div>
-
+        <!-- 記録カード（モバイル） -->
+        <div class="lg:hidden card bg-base-100 border border-base-300">
+          <div class="card-body p-4">
             <div class="space-y-3">
               <%= button_to I18n.t('dashboard.index.wake_record'), sleep_records_path,
                   method: :post,
                   class: "btn btn-primary btn-lg w-full #{'btn-disabled' if @unwoken_record.present?}",
-                  disabled: @unwoken_record.present? %>
+                  disabled: @unwoken_record.present?,
+                  data: { test: 'mobile-wake-button' } %>
               <%= button_to I18n.t('dashboard.index.bed_record'),
                   (@unwoken_record ? sleep_record_path(@unwoken_record) : "#"),
                   method: :patch,
                   params: { record_type: 'bed_time' },
                   class: "btn btn-secondary btn-lg w-full #{'btn-disabled' if @unwoken_record.nil?}",
-                  disabled: @unwoken_record.nil? %>
+                  disabled: @unwoken_record.nil?,
+                  data: { test: 'mobile-bed-button' } %>
+            </div>
+          </div>
+        </div>
+
+        <!-- 記録テーブル -->
+        <div class="card bg-base-100 border border-base-300">
+          <details class="group [&_summary::-webkit-details-marker]:hidden">
+            <summary class="cursor-pointer p-4 font-bold text-xl bg-base-100 flex justify-between items-center rounded-t-lg">
+              <%= t('dashboard.index.this_week_records') %>
+              <span class="transition-transform duration-300 group-open:rotate-180">⤵︎</span>
+            </summary>
+            <div class="p-4">
+              <!-- モバイル用カード表示 -->
+              <div class="md:hidden space-y-2">
+                <% @weekly_records.each_with_index do |record, idx| %>
+                  <div class="card bg-base-100 border border-base-300 shadow-sm">
+                    <details class="group">
+                      <summary class="cursor-pointer p-3 flex justify-between items-center list-none">
+                        <div class="flex-1">
+                          <div class="flex items-center gap-3 mb-1">
+                            <h4 class="font-bold text-sm">
+                              <%= record[:day].is_a?(Date) ? record[:day].strftime("%m-%d (%a)") : '--' %>
+                            </h4>
+                            <% if record[:id].present? %>
+                              <%= link_to '編集', edit_sleep_record_path(record[:id]), class: "btn btn-xs btn-outline", onclick: "event.stopPropagation()" %>
+                            <% else %>
+                              <%= link_to '追加', new_sleep_record_path(date: record[:day]), class: "btn btn-xs btn-outline btn-primary", onclick: "event.stopPropagation()" %>
+                            <% end %>
+                          </div>
+                          <div class="text-xs text-base-content/70 flex gap-4">
+                            <span class="flex items-center gap-1">
+                              <i class="ph-fill ph-sun text-warning"></i>
+                              <% if record[:wake_times].present? %>
+                                <%= Time.parse(record[:wake_times].first).strftime("%H:%M") %>
+                              <% else %>
+                                -
+                              <% end %>
+                            </span>
+                            <span class="flex items-center gap-1">
+                              <i class="ph-fill ph-moon text-info"></i>
+                              <% if record[:bed_times].present? %>
+                                <%= Time.parse(record[:bed_times].last).strftime("%H:%M") %>
+                              <% else %>
+                                -
+                              <% end %>
+                            </span>
+                          </div>
+                        </div>
+                        <span class="transition-transform duration-300 group-open:rotate-180 text-base-content/50">▼</span>
+                      </summary>
+
+                      <div class="px-3 pb-3 pt-2 border-t border-base-300">
+                        <div class="grid grid-cols-2 gap-3 text-sm">
+                          <div>
+                            <div class="text-xs text-base-content/70 mb-1"><%= t('dashboard.index.wake_time') %></div>
+                            <% if record[:wake_times].present? %>
+                              <% record[:wake_times].each do |time| %>
+                                <span class="badge badge-success badge-sm mb-1 text-xs">
+                                  <%= Time.parse(time).strftime("%H:%M") %>
+                                </span>
+                              <% end %>
+                            <% else %>
+                              <span class="text-base-content/40">-</span>
+                            <% end %>
+                          </div>
+
+                          <div>
+                            <div class="text-xs text-base-content/70 mb-1"><%= t('dashboard.index.bed_time') %></div>
+                            <% if record[:bed_times].present? %>
+                              <% record[:bed_times].each do |time| %>
+                                <span class="badge badge-secondary badge-sm mb-1 text-xs">
+                                  <%= Time.parse(time).strftime("%H:%M") %>
+                                </span>
+                              <% end %>
+                            <% else %>
+                              <span class="text-base-content/40">-</span>
+                            <% end %>
+                          </div>
+
+                          <div>
+                            <div class="text-xs text-base-content/70 mb-1"><%= t('dashboard.index.cumulative_wake_hours') %></div>
+                            <div class="text-accent text-sm font-semibold">
+                              <%= record[:cumulative_wake_hours] || '-' %>
+                            </div>
+                          </div>
+
+                          <div>
+                            <div class="text-xs text-base-content/70 mb-1"><%= t('dashboard.index.cumulative_sleep_hours') %></div>
+                            <div class="text-info text-sm font-semibold">
+                              <%= record[:cumulative_sleep_hours] || '-' %>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </details>
+                  </div>
+                <% end %>
+              </div>
+
+              <!-- デスクトップ用テーブル表示 -->
+              <div class="hidden md:block overflow-x-auto">
+                <table class="table table-zebra w-full border-t border-base-300 text-sm">
+                  <thead class="bg-base-200">
+                    <tr>
+                      <th class="px-4 py-3 text-sm font-semibold text-base-content/70"><%= t('dashboard.index.date') %></th>
+                      <th class="px-4 py-3 text-sm font-semibold text-base-content/70"><%= t('dashboard.index.wake_time') %></th>
+                      <th class="px-4 py-3 text-sm font-semibold text-base-content/70"><%= t('dashboard.index.bed_time') %></th>
+                      <th class="px-4 py-3 text-sm font-semibold text-base-content/70"><%= t('dashboard.index.daily_wake_hours') %></th>
+                      <th class="px-4 py-3 text-sm font-semibold text-base-content/70"><%= t('dashboard.index.daily_sleep_hours') %></th>
+                      <th class="px-4 py-3 text-sm font-semibold text-base-content/70"><%= t('dashboard.index.cumulative_wake_hours') %></th>
+                      <th class="px-4 py-3 text-sm font-semibold text-base-content/70"><%= t('dashboard.index.cumulative_sleep_hours') %></th>
+                      <th class="px-4 py-3 text-sm font-semibold text-base-content/70">操作</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% @weekly_records.each_with_index do |record, idx| %>
+                      <tr class="hover">
+                        <td class="px-4 py-3 whitespace-nowrap">
+                          <%= record[:day].is_a?(Date) ? record[:day].strftime("%m-%d (%a)") : '--' %>
+                        </td>
+                        <td class="px-4 py-3">
+                          <% if record[:wake_times].present? %>
+                            <% record[:wake_times].each do |time| %>
+                              <span class="badge badge-success badge-sm mb-1 text-xs">
+                                <%= Time.parse(time).strftime("%m/%d_%H:%M") %>
+                              </span>
+                            <% end %>
+                          <% else %>
+                            <span class="text-base-content/40">-</span>
+                          <% end %>
+                        </td>
+                        <td class="px-4 py-3">
+                          <% if record[:bed_times].present? %>
+                            <% record[:bed_times].each do |time| %>
+                              <span class="badge badge-secondary badge-sm mb-1 text-xs">
+                                <%= Time.parse(time).strftime("%m/%d_%H:%M") %>
+                              </span>
+                            <% end %>
+                          <% else %>
+                            <span class="text-base-content/40">-</span>
+                          <% end %>
+                        </td>
+                        <td class="px-4 py-3 text-accent font-semibold">
+                          <%= record[:daily_wake_hours] ? sprintf("%.2f", record[:daily_wake_hours]) : '-' %>
+                        </td>
+                        <td class="px-4 py-3 text-info font-semibold">
+                          <%= record[:daily_sleep_hours] ? sprintf("%.2f", record[:daily_sleep_hours]) : '-' %>
+                        </td>
+                        <td class="px-4 py-3 text-accent text-sm font-semibold">
+                          <%= record[:cumulative_wake_hours] || '-' %>
+                        </td>
+                        <td class="px-4 py-3 text-info text-sm font-semibold">
+                          <%= record[:cumulative_sleep_hours] || '-' %>
+                        </td>
+                        <td class="px-4 py-3">
+                          <% if record[:id].present? %>
+                            <%= link_to '編集', edit_sleep_record_path(record[:id]), class: "btn btn-xs btn-outline whitespace-nowrap" %>
+                          <% else %>
+                            <%= link_to '追加', new_sleep_record_path(date: record[:day]), class: "btn btn-xs btn-outline btn-primary whitespace-nowrap" %>
+                          <% end %>
+                        </td>
+                      </tr>
+                    <% end %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </details>
+        </div>
+
+        <!-- 統計 -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
+          <div class="card bg-base-100 border border-base-300 text-center p-3 sm:p-4">
+            <div class="text-[10px] sm:text-xs text-base-content/70 mb-1 sm:mb-2 leading-tight"><%= t('dashboard.index.weekly_average_wake_hours') %></div>
+            <div class="text-lg sm:text-xl lg:text-2xl font-bold text-success">
+              <%= @weekly_average_wake_hours ? sprintf("%.2f", @weekly_average_wake_hours) : '-' %>h
+            </div>
+          </div>
+          <div class="card bg-base-100 border border-base-300 text-center p-3 sm:p-4">
+            <div class="text-[10px] sm:text-xs text-base-content/70 mb-1 sm:mb-2 leading-tight"><%= t('dashboard.index.weekly_average_sleep_hours') %></div>
+            <div class="text-lg sm:text-xl lg:text-2xl font-bold text-info">
+              <%= @weekly_average_sleep_hours ? sprintf("%.2f", @weekly_average_sleep_hours) : '-' %>h
+            </div>
+          </div>
+          <div class="card bg-base-100 border border-base-300 text-center p-3 sm:p-4">
+            <div class="text-[10px] sm:text-xs text-base-content/70 mb-1 sm:mb-2 leading-tight"><%= t('dashboard.index.weekly_average_wake_time') %></div>
+            <div class="text-lg sm:text-xl lg:text-2xl font-bold text-primary">
+              <%= @weekly_average_wake_time || "--:--" %>
+            </div>
+          </div>
+          <div class="card bg-base-100 border border-base-300 text-center p-3 sm:p-4">
+            <div class="text-[10px] sm:text-xs text-base-content/70 mb-1 sm:mb-2 leading-tight"><%= t('dashboard.index.weekly_average_bed_time') %></div>
+            <div class="text-lg sm:text-xl lg:text-2xl font-bold text-secondary">
+              <%= @weekly_average_bed_time || "--:--" %>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 右カラム -->
+      <div class="hidden lg:flex w-full lg:flex-[3] flex-col gap-3 sm:gap-4 lg:gap-6">
+
+        <!-- 記録カード -->
+        <div class="card bg-base-100 border border-base-300">
+          <div class="card-body p-4">
+            <div class="space-y-3">
+              <%= button_to I18n.t('dashboard.index.wake_record'), sleep_records_path,
+                  method: :post,
+                  class: "btn btn-primary btn-lg w-full #{'btn-disabled' if @unwoken_record.present?}",
+                  disabled: @unwoken_record.present?,
+                  data: { test: 'desktop-wake-button' } %>
+              <%= button_to I18n.t('dashboard.index.bed_record'),
+                  (@unwoken_record ? sleep_record_path(@unwoken_record) : "#"),
+                  method: :patch,
+                  params: { record_type: 'bed_time' },
+                  class: "btn btn-secondary btn-lg w-full #{'btn-disabled' if @unwoken_record.nil?}",
+                  disabled: @unwoken_record.nil?,
+                  data: { test: 'desktop-bed-button' } %>
             </div>
           </div>
         </div>

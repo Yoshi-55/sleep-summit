@@ -17,8 +17,10 @@ document.addEventListener("turbo:load", () => {
         chart: {
           backgroundColor: "transparent",
           type: "area",
-          zoomType: "x"
+          zoomType: "x",
+          scrollablePlotArea: { minWidth: 400, scrollPositionX: 1 },
         },
+        accessibility: { enabled: false },
         colors: ["rgb(72, 125, 0)"],
         tooltip: {
           formatter: function() {

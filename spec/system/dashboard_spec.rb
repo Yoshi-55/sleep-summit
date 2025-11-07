@@ -27,7 +27,7 @@ RSpec.describe "Dashboard", type: :system do
 
   it "起床記録ボタンが表示されていて押せること" do
     expect(page).to have_button(I18n.t('dashboard.index.wake_record'), disabled: false)
-    click_button I18n.t('dashboard.index.wake_record')
+    find('button[data-test="mobile-wake-button"], button[data-test="desktop-wake-button"]', match: :first).click
     expect(page).to have_content(I18n.t('dashboard.index.wake_record'))
   end
 
@@ -35,14 +35,14 @@ RSpec.describe "Dashboard", type: :system do
     FactoryBot.create(:sleep_record, :unbedded, user: user)
     visit dashboard_path
     expect(page).to have_button(I18n.t('dashboard.index.bed_record'), disabled: false)
-    click_button I18n.t('dashboard.index.bed_record')
+    find('button[data-test="mobile-bed-button"], button[data-test="desktop-bed-button"]', match: :first).click
     expect(page).to have_content(I18n.t('dashboard.index.bed_record'))
   end
 
   it "起床記録後に就寝記録ボタンが有効になること" do
-    click_button I18n.t('dashboard.index.wake_record')
+    find('button[data-test="mobile-wake-button"], button[data-test="desktop-wake-button"]', match: :first).click
     expect(page).to have_button(I18n.t('dashboard.index.bed_record'), disabled: false)
-    click_button I18n.t('dashboard.index.bed_record')
+    find('button[data-test="mobile-bed-button"], button[data-test="desktop-bed-button"]', match: :first).click
     expect(page).to have_content(I18n.t('dashboard.index.bed_record'))
   end
 end
