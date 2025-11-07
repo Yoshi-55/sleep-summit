@@ -29,13 +29,15 @@
               <%= button_to I18n.t('dashboard.index.wake_record'), sleep_records_path,
                   method: :post,
                   class: "btn btn-primary btn-lg w-full #{'btn-disabled' if @unwoken_record.present?}",
-                  disabled: @unwoken_record.present? %>
+                  disabled: @unwoken_record.present?,
+                  data: { test: 'mobile-wake-button' } %>
               <%= button_to I18n.t('dashboard.index.bed_record'),
                   (@unwoken_record ? sleep_record_path(@unwoken_record) : "#"),
                   method: :patch,
                   params: { record_type: 'bed_time' },
                   class: "btn btn-secondary btn-lg w-full #{'btn-disabled' if @unwoken_record.nil?}",
-                  disabled: @unwoken_record.nil? %>
+                  disabled: @unwoken_record.nil?,
+                  data: { test: 'mobile-bed-button' } %>
             </div>
           </div>
         </div>
@@ -246,13 +248,15 @@
               <%= button_to I18n.t('dashboard.index.wake_record'), sleep_records_path,
                   method: :post,
                   class: "btn btn-primary btn-lg w-full #{'btn-disabled' if @unwoken_record.present?}",
-                  disabled: @unwoken_record.present? %>
+                  disabled: @unwoken_record.present?,
+                  data: { test: 'desktop-wake-button' } %>
               <%= button_to I18n.t('dashboard.index.bed_record'),
                   (@unwoken_record ? sleep_record_path(@unwoken_record) : "#"),
                   method: :patch,
                   params: { record_type: 'bed_time' },
                   class: "btn btn-secondary btn-lg w-full #{'btn-disabled' if @unwoken_record.nil?}",
-                  disabled: @unwoken_record.nil? %>
+                  disabled: @unwoken_record.nil?,
+                  data: { test: 'desktop-bed-button' } %>
             </div>
           </div>
         </div>
