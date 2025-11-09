@@ -35,5 +35,13 @@ class DashboardController < ApplicationController
 
     @weekly_average_wake_time = SleepRecordAggregator.new(valid_wake_records).average_time(:wake_time)
     @weekly_average_bed_time  = SleepRecordAggregator.new(valid_sleep_records).average_time(:bed_time)
+
+    # Google Calendar連携
+    @today_events = if current_user.google_authenticated?
+      calendar_service = GoogleCalendarService.new(current_user)
+      calendar_service.fetch_today_events
+    else
+      []
+    end
   end
 end
