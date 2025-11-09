@@ -14,6 +14,7 @@ class User < ApplicationRecord
 
   # Google認証済みかどうかを判定
   def google_authenticated?
+    return false unless ENV["GOOGLE_CLIENT_ID"].present? && ENV["GOOGLE_CLIENT_SECRET"].present?
     provider.present? && uid.present? && google_token.present?
   end
 
