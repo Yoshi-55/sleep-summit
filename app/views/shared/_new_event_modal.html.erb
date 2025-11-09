@@ -7,102 +7,48 @@
       </form>
 
       <%= form_with url: google_calendars_path, method: :post, id: "new_event_form", class: "space-y-4", data: { turbo: false } do |f| %>
-        <!-- タイトル（常に表示） -->
+        <!-- タイトル -->
         <div class="form-control">
-          <%= text_field_tag :summary, nil, class: "input input-bordered input-lg w-full border-0 border-b border-base-300 rounded-none px-0 focus:border-primary focus:outline-none", placeholder: "タイトルを追加", required: true %>
+          <%= text_field_tag :summary, nil, class: "input input-bordered input-lg w-full", placeholder: "タイトルを追加", required: true %>
         </div>
 
-        <!-- シンプルモード：日時入力 -->
-        <div id="simple_mode" class="space-y-3">
-          <div class="flex items-center gap-3">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-base-content/70" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            <div class="flex-1 flex items-center gap-2">
-              <%= date_field_tag :start_date, Date.current, class: "input input-sm input-bordered", required: true %>
-              <span class="text-sm">·</span>
-              <%= time_field_tag :start_time, Time.current.strftime("%H:%M"), class: "input input-sm input-bordered", required: true %>
-              <span class="text-sm text-base-content/50">-</span>
-              <%= time_field_tag :end_time, (Time.current + 1.hour).strftime("%H:%M"), class: "input input-sm input-bordered", required: true %>
-            </div>
+        <!-- 開始日時 -->
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text font-semibold">開始日時</span>
+          </label>
+          <div class="grid grid-cols-2 gap-3">
+            <%= date_field_tag :start_date, Date.current, class: "input input-bordered input-lg", required: true %>
+            <%= time_field_tag :start_time, Time.current.strftime("%H:%M"), class: "input input-bordered input-lg", required: true %>
           </div>
-
-          <!-- 詳細を追加ボタン -->
-          <button type="button" onclick="toggleDetailMode()" class="btn btn-ghost btn-sm gap-2 text-primary">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-            </svg>
-            詳細を追加
-          </button>
         </div>
 
-        <!-- 詳細モード（初期状態で非表示） -->
-        <div id="detail_mode" class="space-y-4 hidden">
-          <!-- 開始日時 -->
-          <div class="flex items-start gap-3">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-base-content/70 mt-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            <div class="flex-1 space-y-2">
-              <div class="grid grid-cols-2 gap-2">
-                <div class="form-control">
-                  <label class="label py-1">
-                    <span class="label-text text-xs">開始日</span>
-                  </label>
-                  <%= date_field_tag :start_date_detail, Date.current, class: "input input-sm input-bordered w-full" %>
-                </div>
-                <div class="form-control">
-                  <label class="label py-1">
-                    <span class="label-text text-xs">開始時刻</span>
-                  </label>
-                  <%= time_field_tag :start_time_detail, Time.current.strftime("%H:%M"), class: "input input-sm input-bordered w-full" %>
-                </div>
-              </div>
-              <div class="grid grid-cols-2 gap-2">
-                <div class="form-control">
-                  <label class="label py-1">
-                    <span class="label-text text-xs">終了日</span>
-                  </label>
-                  <%= date_field_tag :end_date, Date.current, class: "input input-sm input-bordered w-full" %>
-                </div>
-                <div class="form-control">
-                  <label class="label py-1">
-                    <span class="label-text text-xs">終了時刻</span>
-                  </label>
-                  <%= time_field_tag :end_time_detail, (Time.current + 1.hour).strftime("%H:%M"), class: "input input-sm input-bordered w-full" %>
-                </div>
-              </div>
-            </div>
+        <!-- 終了時刻 -->
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text font-semibold">終了時刻</span>
+            <span class="label-text-alt text-base-content/60">※終了日は開始日と同じです</span>
+          </label>
+          <div class="grid grid-cols-2 gap-3">
+            <div></div>
+            <%= time_field_tag :end_time, (Time.current + 1.hour).strftime("%H:%M"), class: "input input-bordered input-lg", required: true %>
           </div>
+        </div>
 
-          <!-- 場所 -->
-          <div class="flex items-center gap-3">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-base-content/70" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-            </svg>
-            <div class="flex-1">
-              <%= text_field_tag :location, nil, class: "input input-sm input-bordered w-full", placeholder: "場所を追加" %>
-            </div>
-          </div>
+        <!-- 場所 -->
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text font-semibold">場所（任意）</span>
+          </label>
+          <%= text_field_tag :location, nil, class: "input input-bordered input-lg w-full", placeholder: "場所を追加" %>
+        </div>
 
-          <!-- 説明 -->
-          <div class="flex items-start gap-3">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-base-content/70 mt-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" />
-            </svg>
-            <div class="flex-1">
-              <%= text_area_tag :description, nil, class: "textarea textarea-bordered w-full", rows: 3, placeholder: "説明を追加" %>
-            </div>
-          </div>
-
-          <!-- 詳細を閉じるボタン -->
-          <button type="button" onclick="toggleDetailMode()" class="btn btn-ghost btn-sm gap-2 text-base-content/70">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 12H6" />
-            </svg>
-            詳細を閉じる
-          </button>
+        <!-- 説明 -->
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text font-semibold">説明（任意）</span>
+          </label>
+          <%= text_area_tag :description, nil, class: "textarea textarea-bordered w-full", rows: 3, placeholder: "説明を追加" %>
         </div>
 
         <!-- アクションボタン -->

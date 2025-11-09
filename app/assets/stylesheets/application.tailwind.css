@@ -38,3 +38,23 @@
   --depth: 1;
   --noise: 1;
 }
+
+/* カードを半透明に */
+.card.bg-base-100 {
+  background-color: oklch(24.353% 0 0 / 0.3) !important;
+  backdrop-filter: blur(1px);
+}
+
+.bg-base-100 {
+  background-color: oklch(24.353% 0 0 / 0.3) !important;
+}
+
+/* テーブルのストライプを薄く */
+.table-zebra tbody tr:nth-child(even) {
+  background-color: oklch(37% 0 0 / 0.15) !important;
+}
+
+/* テーブルのヘッダーを薄く */
+.table thead {
+  background-color: oklch(37% 0 0 / 0.2) !important;
+}
