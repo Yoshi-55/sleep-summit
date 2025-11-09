@@ -260,6 +260,140 @@
             </div>
           </div>
         </div>
+
+        <!-- Googleカレンダー連携 -->
+        <% if ENV["GOOGLE_CLIENT_ID"].present? && ENV["GOOGLE_CLIENT_SECRET"].present? %>
+          <% if current_user&.google_authenticated? %>
+            <div class="card bg-base-100 border border-base-300">
+            <div class="card-body p-4">
+              <div class="flex items-center justify-between mb-3">
+                <h3 class="text-lg font-bold">今日の予定</h3>
+                <% if @today_events.present? %>
+                  <span class="badge badge-outline badge-sm"><%= @today_events.size %>件</span>
+                <% end %>
+              </div>
+
+              <% if @today_events.present? %>
+                <div class="space-y-2">
+                  <% @today_events.each_with_index do |event, index| %>
+                    <div class="p-2 rounded hover:bg-base-200 transition-colors cursor-pointer" onclick="event_modal_<%= index %>.showModal()">
+                      <div class="flex items-start gap-2">
+                        <div class="flex-shrink-0 mt-0.5">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                          </svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <p class="text-sm font-medium"><%= event.summary || "(タイトルなし)" %></p>
+                          <p class="text-xs text-base-content/60">
+                            <% if event.start.date_time %>
+                              <%= event.start.date_time.in_time_zone("Asia/Tokyo").strftime("%H:%M") %>
+                              <% if event.end.date_time %>
+                                - <%= event.end.date_time.in_time_zone("Asia/Tokyo").strftime("%H:%M") %>
+                              <% end %>
+                            <% elsif event.start.date %>
+                              終日
+                            <% end %>
+                            <% if event.respond_to?(:calendar_summary) && event.calendar_summary.present? %>
+                              <span class="ml-2 text-xs opacity-70">
+                                • <%= event.calendar_summary %>
+                              </span>
+                            <% end %>
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- モーダル -->
+                    <dialog id="event_modal_<%= index %>" class="modal">
+                      <div class="modal-box">
+                        <form method="dialog">
+                          <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                        </form>
+                        <h3 class="font-bold text-lg mb-4"><%= event.summary || "(タイトルなし)" %></h3>
+
+                        <div class="space-y-3">
+                          <% if event.start.date_time %>
+                            <div class="flex items-start gap-2">
+                              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-base-content/70 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                              </svg>
+                              <div>
+                                <p class="text-sm">
+                                  <%= event.start.date_time.in_time_zone("Asia/Tokyo").strftime("%Y年%m月%d日 %H:%M") %>
+                                  <% if event.end.date_time %>
+                                    - <%= event.end.date_time.in_time_zone("Asia/Tokyo").strftime("%H:%M") %>
+                                  <% end %>
+                                </p>
+                              </div>
+                            </div>
+                          <% elsif event.start.date %>
+                            <div class="flex items-start gap-2">
+                              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-base-content/70 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                              </svg>
+                              <p class="text-sm">終日</p>
+                            </div>
+                          <% end %>
+
+                          <% if event.location.present? %>
+                            <div class="flex items-start gap-2">
+                              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-base-content/70 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                              </svg>
+                              <p class="text-sm"><%= event.location %></p>
+                            </div>
+                          <% end %>
+
+                          <% if event.description.present? %>
+                            <div class="flex items-start gap-2">
+                              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-base-content/70 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" />
+                              </svg>
+                              <p class="text-sm whitespace-pre-wrap"><%= event.description %></p>
+                            </div>
+                          <% end %>
+
+                          <% if event.respond_to?(:calendar_summary) && event.calendar_summary.present? %>
+                            <div class="pt-2 border-t border-base-300">
+                              <span class="badge badge-sm"><%= event.calendar_summary %></span>
+                            </div>
+                          <% end %>
+                        </div>
+                      </div>
+                      <form method="dialog" class="modal-backdrop">
+                        <button>close</button>
+                      </form>
+                    </dialog>
+                  <% end %>
+                </div>
+              <% else %>
+                <div class="text-center py-4">
+                  <p class="text-sm text-base-content/60">今日の予定はありません</p>
+                </div>
+              <% end %>
+
+              <div class="pt-3 border-t border-base-300">
+                <button onclick="new_event_modal.showModal()" class="btn btn-primary btn-sm w-full">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                  </svg>
+                  予定を追加
+                </button>
+              </div>
+            </div>
+          </div>
+          <% else %>
+            <div class="card bg-base-100 border border-base-300">
+              <div class="card-body p-4 text-center">
+                <h3 class="text-lg font-bold mb-2">Googleカレンダーと連携</h3>
+                <p class="text-sm text-base-content/70 mb-4">カレンダーと連携して予定を表示しましょう</p>
+                <%= button_to "Googleカレンダーと連携", user_google_oauth2_omniauth_authorize_path, method: :post, class: "btn btn-primary btn-sm", data: { turbo: false } %>
+              </div>
+            </div>
+          <% end %>
+        <% end %>
       </div>
     </div>
   </div>

@@ -35,5 +35,18 @@ class DashboardController < ApplicationController
 
     @weekly_average_wake_time = SleepRecordAggregator.new(valid_wake_records).average_time(:wake_time)
     @weekly_average_bed_time  = SleepRecordAggregator.new(valid_sleep_records).average_time(:bed_time)
+
+    # Google Calendar連携
+    if current_user.google_authenticated?
+      begin
+        calendar_service = GoogleCalendarService.new(current_user)
+        @today_events = calendar_service.fetch_today_events
+      rescue StandardError => e
+        Rails.logger.error "Google Calendar fetch error: #{e.message}"
+        @today_events = []
+      end
+    else
+      @today_events = []
+    end
   end
 end

@@ -62,3 +62,6 @@ ja:
   sidebar:
     dashboard: "記録"
     history: "履歴"
+  google_calendars:
+    index:
+      page_title: "カレンダー"
