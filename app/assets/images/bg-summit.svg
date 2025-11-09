@@ -1,10 +1,149 @@
-<svg width="100%" height="100%" viewBox="0 0 1280 677" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg width="100%" height="100%" viewBox="0 0 1280 800" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
   <defs>
-    <linearGradient id="fade-bottom" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="80%" stop-color="#049933" stop-opacity="0.38"/>
+    <!-- 遠景の山（薄い緑、より長いグラデーション） -->
+    <linearGradient id="mountain-far" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#049933" stop-opacity="0.12"/>
+      <stop offset="85%" stop-color="#049933" stop-opacity="0.02"/>
       <stop offset="100%" stop-color="#049933" stop-opacity="0"/>
     </linearGradient>
+
+    <!-- 近景の山（少し濃い緑、より長いグラデーション） -->
+    <linearGradient id="mountain-near" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#049933" stop-opacity="0.22"/>
+      <stop offset="80%" stop-color="#049933" stop-opacity="0.05"/>
+      <stop offset="100%" stop-color="#049933" stop-opacity="0"/>
+    </linearGradient>
+
+    <!-- 流れ星のグラデーション -->
+    <linearGradient id="shooting-star-1" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fbbf24" stop-opacity="0"/>
+      <stop offset="30%" stop-color="#fbbf24" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#fbbf24" stop-opacity="0.8"/>
+    </linearGradient>
+
+    <linearGradient id="shooting-star-2" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fbbf24" stop-opacity="0"/>
+      <stop offset="30%" stop-color="#fbbf24" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#fbbf24" stop-opacity="0.7"/>
+    </linearGradient>
   </defs>
-  <path d="M0 147C0 147 156.833 285 327.5 285C498.167 285 629.833 0.5 800.5 0.5C971.167 0.5 1280 165 1280 165V676.999C1280 676.999 1024 676.999 853.333 676.999C682.667 676.999 597.333 676.999 426.667 676.999C256 676.999 0 676.999 0 676.999V147Z" fill="url(#fade-bottom)"/>
-  <path d="M0 677C0 677 239.333 399.5 410 399.5C580.667 399.5 735.333 508.5 906 508.5C1076.67 508.5 1280 256 1280 256V677C1280 677 1024 677 853.333 677C682.667 677 597.333 677 426.667 677C256 677 0 677 0 677Z" fill="url(#fade-bottom)"/>
+
+  <!-- 遠景の山（下に移動） -->
+  <path d="M0 347C0 347 156.833 485 327.5 485C498.167 485 629.833 200.5 800.5 200.5C971.167 200.5 1280 365 1280 365V800H0V347Z" fill="url(#mountain-far)"/>
+
+  <!-- 近景の山（下に移動） -->
+  <path d="M0 800C0 800 239.333 549.5 410 549.5C580.667 549.5 735.333 658.5 906 658.5C1076.67 658.5 1280 456 1280 456V800H0Z" fill="url(#mountain-near)"/>
+
+  <!-- 流れ星 -->
+  <line x1="75%" y1="120" x2="82%" y2="160" stroke="url(#shooting-star-1)" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="82%" cy="160" r="2.5" fill="#fbbf24" opacity="0.7"/>
+
+  <line x1="30%" y1="80" x2="35%" y2="115" stroke="url(#shooting-star-2)" stroke-width="1.5" stroke-linecap="round"/>
+  <circle cx="35%" cy="115" r="2" fill="#fbbf24" opacity="0.6"/>
+
+  <!-- 星を散りばめる -->
+  <!-- 大きめの星 -->
+  <circle cx="8%" cy="60" r="2" fill="#fbbf24" opacity="0.4"/>
+  <circle cx="22%" cy="85" r="1.8" fill="#fbbf24" opacity="0.35"/>
+  <circle cx="35%" cy="45" r="2.2" fill="#fbbf24" opacity="0.45"/>
+  <circle cx="48%" cy="70" r="1.9" fill="#fbbf24" opacity="0.38"/>
+  <circle cx="62%" cy="55" r="2.1" fill="#fbbf24" opacity="0.42"/>
+  <circle cx="75%" cy="90" r="2" fill="#fbbf24" opacity="0.37"/>
+  <circle cx="88%" cy="65" r="1.8" fill="#fbbf24" opacity="0.35"/>
+  <circle cx="95%" cy="80" r="2.2" fill="#fbbf24" opacity="0.43"/>
+  <circle cx="10%" cy="200" r="2.1" fill="#fbbf24" opacity="0.4"/>
+  <circle cx="40%" cy="180" r="2" fill="#fbbf24" opacity="0.38"/>
+  <circle cx="65%" cy="210" r="2.2" fill="#fbbf24" opacity="0.42"/>
+  <circle cx="90%" cy="190" r="1.9" fill="#fbbf24" opacity="0.39"/>
+
+  <!-- 中くらいの星 -->
+  <circle cx="12%" cy="110" r="1.4" fill="#fbbf24" opacity="0.28"/>
+  <circle cx="18%" cy="50" r="1.5" fill="#fbbf24" opacity="0.3"/>
+  <circle cx="28%" cy="120" r="1.3" fill="#fbbf24" opacity="0.26"/>
+  <circle cx="42%" cy="95" r="1.5" fill="#fbbf24" opacity="0.32"/>
+  <circle cx="52%" cy="35" r="1.4" fill="#fbbf24" opacity="0.28"/>
+  <circle cx="58%" cy="105" r="1.6" fill="#fbbf24" opacity="0.33"/>
+  <circle cx="68%" cy="75" r="1.3" fill="#fbbf24" opacity="0.26"/>
+  <circle cx="72%" cy="40" r="1.5" fill="#fbbf24" opacity="0.3"/>
+  <circle cx="82%" cy="115" r="1.4" fill="#fbbf24" opacity="0.28"/>
+  <circle cx="92%" cy="95" r="1.5" fill="#fbbf24" opacity="0.32"/>
+  <circle cx="15%" cy="170" r="1.5" fill="#fbbf24" opacity="0.3"/>
+  <circle cx="33%" cy="195" r="1.4" fill="#fbbf24" opacity="0.29"/>
+  <circle cx="50%" cy="220" r="1.6" fill="#fbbf24" opacity="0.32"/>
+  <circle cx="70%" cy="175" r="1.5" fill="#fbbf24" opacity="0.31"/>
+  <circle cx="85%" cy="230" r="1.4" fill="#fbbf24" opacity="0.28"/>
+  <circle cx="95%" cy="205" r="1.5" fill="#fbbf24" opacity="0.3"/>
+
+  <!-- 小さめの星 -->
+  <circle cx="5%" cy="85" r="1" fill="#fbbf24" opacity="0.22"/>
+  <circle cx="15%" cy="130" r="0.9" fill="#fbbf24" opacity="0.2"/>
+  <circle cx="25%" cy="65" r="1.1" fill="#fbbf24" opacity="0.24"/>
+  <circle cx="32%" cy="100" r="1" fill="#fbbf24" opacity="0.22"/>
+  <circle cx="38%" cy="30" r="0.9" fill="#fbbf24" opacity="0.2"/>
+  <circle cx="45%" cy="125" r="1.1" fill="#fbbf24" opacity="0.24"/>
+  <circle cx="55%" cy="85" r="1" fill="#fbbf24" opacity="0.22"/>
+  <circle cx="65%" cy="120" r="0.9" fill="#fbbf24" opacity="0.22"/>
+  <circle cx="70%" cy="50" r="1.1" fill="#fbbf24" opacity="0.24"/>
+  <circle cx="78%" cy="100" r="1" fill="#fbbf24" opacity="0.22"/>
+  <circle cx="85%" cy="35" r="0.9" fill="#fbbf24" opacity="0.2"/>
+  <circle cx="90%" cy="110" r="1.1" fill="#fbbf24" opacity="0.24"/>
+  <circle cx="97%" cy="55" r="1" fill="#fbbf24" opacity="0.22"/>
+  <circle cx="7%" cy="155" r="1" fill="#fbbf24" opacity="0.22"/>
+  <circle cx="20%" cy="240" r="1.1" fill="#fbbf24" opacity="0.23"/>
+  <circle cx="28%" cy="215" r="0.9" fill="#fbbf24" opacity="0.21"/>
+  <circle cx="43%" cy="165" r="1" fill="#fbbf24" opacity="0.22"/>
+  <circle cx="55%" cy="250" r="1.1" fill="#fbbf24" opacity="0.24"/>
+  <circle cx="62%" cy="185" r="1" fill="#fbbf24" opacity="0.22"/>
+  <circle cx="73%" cy="235" r="0.9" fill="#fbbf24" opacity="0.21"/>
+  <circle cx="80%" cy="245" r="1.1" fill="#fbbf24" opacity="0.23"/>
+  <circle cx="88%" cy="155" r="1" fill="#fbbf24" opacity="0.22"/>
+  <circle cx="93%" cy="170" r="1" fill="#fbbf24" opacity="0.22"/>
+  <circle cx="97%" cy="225" r="0.9" fill="#fbbf24" opacity="0.21"/>
+
+  <!-- さらに追加の星（より多く） -->
+  <!-- 大きめの星 -->
+  <circle cx="14%" cy="145" r="2" fill="#fbbf24" opacity="0.4"/>
+  <circle cx="26%" cy="160" r="1.9" fill="#fbbf24" opacity="0.38"/>
+  <circle cx="37%" cy="260" r="2.1" fill="#fbbf24" opacity="0.41"/>
+  <circle cx="49%" cy="140" r="2" fill="#fbbf24" opacity="0.39"/>
+  <circle cx="60%" cy="270" r="2.2" fill="#fbbf24" opacity="0.42"/>
+  <circle cx="77%" cy="145" r="1.9" fill="#fbbf24" opacity="0.38"/>
+  <circle cx="84%" cy="265" r="2.1" fill="#fbbf24" opacity="0.4"/>
+  <circle cx="96%" cy="150" r="2" fill="#fbbf24" opacity="0.39"/>
+
+  <!-- 中くらいの星 -->
+  <circle cx="3%" cy="115" r="1.5" fill="#fbbf24" opacity="0.3"/>
+  <circle cx="9%" cy="190" r="1.4" fill="#fbbf24" opacity="0.29"/>
+  <circle cx="17%" cy="220" r="1.6" fill="#fbbf24" opacity="0.32"/>
+  <circle cx="24%" cy="145" r="1.5" fill="#fbbf24" opacity="0.3"/>
+  <circle cx="31%" cy="255" r="1.4" fill="#fbbf24" opacity="0.29"/>
+  <circle cx="39%" cy="135" r="1.5" fill="#fbbf24" opacity="0.31"/>
+  <circle cx="46%" cy="205" r="1.6" fill="#fbbf24" opacity="0.32"/>
+  <circle cx="54%" cy="155" r="1.4" fill="#fbbf24" opacity="0.29"/>
+  <circle cx="61%" cy="240" r="1.5" fill="#fbbf24" opacity="0.3"/>
+  <circle cx="67%" cy="150" r="1.5" fill="#fbbf24" opacity="0.31"/>
+  <circle cx="75%" cy="220" r="1.4" fill="#fbbf24" opacity="0.29"/>
+  <circle cx="81%" cy="180" r="1.6" fill="#fbbf24" opacity="0.32"/>
+  <circle cx="89%" cy="210" r="1.5" fill="#fbbf24" opacity="0.3"/>
+  <circle cx="94%" cy="135" r="1.4" fill="#fbbf24" opacity="0.29"/>
+
+  <!-- 小さめの星 -->
+  <circle cx="2%" cy="140" r="1" fill="#fbbf24" opacity="0.22"/>
+  <circle cx="6%" cy="230" r="0.9" fill="#fbbf24" opacity="0.21"/>
+  <circle cx="11%" cy="260" r="1.1" fill="#fbbf24" opacity="0.23"/>
+  <circle cx="19%" cy="175" r="1" fill="#fbbf24" opacity="0.22"/>
+  <circle cx="23%" cy="190" r="0.9" fill="#fbbf24" opacity="0.21"/>
+  <circle cx="29%" cy="135" r="1" fill="#fbbf24" opacity="0.22"/>
+  <circle cx="35%" cy="225" r="1.1" fill="#fbbf24" opacity="0.23"/>
+  <circle cx="41%" cy="280" r="1" fill="#fbbf24" opacity="0.22"/>
+  <circle cx="47%" cy="245" r="0.9" fill="#fbbf24" opacity="0.21"/>
+  <circle cx="53%" cy="175" r="1.1" fill="#fbbf24" opacity="0.23"/>
+  <circle cx="59%" cy="145" r="1" fill="#fbbf24" opacity="0.22"/>
+  <circle cx="64%" cy="260" r="0.9" fill="#fbbf24" opacity="0.21"/>
+  <circle cx="69%" cy="195" r="1" fill="#fbbf24" opacity="0.22"/>
+  <circle cx="76%" cy="255" r="1.1" fill="#fbbf24" opacity="0.23"/>
+  <circle cx="83%" cy="140" r="1" fill="#fbbf24" opacity="0.22"/>
+  <circle cx="87%" cy="225" r="0.9" fill="#fbbf24" opacity="0.21"/>
+  <circle cx="91%" cy="250" r="1.1" fill="#fbbf24" opacity="0.23"/>
+  <circle cx="98%" cy="185" r="1" fill="#fbbf24" opacity="0.22"/>
 </svg>
