@@ -27,4 +27,8 @@ Rails.application.routes.draw do
   resources :google_calendars, only: [ :index, :create, :update, :destroy ] do
     delete :disconnect, on: :collection
   end
+
+  # Pages
+  get "terms", to: "pages#terms", as: :terms
+  get "privacy", to: "pages#privacy", as: :privacy
 end
