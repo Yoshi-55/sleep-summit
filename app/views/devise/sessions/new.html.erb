@@ -28,12 +28,9 @@
         <%= f.password_field :password, autocomplete: "current-password", class: "input input-bordered w-full" %>
       </div>
 
-      <div class="form-control mb-4 flex items-center justify-between">
-        <div>
-          <%= f.check_box :remember_me, class: "checkbox checkbox-primary" %>
-          <%= f.label :remember_me, t('activerecord.attributes.user.remember_me') %>
-        </div>
-        <%= link_to t('devise.shared.links.forgot_your_password'), new_password_path(resource_name), class: "text-sm text-blue-500 hover:underline" %>
+      <div class="form-control mb-4">
+        <%= f.check_box :remember_me, class: "checkbox checkbox-primary" %>
+        <%= f.label :remember_me, t('activerecord.attributes.user.remember_me') %>
       </div>
 
       <div class="form-control">

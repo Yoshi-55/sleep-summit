@@ -43,6 +43,34 @@
               <%= button_to "Googleカレンダーと連携", user_google_oauth2_omniauth_authorize_path, method: :post, class: "btn btn-primary w-full", data: { turbo: false } %>
             <% end %>
           <% end %>
+
+          <div class="divider">アカウント管理</div>
+
+          <div class="collapse collapse-arrow bg-base-200">
+            <input type="checkbox" />
+            <div class="collapse-title text-sm font-medium text-error">
+              アカウントの削除
+            </div>
+            <div class="collapse-content">
+              <div class="alert alert-warning mt-2 mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+                <div>
+                  <h3 class="font-bold">警告</h3>
+                  <div class="text-xs">削除すると全ての睡眠記録が完全に失われます。この操作は取り消せません。</div>
+                </div>
+              </div>
+
+              <%= button_to "アカウントを削除する",
+                user_registration_path,
+                method: :delete,
+                class: "btn btn-error btn-outline w-full",
+                data: {
+                  turbo_confirm: "本当にアカウントを削除しますか？\n\nこの操作は取り消せません。すべての睡眠記録が完全に削除されます。"
+                } %>
+            </div>
+          </div>
         </div>
       </div>
     </div>
