@@ -24,11 +24,18 @@
     <%= render 'shared/flash' %>
 
     <div class="fixed inset-0 w-full h-full -z-10 pointer-events-none"
-      style="background: url('<%= asset_path('bg-summit.svg') %>') center/contain no-repeat;">
+      style="background: url('<%= asset_path('bg-summit.svg') %>') center/cover no-repeat;">
     </div>
 
     <main>
-      <%= yield %>
+      <div class="min-h-screen">
+        <div class="container mx-auto p-6">
+          <% if user_signed_in? %>
+            <%= render 'shared/navbar' %>
+          <% end %>
+          <%= yield %>
+        </div>
+      </div>
     </main>
 
     <div class="hidden lg:block">
@@ -38,5 +45,6 @@
     <%= render 'shared/footer_nav' %>
     <%= render 'shared/mobile_calendar_modal' %>
     <%= render 'shared/new_event_modal' %>
+    <%= render 'shared/sleep_record_modal' %>
   </body>
 </html>
