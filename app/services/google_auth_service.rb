@@ -9,6 +9,7 @@ class GoogleAuthService
   # Google Calendar APIクライアント取得
   def calendar_client
     return nil unless @user.google_authenticated?
+    return nil unless ENV["GOOGLE_CLIENT_ID"].present? && ENV["GOOGLE_CLIENT_SECRET"].present?
 
     client = Google::Apis::CalendarV3::CalendarService.new
     client.authorization = authorization
@@ -25,6 +26,8 @@ class GoogleAuthService
   private
 
   def authorization
+    return nil unless ENV["GOOGLE_CLIENT_ID"].present? && ENV["GOOGLE_CLIENT_SECRET"].present?
+
     auth = Google::Auth::UserRefreshCredentials.new(
       client_id: ENV["GOOGLE_CLIENT_ID"],
       client_secret: ENV["GOOGLE_CLIENT_SECRET"],
