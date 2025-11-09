@@ -20,10 +20,15 @@ gem "cssbundling-rails"
 gem "jbuilder"
 
 gem "devise"
+gem "omniauth-google-oauth2"
+gem "omniauth-rails_csrf_protection"
 
 gem "devise-i18n"
 gem "devise-i18n-views"
 gem "rails-i18n"
+
+# Google Calendar API
+gem "google-apis-calendar_v3"
 
 
 # グラフ関連(日付グループ化のみgem、highchartsはyarnでインストール)
@@ -59,6 +64,9 @@ group :development, :test do
 
   gem "rspec-rails"
   gem "factory_bot_rails"
+
+  # Environment variables
+  gem "dotenv-rails"
 end
 
 group :development do
