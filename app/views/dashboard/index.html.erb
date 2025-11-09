@@ -263,7 +263,7 @@
 
         <!-- Googleカレンダー連携 -->
         <% if ENV["GOOGLE_CLIENT_ID"].present? && ENV["GOOGLE_CLIENT_SECRET"].present? %>
-          <% if current_user.google_authenticated? %>
+          <% if current_user&.google_authenticated? %>
             <div class="card bg-base-100 border border-base-300">
             <div class="card-body p-4">
               <div class="flex items-center justify-between mb-3">
