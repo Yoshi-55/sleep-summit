@@ -1,7 +1,7 @@
 class GoogleCalendarsController < ApplicationController
   before_action :authenticate_user!
-  before_action :check_google_authenticated, except: [:disconnect]
-  before_action :set_calendar_service, except: [:disconnect]
+  before_action :check_google_authenticated, except: [ :disconnect ]
+  before_action :set_calendar_service, except: [ :disconnect ]
 
   def index
     @date = params[:date] ? Date.parse(params[:date]) : Date.current
