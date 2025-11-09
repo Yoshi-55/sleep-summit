@@ -31,4 +31,5 @@ Rails.application.routes.draw do
   # Pages
   get "terms", to: "pages#terms", as: :terms
   get "privacy", to: "pages#privacy", as: :privacy
+  get "contact", to: "pages#contact", as: :contact
 end
