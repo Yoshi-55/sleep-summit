@@ -1,9 +1,6 @@
 <% content_for :page_title do %>
   <%= t('history.index.page_title') %>
 <% end %>
-<div class="min-h-screen">
-  <div class="container mx-auto p-6">
-    <%= render 'shared/navbar' %>
 
     <!-- 活動グラフ -->
     <div class="card bg-base-100 border border-base-300 mb-3 sm:mb-4 lg:mb-6">
@@ -54,9 +51,9 @@
                           <%= record[:day].is_a?(Date) ? record[:day].strftime("%m-%d (%a)") : '--' %>
                         </h4>
                         <% if record[:id].present? %>
-                          <%= link_to '編集', edit_sleep_record_path(record[:id]), class: "btn btn-xs btn-outline", onclick: "event.stopPropagation()" %>
+                          <button onclick="event.stopPropagation(); openSleepRecordModal('edit', <%= record[:id] %>, '<%= record[:wake_times].present? ? Time.parse(record[:wake_times].first).strftime('%Y-%m-%dT%H:%M') : '' %>', '<%= record[:bed_times].present? ? Time.parse(record[:bed_times].last).strftime('%Y-%m-%dT%H:%M') : '' %>')" class="btn btn-xs btn-outline">編集</button>
                         <% else %>
-                          <%= link_to '追加', new_sleep_record_path(date: record[:day]), class: "btn btn-xs btn-outline btn-primary", onclick: "event.stopPropagation()" %>
+                          <button onclick="event.stopPropagation(); openSleepRecordModal('new', null, null, null, '<%= record[:day] %>')" class="btn btn-xs btn-outline btn-primary">追加</button>
                         <% end %>
                       </div>
                       <div class="text-xs text-base-content/70 flex gap-4">
@@ -184,9 +181,9 @@
                     </td>
                     <td class="px-4 py-3">
                       <% if record[:id].present? %>
-                        <%= link_to '編集', edit_sleep_record_path(record[:id]), class: "btn btn-xs btn-outline whitespace-nowrap" %>
+                        <button onclick="openSleepRecordModal('edit', <%= record[:id] %>, '<%= record[:wake_times].present? ? Time.parse(record[:wake_times].first).strftime('%Y-%m-%dT%H:%M') : '' %>', '<%= record[:bed_times].present? ? Time.parse(record[:bed_times].last).strftime('%Y-%m-%dT%H:%M') : '' %>')" class="btn btn-xs btn-outline whitespace-nowrap">編集</button>
                       <% else %>
-                        <%= link_to '追加', new_sleep_record_path(date: record[:day]), class: "btn btn-xs btn-outline btn-primary whitespace-nowrap" %>
+                        <button onclick="openSleepRecordModal('new', null, null, null, '<%= record[:day] %>')" class="btn btn-xs btn-outline btn-primary whitespace-nowrap">追加</button>
                       <% end %>
                     </td>
                   </tr>
@@ -225,5 +222,3 @@
         </div>
       </div>
     </div>
-  </div>
-</div>

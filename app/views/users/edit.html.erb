@@ -2,11 +2,6 @@
   <%= t('profiles.edit.page_title') %>
 <% end %>
 
-<div class="min-h-screen">
-  <div class="container mx-auto p-6">
-
-    <%= render 'shared/navbar' %>
-
     <div class="card bg-base-100 border border-base-300 p-8 max-w-lg mx-auto">
       <div class="flex flex-col items-center">
         <%= form_with model: current_user, url: profile_path, method: :patch, local: true do |f| %>
@@ -35,5 +30,3 @@
     <% end %>
       </div>
     </div>
-  </div>
-</div>
