@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
-  devise_for :users
+  devise_for :users, controllers: {
+    omniauth_callbacks: "users/omniauth_callbacks"
+  }
 
   authenticated :user do
     root to: "dashboard#index", as: :authenticated_root
@@ -20,4 +22,9 @@ Rails.application.routes.draw do
 
 
   resources :sleep_records, only: [ :new, :create, :update, :edit ]
+
+  # Google Calendar
+  resources :google_calendars, only: [ :index, :create, :update, :destroy ] do
+    delete :disconnect, on: :collection
+  end
 end
