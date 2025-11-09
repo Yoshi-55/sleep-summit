@@ -1,0 +1,25 @@
+<% content_for :page_title do %>
+  お問い合わせ
+<% end %>
+
+<div class="min-h-screen">
+  <div class="container mx-auto p-6">
+    <%= render 'shared/navbar' %>
+
+    <div class="card bg-base-100 border border-base-300 mb-3 sm:mb-4 lg:mb-6">
+      <div class="card-body p-8">
+        <p class="mb-6">
+          ご質問、ご意見、不具合報告などお気軽にお問い合わせください。
+        </p>
+
+        <div class="text-center my-8">
+          <%= link_to "お問い合わせフォームを開く",
+                      "https://forms.gle/rQx7MCHvG3mXLQb7A",
+                      target: "_blank",
+                      rel: "noopener noreferrer",
+                      class: "btn btn-primary btn-lg" %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
