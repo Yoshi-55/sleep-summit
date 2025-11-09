@@ -120,7 +120,7 @@ class SleepRecordAggregator
     return [ 0.0, 0.0 ] if records.empty?
     sleep_total = 0.0
     wake_total = 0.0
-    ordered = records.is_a?(ActiveRecord::Relation) ? records.to_a : records
+    ordered = (records.is_a?(ActiveRecord::Relation) ? records.to_a : records).sort_by { |r| r.wake_time }
     ordered.each_with_index do |rec, i|
       end_time = rec.bed_time || Time.current
       wake_total += time_diff_hours(rec.wake_time, end_time)
