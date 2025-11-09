@@ -31,7 +31,7 @@ class GoogleAuthService
     auth = Google::Auth::UserRefreshCredentials.new(
       client_id: ENV["GOOGLE_CLIENT_ID"],
       client_secret: ENV["GOOGLE_CLIENT_SECRET"],
-      scope: ["https://www.googleapis.com/auth/calendar"],
+      scope: [ "https://www.googleapis.com/auth/calendar" ],
       access_token: @user.google_token,
       refresh_token: @user.google_refresh_token,
       expires_at: @user.google_token_expires_at&.to_i

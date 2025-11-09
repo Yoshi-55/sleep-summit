@@ -24,7 +24,7 @@ class GoogleCalendarService
           cal.id,
           max_results: 50,
           single_events: true,
-          order_by: 'startTime',
+          order_by: "startTime",
           time_min: time_min,
           time_max: time_max
         )
@@ -73,7 +73,7 @@ class GoogleCalendarService
           cal.id,
           max_results: 250,
           single_events: true,
-          order_by: 'startTime',
+          order_by: "startTime",
           time_min: time_min,
           time_max: time_max
         )
@@ -106,7 +106,7 @@ class GoogleCalendarService
     begin
       calendar = @auth_service.calendar_client
       result = calendar.list_calendar_lists(
-        min_access_role: 'reader'
+        min_access_role: "reader"
       )
 
       result.items || []
@@ -126,10 +126,10 @@ class GoogleCalendarService
     begin
       calendar_list = fetch_calendar_list
       primary = calendar_list.find { |cal| cal.primary }
-      primary&.id || 'primary'
+      primary&.id || "primary"
     rescue => e
       Rails.logger.error "Error getting primary calendar: #{e.message}"
-      'primary'
+      "primary"
     end
   end
 
@@ -145,11 +145,11 @@ class GoogleCalendarService
         location: location,
         start: Google::Apis::CalendarV3::EventDateTime.new(
           date_time: start_time.iso8601,
-          time_zone: 'Asia/Tokyo'
+          time_zone: "Asia/Tokyo"
         ),
         end: Google::Apis::CalendarV3::EventDateTime.new(
           date_time: end_time.iso8601,
-          time_zone: 'Asia/Tokyo'
+          time_zone: "Asia/Tokyo"
         )
       )
 
@@ -177,11 +177,11 @@ class GoogleCalendarService
         location: location,
         start: Google::Apis::CalendarV3::EventDateTime.new(
           date_time: start_time.iso8601,
-          time_zone: 'Asia/Tokyo'
+          time_zone: "Asia/Tokyo"
         ),
         end: Google::Apis::CalendarV3::EventDateTime.new(
           date_time: end_time.iso8601,
-          time_zone: 'Asia/Tokyo'
+          time_zone: "Asia/Tokyo"
         )
       )
 
