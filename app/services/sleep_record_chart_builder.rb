@@ -26,7 +26,6 @@ class SleepRecordChartBuilder
       if record.bed_time && next_rec&.wake_time
         sleep_hours = time_diff_hours(record.bed_time, next_rec.wake_time)
         cumulative -= sleep_hours
-        series << [ next_rec.wake_time.iso8601, cumulative ]
       end
     end
     series
