@@ -16,5 +16,13 @@
       <i class="ph ph-clock-counter-clockwise text-lg"></i>
       <span class="ml-2"><%= t('sidebar.history') %></span>
     <% end %>
+
+    <% if current_user.google_authenticated? %>
+      <%= link_to google_calendars_path,
+        class: "group flex items-center w-full px-2 py-2 rounded transition #{current_page?(google_calendars_path) ? 'bg-primary/10 text-primary font-bold' : 'hover:bg-base-300/10 text-base-content'}" do %>
+        <i class="ph ph-calendar text-lg"></i>
+        <span class="ml-2">カレンダー</span>
+      <% end %>
+    <% end %>
   </nav>
 </div>
