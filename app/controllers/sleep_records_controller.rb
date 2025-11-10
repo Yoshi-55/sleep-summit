@@ -19,7 +19,7 @@ class SleepRecordsController < ApplicationController
     if params[:sleep_record].present?
       create_from_form
     else
-      return redirect_with_flash(:alert, "すでに未就寝レコードがあります") if @unwoken_record
+      return redirect_with_flash(:alert, I18n.t("sleep_records.create.already_has_unwoken_record")) if @unwoken_record
       create_wake_record
     end
   end
@@ -49,14 +49,14 @@ class SleepRecordsController < ApplicationController
   def create_wake_record
     last_record = current_user.sleep_records.order(:wake_time).last
     if last_record && last_record.bed_time.nil?
-      return redirect_with_flash(:alert, "前回の就寝時刻を先に記録してください")
+      return redirect_with_flash(:alert, I18n.t("sleep_records.create.need_previous_bed_time"))
     end
 
     sleep_record = current_user.sleep_records.build(wake_time: Time.current)
     if sleep_record.save
-      redirect_with_flash(:notice, "起床時刻を記録しました")
+      redirect_with_flash(:notice, I18n.t("sleep_records.create.wake_time_recorded"))
     else
-      redirect_with_flash(:alert, "起床時刻の記録に失敗しました: #{sleep_record.errors.full_messages.join(', ')}")
+      redirect_with_flash(:alert, I18n.t("sleep_records.create.wake_time_failed", errors: sleep_record.errors.full_messages.join(", ")))
     end
   end
 
@@ -72,7 +72,7 @@ class SleepRecordsController < ApplicationController
 
     if @sleep_record.save
       return_path = session.delete(:return_to) || authenticated_root_path
-      redirect_to return_path, notice: "記録を作成しました"
+      redirect_to return_path, notice: I18n.t("sleep_records.create.record_created")
     else
       render :new, status: :unprocessable_entity
     end
@@ -80,12 +80,12 @@ class SleepRecordsController < ApplicationController
 
   def update_bed_time
     unwoken_record = current_user.sleep_records.unbedded.first
-    return redirect_with_flash(:alert, "未就寝レコードがありません") unless unwoken_record
+    return redirect_with_flash(:alert, I18n.t("sleep_records.update.no_unwoken_record")) unless unwoken_record
 
     if unwoken_record.update(bed_time: Time.current)
-      redirect_with_flash(:notice, "就寝時刻を記録しました")
+      redirect_with_flash(:notice, I18n.t("sleep_records.update.bed_time_recorded"))
     else
-      redirect_with_flash(:alert, "就寝時刻の記録に失敗しました: #{unwoken_record.errors.full_messages.join(', ')}")
+      redirect_with_flash(:alert, I18n.t("sleep_records.update.bed_time_failed", errors: unwoken_record.errors.full_messages.join(", ")))
     end
   end
 
@@ -99,7 +99,7 @@ class SleepRecordsController < ApplicationController
 
     if @sleep_record.update(attributes)
       return_path = session.delete(:return_to) || authenticated_root_path
-      redirect_to return_path, notice: "記録を更新しました"
+      redirect_to return_path, notice: I18n.t("sleep_records.update.record_updated")
     else
       render :edit, status: :unprocessable_entity
     end

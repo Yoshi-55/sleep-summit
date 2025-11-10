@@ -19,11 +19,11 @@
         class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow border border-base-300">
           <li><%= link_to t('navbar.profile'), profile_path %></li>
           <li class="menu-title mt-2">
-            <span>情報</span>
+            <span><%= t('navbar.info') %></span>
           </li>
-          <li><%= link_to "利用規約", terms_path %></li>
-          <li><%= link_to "プライバシーポリシー", privacy_path %></li>
-          <li><%= link_to "お問い合わせ", contact_path %></li>
+          <li><%= link_to t('navbar.terms'), terms_path %></li>
+          <li><%= link_to t('navbar.privacy'), privacy_path %></li>
+          <li><%= link_to t('navbar.contact'), contact_path %></li>
           <li class="border-t border-base-300 mt-2 pt-2">
             <%= link_to t('navbar.logout'), destroy_user_session_path,
               data: { turbo_method: :delete, turbo_confirm: t('navbar.logout_confirm') } %>

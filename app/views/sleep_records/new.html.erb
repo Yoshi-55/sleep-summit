@@ -1,5 +1,5 @@
 <% content_for :page_title do %>
-  睡眠記録を追加
+  <%= t('sleep_records.new.page_title') %>
 <% end %>
 
 <div class="min-h-screen bg-base-200">
@@ -8,35 +8,35 @@
 
     <div class="card bg-base-100 shadow-xl mt-6">
       <div class="card-body">
-        <h2 class="card-title text-2xl mb-6">睡眠記録を追加</h2>
+        <h2 class="card-title text-2xl mb-6"><%= t('sleep_records.new.page_title') %></h2>
 
         <%= form_with model: @sleep_record, local: true do |f| %>
           <%= render 'shared/error_messages', object: @sleep_record %>
 
           <div class="form-control mb-4">
-            <%= f.label :wake_time, "起床時刻", class: "label" %>
-            <%= f.datetime_local_field :wake_time, 
-                class: "input input-bordered w-full", 
+            <%= f.label :wake_time, t('sleep_records.new.wake_time_label'), class: "label" %>
+            <%= f.datetime_local_field :wake_time,
+                class: "input input-bordered w-full",
                 max: Time.current.strftime("%Y-%m-%dT%H:%M"),
                 required: true %>
             <label class="label">
-              <span class="label-text-alt text-base-content/60">※未来の時刻は設定できません</span>
+              <span class="label-text-alt text-base-content/60"><%= t('sleep_records.new.future_time_note') %></span>
             </label>
           </div>
 
           <div class="form-control mb-6">
-            <%= f.label :bed_time, "就寝時刻（任意）", class: "label" %>
-            <%= f.datetime_local_field :bed_time, 
-                class: "input input-bordered w-full", 
+            <%= f.label :bed_time, t('sleep_records.new.bed_time_label'), class: "label" %>
+            <%= f.datetime_local_field :bed_time,
+                class: "input input-bordered w-full",
                 max: Time.current.strftime("%Y-%m-%dT%H:%M") %>
             <label class="label">
-              <span class="label-text-alt text-base-content/60">※未来の時刻は設定できません</span>
+              <span class="label-text-alt text-base-content/60"><%= t('sleep_records.new.future_time_note') %></span>
             </label>
           </div>
 
           <div class="flex gap-4">
-            <%= f.submit "作成", class: "btn btn-primary flex-1" %>
-            <%= link_to "キャンセル", session[:return_to] || authenticated_root_path, class: "btn btn-outline flex-1" %>
+            <%= f.submit t('sleep_records.new.submit'), class: "btn btn-primary flex-1" %>
+            <%= link_to t('sleep_records.new.cancel'), session[:return_to] || authenticated_root_path, class: "btn btn-outline flex-1" %>
           </div>
         <% end %>
       </div>

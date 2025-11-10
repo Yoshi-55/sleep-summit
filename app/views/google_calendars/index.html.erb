@@ -77,7 +77,7 @@
                     <% if event.start.date_time %>
                       <%= event.start.date_time.in_time_zone('Asia/Tokyo').strftime("%H:%M") %>
                     <% end %>
-                    <%= event.summary || "(タイトルなし)" %>
+                    <%= event.summary || t('google_calendars.index.no_title') %>
                   </button>
                 <% end %>
                 <% if events_for_day.size > 3 %>
@@ -132,7 +132,7 @@
             <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
           </form>
           <h3 class="font-bold text-lg mb-4">
-            <%= day.strftime("%Y年%m月%d日") %>の予定
+            <%= t('google_calendars.index.day_schedule', date: day.strftime("%Y年%m月%d日")) %>
             <% if events_for_day.present? %>
               (<%= events_for_day.size %>件)
             <% end %>
@@ -148,7 +148,7 @@
                       <div class="flex-shrink-0 w-1 h-full rounded"
                           style="background-color: <%= event.respond_to?(:calendar_color) ? event.calendar_color : '#9fe1e7' %>;"></div>
                       <div class="flex-1 min-w-0">
-                        <h4 class="font-semibold text-sm"><%= event.summary || "(タイトルなし)" %></h4>
+                        <h4 class="font-semibold text-sm"><%= event.summary || t('google_calendars.index.no_title') %></h4>
                         <div class="flex items-center gap-4 mt-1 text-xs text-base-content/70">
                           <% if event.start.date_time %>
                             <div class="flex items-center gap-1">
@@ -165,7 +165,7 @@
                               <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                               </svg>
-                              終日
+                              <%= t('google_calendars.index.all_day') %>
                             </div>
                           <% end %>
                           <% if event.respond_to?(:calendar_summary) && event.calendar_summary.present? %>
@@ -189,7 +189,7 @@
             </div>
           <% else %>
             <div class="text-center py-8">
-              <p class="text-sm text-base-content/60">予定がありません</p>
+              <p class="text-sm text-base-content/60"><%= t('google_calendars.index.no_events') %></p>
             </div>
           <% end %>
 
@@ -198,7 +198,7 @@
               <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
               </svg>
-              予定を追加
+              <%= t('google_calendars.index.add_event') %>
             </button>
           </div>
         </div>
@@ -217,7 +217,7 @@
       <form method="dialog">
         <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
       </form>
-      <h3 class="font-bold text-lg mb-4"><%= event.summary || "(タイトルなし)" %></h3>
+      <h3 class="font-bold text-lg mb-4"><%= event.summary || t('google_calendars.index.no_title') %></h3>
 
       <div class="space-y-3">
         <% if event.start.date_time %>
@@ -239,7 +239,7 @@
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-base-content/70 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
-            <p class="text-sm">終日</p>
+            <p class="text-sm"><%= t('google_calendars.index.all_day') %></p>
           </div>
         <% end %>
 
@@ -270,17 +270,17 @@
 
         <% if event.respond_to?(:is_primary?) && event.is_primary? %>
           <div class="flex gap-2 pt-4 border-t border-base-300">
-            <button type="button" onclick="openEditModal('<%= event.id %>', '<%= j event.summary %>', '<%= event.start.date_time&.to_date || event.start.date %>', '<%= event.start.date_time&.in_time_zone("Asia/Tokyo")&.strftime("%H:%M") || "00:00" %>', '<%= event.end.date_time&.to_date || event.end.date %>', '<%= event.end.date_time&.in_time_zone("Asia/Tokyo")&.strftime("%H:%M") || "01:00" %>', '<%= j event.location.to_s %>', '<%= j event.description.to_s %>')" class="btn btn-sm btn-outline flex-1">
+            <button type="button" onclick="openEditModal('<%= event.id %>', '<%= j event.summary %>', '<%= event.start.date_time&.to_date || event.start.date %>', '<%= event.start.date_time&.in_time_zone("Asia/Tokyo")&.strftime("%H:%M") || "00:00" %>', '<%= event.end.date_time&.in_time_zone("Asia/Tokyo")&.strftime("%H:%M") || "01:00" %>', '<%= j event.location.to_s %>', '<%= j event.description.to_s %>')" class="btn btn-sm btn-outline flex-1">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
               </svg>
-              編集
+              <%= t('google_calendars.event_modal.edit') %>
             </button>
-            <%= button_to google_calendar_path(event.id), method: :delete, class: "btn btn-sm btn-error btn-outline flex-1", data: { turbo: false, confirm: "この予定を削除しますか？" } do %>
+            <%= button_to google_calendar_path(event.id), method: :delete, class: "btn btn-sm btn-error btn-outline flex-1", data: { turbo: false, confirm: t('google_calendars.event_modal.delete_confirm') } do %>
               <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
               </svg>
-              削除
+              <%= t('google_calendars.event_modal.delete') %>
             <% end %>
           </div>
         <% end %>
@@ -294,56 +294,17 @@
 
 <script>
 // 編集モーダルを開く関数
-function openEditModal(eventId, summary, startDate, startTime, endDate, endTime, location, description) {
+function openEditModal(eventId, summary, startDate, startTime, endTime, location, description) {
   const form = document.getElementById('edit_event_form');
   form.action = `/google_calendars/${eventId}`;
 
-  // タイトルを設定
+  // フィールドに値を設定
   form.querySelector('[name="summary"]').value = summary;
-
-  // 場所や説明がある場合は詳細モードで開く
-  const hasDetails = location || description || startDate !== endDate;
-
-  if (hasDetails) {
-    // 詳細モード
-    document.getElementById('edit_simple_mode').classList.add('hidden');
-    document.getElementById('edit_detail_mode').classList.remove('hidden');
-
-    form.querySelector('[name="start_date"]').value = startDate;
-    form.querySelector('[name="start_time"]').value = startTime;
-    form.querySelector('[name="end_date"]').value = endDate;
-    form.querySelector('[name="end_time"]').value = endTime;
-    form.querySelector('[name="location"]').value = location;
-    form.querySelector('[name="description"]').value = description;
-
-    // シンプルモードのフィールドを無効化
-    form.querySelector('[name="edit_start_date"]').removeAttribute('required');
-    form.querySelector('[name="edit_start_time"]').removeAttribute('required');
-    form.querySelector('[name="edit_end_time"]').removeAttribute('required');
-
-    // 詳細モードのフィールドを有効化（required属性は無し、submitで使うため）
-  } else {
-    // シンプルモード
-    document.getElementById('edit_simple_mode').classList.remove('hidden');
-    document.getElementById('edit_detail_mode').classList.add('hidden');
-
-    form.querySelector('[name="edit_start_date"]').value = startDate;
-    form.querySelector('[name="edit_start_time"]').value = startTime;
-    form.querySelector('[name="edit_end_time"]').value = endTime;
-
-    // 詳細モードのフィールドにも値をコピー（切り替え時のため）
-    form.querySelector('[name="start_date"]').value = startDate;
-    form.querySelector('[name="start_time"]').value = startTime;
-    form.querySelector('[name="end_date"]').value = endDate;
-    form.querySelector('[name="end_time"]').value = endTime;
-    form.querySelector('[name="location"]').value = location;
-    form.querySelector('[name="description"]').value = description;
-
-    // シンプルモードのフィールドを有効化
-    form.querySelector('[name="edit_start_date"]').setAttribute('required', 'required');
-    form.querySelector('[name="edit_start_time"]').setAttribute('required', 'required');
-    form.querySelector('[name="edit_end_time"]').setAttribute('required', 'required');
-  }
+  form.querySelector('[name="edit_start_date"]').value = startDate;
+  form.querySelector('[name="edit_start_time"]').value = startTime;
+  form.querySelector('[name="edit_end_time"]').value = endTime;
+  form.querySelector('[name="location"]').value = location;
+  form.querySelector('[name="description"]').value = description;
 
   // イベント詳細モーダルを閉じる
   document.querySelectorAll('.modal[open]').forEach(modal => modal.close());
@@ -351,69 +312,6 @@ function openEditModal(eventId, summary, startDate, startTime, endDate, endTime,
   // 編集モーダルを開く
   document.getElementById('edit_event_modal').showModal();
 }
-
-// 編集モーダルのシンプル/詳細モード切り替え
-function toggleEditDetailMode() {
-  const simpleMode = document.getElementById('edit_simple_mode');
-  const detailMode = document.getElementById('edit_detail_mode');
-  const form = document.getElementById('edit_event_form');
-
-  if (detailMode.classList.contains('hidden')) {
-    // 詳細モードに切り替え
-    simpleMode.classList.add('hidden');
-    detailMode.classList.remove('hidden');
-
-    // シンプルモードの値を詳細モードにコピー
-    const startDate = form.querySelector('[name="edit_start_date"]').value;
-    const startTime = form.querySelector('[name="edit_start_time"]').value;
-    const endTime = form.querySelector('[name="edit_end_time"]').value;
-
-    form.querySelector('[name="start_date"]').value = startDate;
-    form.querySelector('[name="start_time"]').value = startTime;
-    form.querySelector('[name="end_date"]').value = startDate; // 終了日は開始日と同じ
-    form.querySelector('[name="end_time"]').value = endTime;
-
-    // シンプルモードのフィールドを無効化
-    form.querySelector('[name="edit_start_date"]').removeAttribute('required');
-    form.querySelector('[name="edit_start_time"]').removeAttribute('required');
-    form.querySelector('[name="edit_end_time"]').removeAttribute('required');
-  } else {
-    // シンプルモードに切り替え
-    detailMode.classList.add('hidden');
-    simpleMode.classList.remove('hidden');
-
-    // 詳細モードの値をシンプルモードにコピー
-    const startDate = form.querySelector('[name="start_date"]').value;
-    const startTime = form.querySelector('[name="start_time"]').value;
-    const endTime = form.querySelector('[name="end_time"]').value;
-
-    form.querySelector('[name="edit_start_date"]').value = startDate;
-    form.querySelector('[name="edit_start_time"]').value = startTime;
-    form.querySelector('[name="edit_end_time"]').value = endTime;
-
-    // シンプルモードのフィールドを有効化
-    form.querySelector('[name="edit_start_date"]').setAttribute('required', 'required');
-    form.querySelector('[name="edit_start_time"]').setAttribute('required', 'required');
-    form.querySelector('[name="edit_end_time"]').setAttribute('required', 'required');
-  }
-}
-
-// 編集モーダルを閉じた時にシンプルモードにリセット
-document.getElementById('edit_event_modal').addEventListener('close', function() {
-  const simpleMode = document.getElementById('edit_simple_mode');
-  const detailMode = document.getElementById('edit_detail_mode');
-  const form = document.getElementById('edit_event_form');
-
-  // シンプルモードに戻す
-  if (!simpleMode.classList.contains('hidden')) return;
-
-  detailMode.classList.add('hidden');
-  simpleMode.classList.remove('hidden');
-
-  form.querySelector('[name="edit_start_date"]').setAttribute('required', 'required');
-  form.querySelector('[name="edit_start_time"]').setAttribute('required', 'required');
-  form.querySelector('[name="edit_end_time"]').setAttribute('required', 'required');
-});
 </script>
 
 <!-- 編集モーダル（Googleカレンダー風） -->
@@ -426,11 +324,11 @@ document.getElementById('edit_event_modal').addEventListener('close', function()
     <%= form_with url: "", method: :patch, id: "edit_event_form", class: "space-y-4", data: { turbo: false } do |f| %>
       <!-- タイトル（常に表示） -->
       <div class="form-control">
-        <%= text_field_tag :summary, nil, class: "input input-bordered input-lg w-full border-0 border-b border-base-300 rounded-none px-0 focus:border-primary focus:outline-none", placeholder: "タイトルを追加", required: true %>
+        <%= text_field_tag :summary, nil, class: "input input-bordered input-lg w-full border-0 border-b border-base-300 rounded-none px-0 focus:border-primary focus:outline-none", placeholder: t('google_calendars.edit_modal.title_placeholder'), required: true %>
       </div>
 
-      <!-- シンプルモード：日時入力 -->
-      <div id="edit_simple_mode" class="space-y-3">
+      <!-- 日時入力 -->
+      <div class="space-y-3">
         <div class="flex items-center gap-3">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-base-content/70" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -443,89 +341,33 @@ document.getElementById('edit_event_modal').addEventListener('close', function()
             <%= time_field_tag :edit_end_time, nil, class: "input input-sm input-bordered", required: true %>
           </div>
         </div>
-
-        <!-- 詳細を追加ボタン -->
-        <button type="button" onclick="toggleEditDetailMode()" class="btn btn-ghost btn-sm gap-2 text-primary">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-          </svg>
-          詳細を追加
-        </button>
       </div>
 
-      <!-- 詳細モード（初期状態で非表示） -->
-      <div id="edit_detail_mode" class="space-y-4 hidden">
-        <!-- 開始日時 -->
-        <div class="flex items-start gap-3">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-base-content/70 mt-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-          <div class="flex-1 space-y-2">
-            <div class="grid grid-cols-2 gap-2">
-              <div class="form-control">
-                <label class="label py-1">
-                  <span class="label-text text-xs">開始日</span>
-                </label>
-                <%= date_field_tag :start_date, nil, class: "input input-sm input-bordered w-full" %>
-              </div>
-              <div class="form-control">
-                <label class="label py-1">
-                  <span class="label-text text-xs">開始時刻</span>
-                </label>
-                <%= time_field_tag :start_time, nil, class: "input input-sm input-bordered w-full" %>
-              </div>
-            </div>
-            <div class="grid grid-cols-2 gap-2">
-              <div class="form-control">
-                <label class="label py-1">
-                  <span class="label-text text-xs">終了日</span>
-                </label>
-                <%= date_field_tag :end_date, nil, class: "input input-sm input-bordered w-full" %>
-              </div>
-              <div class="form-control">
-                <label class="label py-1">
-                  <span class="label-text text-xs">終了時刻</span>
-                </label>
-                <%= time_field_tag :end_time, nil, class: "input input-sm input-bordered w-full" %>
-              </div>
-            </div>
-          </div>
+      <!-- 場所 -->
+      <div class="flex items-center gap-3">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-base-content/70" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg>
+        <div class="flex-1">
+          <%= text_field_tag :location, nil, class: "input input-sm input-bordered w-full", placeholder: t('google_calendars.edit_modal.location_placeholder') %>
         </div>
+      </div>
 
-        <!-- 場所 -->
-        <div class="flex items-center gap-3">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-base-content/70" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-          </svg>
-          <div class="flex-1">
-            <%= text_field_tag :location, nil, class: "input input-sm input-bordered w-full", placeholder: "場所を追加" %>
-          </div>
+      <!-- 説明 -->
+      <div class="flex items-start gap-3">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-base-content/70 mt-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" />
+        </svg>
+        <div class="flex-1">
+          <%= text_area_tag :description, nil, class: "textarea textarea-bordered w-full", rows: 3, placeholder: t('google_calendars.edit_modal.description_placeholder') %>
         </div>
-
-        <!-- 説明 -->
-        <div class="flex items-start gap-3">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-base-content/70 mt-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" />
-          </svg>
-          <div class="flex-1">
-            <%= text_area_tag :description, nil, class: "textarea textarea-bordered w-full", rows: 3, placeholder: "説明を追加" %>
-          </div>
-        </div>
-
-        <!-- 詳細を閉じるボタン -->
-        <button type="button" onclick="toggleEditDetailMode()" class="btn btn-ghost btn-sm gap-2 text-base-content/70">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 12H6" />
-          </svg>
-          詳細を閉じる
-        </button>
       </div>
 
       <!-- アクションボタン -->
       <div class="flex justify-end gap-2 pt-4 border-t border-base-300">
-        <button type="button" onclick="edit_event_modal.close()" class="btn btn-ghost">キャンセル</button>
-        <%= f.submit "保存", class: "btn btn-primary" %>
+        <button type="button" onclick="edit_event_modal.close()" class="btn btn-ghost"><%= t('google_calendars.edit_modal.cancel') %></button>
+        <%= f.submit t('google_calendars.edit_modal.save'), class: "btn btn-primary" %>
       </div>
     <% end %>
   </div>
