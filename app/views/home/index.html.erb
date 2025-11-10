@@ -4,33 +4,32 @@
 
   <div class="mt-40">
     <h1 class="text-5xl font-bold fade-in-left block">
-      毎日の習慣が、<br>綺麗な山をつくる。
+      <%= t('home.headline').html_safe %>
     </h1>
 
     <hr class="my-2">
 
     <p class="text-xl text-right fade-in-right">
-      起きた時間と眠る時間を簡単記録、続けるほど山は美しく育っていく。
+      <%= t('home.subheadline') %>
     </p>
   </div>
 
   <div class="text-center fade-in-delay mt-30">
     <div class="flex flex-col items-center gap-4">
-      <%= link_to "はじめる", new_user_registration_path, class: "btn btn-lg w-60" %>
-      <%= link_to "ログイン", new_user_session_path, class: "btn btn-outline btn-lg w-60" %>
+      <%= link_to t('home.start'), new_user_registration_path, class: "btn btn-lg w-60" %>
+      <%= link_to t('home.login'), new_user_session_path, class: "btn btn-outline btn-lg w-60" %>
     </div>
   </div>
 
   <p class="fade-in-delay mt-30">
-    Sleep Summitは、起床と睡眠の記録をもとに毎日の生活リズムを山の形で表現。
-    <br>健康的な生活習慣を続けるほど美しい山が描かれ、視覚的にあなたの健康をサポートします。
+    <%= t('home.description').html_safe %>
   </p>
 
   <footer class="mt-20 mb-10 text-center">
     <div class="flex justify-center gap-4 text-sm">
-      <%= link_to "利用規約", terms_path, class: "link link-hover" %>
+      <%= link_to t('home.terms'), terms_path, class: "link link-hover" %>
       <span>|</span>
-      <%= link_to "プライバシーポリシー", privacy_path, class: "link link-hover" %>
+      <%= link_to t('home.privacy'), privacy_path, class: "link link-hover" %>
     </div>
   </footer>
 </div>
