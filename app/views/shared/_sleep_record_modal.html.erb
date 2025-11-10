@@ -2,10 +2,10 @@
 <dialog id="sleep_record_modal" class="modal">
   <div class="modal-box max-w-2xl">
     <form method="dialog">
-      <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+      <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"><%= t('modals.sleep_record.close') %></button>
     </form>
 
-    <h2 class="text-2xl font-bold mb-6" id="sleep_record_modal_title">睡眠記録を追加</h2>
+    <h2 class="text-2xl font-bold mb-6" id="sleep_record_modal_title"><%= t('modals.sleep_record.title_new') %></h2>
 
     <%= form_with model: SleepRecord.new, id: "sleep_record_form", class: "space-y-4", data: { turbo: false } do |f| %>
       <div id="sleep_record_errors" class="hidden alert alert-error mb-4">
@@ -17,9 +17,9 @@
         <label class="label">
           <span class="label-text font-semibold flex items-center gap-2">
             <i class="ph-fill ph-sun text-warning text-lg"></i>
-            起床時刻
+            <%= t('modals.sleep_record.wake_time') %>
           </span>
-          <span class="label-text-alt text-base-content/60">※未来の時刻は設定できません</span>
+          <span class="label-text-alt text-base-content/60"><%= t('modals.sleep_record.wake_time_note') %></span>
         </label>
 
         <div class="grid grid-cols-2 gap-3">
@@ -41,9 +41,9 @@
         <label class="label">
           <span class="label-text font-semibold flex items-center gap-2">
             <i class="ph-fill ph-moon text-info text-lg"></i>
-            就寝時刻
+            <%= t('modals.sleep_record.bed_time') %>
           </span>
-          <span class="label-text-alt text-base-content/60">※未来の時刻は設定できません</span>
+          <span class="label-text-alt text-base-content/60"><%= t('modals.sleep_record.bed_time_note') %></span>
         </label>
 
         <div class="grid grid-cols-2 gap-3">
@@ -59,8 +59,8 @@
       </div>
 
       <div class="flex justify-end gap-2 pt-4 border-t border-base-300">
-        <button type="button" onclick="sleep_record_modal.close()" class="btn btn-outline">キャンセル</button>
-        <%= f.submit "作成", class: "btn btn-primary", id: "sleep_record_submit_btn" %>
+        <button type="button" onclick="sleep_record_modal.close()" class="btn btn-outline"><%= t('modals.sleep_record.cancel') %></button>
+        <%= f.submit t('modals.sleep_record.create'), class: "btn btn-primary", id: "sleep_record_submit_btn" %>
       </div>
     <% end %>
   </div>
@@ -100,10 +100,10 @@
     errorsDiv.classList.add('hidden');
 
     if (mode === 'new') {
-      title.textContent = '睡眠記録を追加';
+      title.textContent = '<%= t('modals.sleep_record.title_new') %>';
       form.action = '/sleep_records';
       form.querySelector('input[name="_method"]')?.remove();
-      submitBtn.textContent = '作成';
+      submitBtn.textContent = '<%= t('modals.sleep_record.create') %>';
 
       // dateパラメータがある場合、起床時刻のデフォルト値を設定
       if (date) {
@@ -122,7 +122,7 @@
       document.getElementById('modal_bed_time_only').value = '';
       document.getElementById('modal_bed_time').value = '';
     } else if (mode === 'edit') {
-      title.textContent = '睡眠記録を編集';
+      title.textContent = '<%= t('modals.sleep_record.title_edit') %>';
       form.action = `/sleep_records/${recordId}`;
 
       // PATCH methodを追加
@@ -135,7 +135,7 @@
       }
       methodInput.value = 'patch';
 
-      submitBtn.textContent = '更新';
+      submitBtn.textContent = '<%= t('modals.sleep_record.update') %>';
 
       // 起床時刻を分離
       if (wakeTime) {
