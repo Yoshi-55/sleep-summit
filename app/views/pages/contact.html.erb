@@ -1,15 +1,15 @@
 <% content_for :page_title do %>
-  お問い合わせ
+  <%= t('pages.contact.page_title') %>
 <% end %>
 
     <div class="card bg-base-100 border border-base-300 mb-3 sm:mb-4 lg:mb-6">
       <div class="card-body p-8">
         <p class="mb-6">
-          ご質問、ご意見、不具合報告などお気軽にお問い合わせください。
+          <%= t('pages.contact.description') %>
         </p>
 
         <div class="text-center my-8">
-          <%= link_to "お問い合わせフォームを開く",
+          <%= link_to t('pages.contact.open_form'),
                       "https://forms.gle/rQx7MCHvG3mXLQb7A",
                       target: "_blank",
                       rel: "noopener noreferrer",
