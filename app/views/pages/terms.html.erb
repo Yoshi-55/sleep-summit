@@ -1,5 +1,5 @@
 <% content_for :page_title do %>
-  利用規約
+  <%= t('pages.terms.page_title') %>
 <% end %>
 
 <div class="min-h-screen">
@@ -12,18 +12,18 @@
       </div>
       <div class="navbar-end">
         <% if user_signed_in? %>
-          <%= link_to "ダッシュボード", dashboard_path, class: "btn btn-outline" %>
+          <%= link_to t('pages.common.dashboard'), dashboard_path, class: "btn btn-outline" %>
         <% else %>
-          <%= link_to "ログイン", new_user_session_path, class: "btn btn-outline" %>
+          <%= link_to t('pages.common.login'), new_user_session_path, class: "btn btn-outline" %>
         <% end %>
       </div>
     </div>
 
     <div class="card bg-base-100 border border-base-300 p-8 mt-6">
-      <h1 class="text-3xl font-bold mb-6">利用規約</h1>
+      <h1 class="text-3xl font-bold mb-6"><%= t('pages.terms.page_title') %></h1>
 
       <div class="prose max-w-none">
-        <p class="text-sm text-gray-500 mb-6">最終更新日: <%= Date.today.strftime("%Y年%m月%d日") %></p>
+        <p class="text-sm text-gray-500 mb-6"><%= t('pages.common.last_updated', date: Date.today.strftime("%Y年%m月%d日")) %></p>
 
         <section class="mb-8">
           <h2 class="text-2xl font-bold mb-4">第1条（適用）</h2>
@@ -137,8 +137,8 @@
 
         <div class="mt-8 pt-6 border-t">
           <p class="text-center">
-            <%= link_to "プライバシーポリシーへ", privacy_path, class: "btn btn-outline" %>
-            <%= link_to "トップページへ戻る", root_path, class: "btn btn-outline" %>
+            <%= link_to t('pages.terms.to_privacy'), privacy_path, class: "btn btn-outline" %>
+            <%= link_to t('pages.common.to_top'), root_path, class: "btn btn-outline" %>
           </p>
         </div>
       </div>
