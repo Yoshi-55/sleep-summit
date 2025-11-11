@@ -17,6 +17,15 @@ class User < ApplicationRecord
     avatar.to_s.include?(".") ? avatar : "#{avatar}.png"
   end
 
+  def avatar=(value)
+    normalized = if value.present? && !value.to_s.include?(".")
+      "#{value}.png"
+    else
+      value
+    end
+    super(normalized)
+  end
+
   # Google認証済みかどうかを判定
   def google_authenticated?
     return false unless ENV["GOOGLE_CLIENT_ID"].present? && ENV["GOOGLE_CLIENT_SECRET"].present?
