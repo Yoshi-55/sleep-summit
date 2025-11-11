@@ -190,6 +190,8 @@ GEM
       net-smtp
     marcel (1.0.4)
     matrix (0.4.3)
+    meta-tags (2.22.2)
+      actionpack (>= 6.0.0, < 8.2)
     mini_mime (1.1.5)
     minitest (5.25.5)
     msgpack (1.8.0)
@@ -463,6 +465,7 @@ DEPENDENCIES
   groupdate
   jbuilder
   jsbundling-rails
+  meta-tags
   omniauth-google-oauth2
   omniauth-rails_csrf_protection
   pg (~> 1.1)
