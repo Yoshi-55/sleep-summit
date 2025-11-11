@@ -14,10 +14,10 @@
     <div>
       <%= f.label :avatar, t('profiles.edit.avatar_label') %>
       <div class="flex gap-6 mt-2">
-        <% ["default.png", "boy-1.png", "boy-2.png", "girl-1.png", "girl-2.png"].each do |img| %>
+        <% ["default", "boy-1", "boy-2", "girl-1", "girl-2"].each do |img| %>
           <label class="flex flex-col items-center cursor-pointer">
             <%= f.radio_button :avatar, img, id: img, class: "radio radio-primary mb-2" %>
-            <%= image_tag "avatars/#{img}", size: "50x50", class: "rounded-full border border-base-300" %>
+            <%= image_tag "avatars/#{img}.png", size: "50x50", class: "rounded-full border border-base-300" %>
           </label>
         <% end %>
       </div>
