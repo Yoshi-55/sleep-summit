@@ -12,6 +12,20 @@ class User < ApplicationRecord
   # 新規登録時は選択しないため更新時のみバリデーションを行う
   validates :avatar, presence: true, on: :update
 
+  def avatar_filename
+    return "default.png" if avatar.blank?
+    avatar.to_s.include?(".") ? avatar : "#{avatar}.png"
+  end
+
+  def avatar=(value)
+    normalized = if value.present? && !value.to_s.include?(".")
+      "#{value}.png"
+    else
+      value
+    end
+    super(normalized)
+  end
+
   # Google認証済みかどうかを判定
   def google_authenticated?
     return false unless ENV["GOOGLE_CLIENT_ID"].present? && ENV["GOOGLE_CLIENT_SECRET"].present?
