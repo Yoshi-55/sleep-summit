@@ -1,47 +1,48 @@
-
 <div class="flex justify-center items-center min-h-screen bg-[url('/path/to/bg.jpg')] bg-cover bg-center">
-  <div class="card w-96 shadow-xl p-6 rounded-lg backdrop-blur-md border border-white/20">
-    <h2 class="text-2xl font-bold mb-4 text-center">
-      <%= t('devise.sessions.new.sign_in') %>
-    </h2>
+  <div class="card bg-base-100 border border-base-300 shadow-xl rounded-lg w-96">
+    <div class="card-body p-6">
+      <h2 class="text-2xl font-bold mb-4 text-center">
+        <%= t('devise.sessions.new.sign_in') %>
+      </h2>
 
-    <% if flash[:alert] %>
-      <div class="text-red-500 text-sm mb-2"><%= flash[:alert] %></div>
-    <% end %>
+      <% if flash[:alert] %>
+        <div class="text-red-500 text-sm mb-2"><%= flash[:alert] %></div>
+      <% end %>
 
-    <% if resource.errors.any? %>
-      <ul class="text-red-500 text-sm mb-2">
-        <% resource.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
-    <% end %>
+      <% if resource.errors.any? %>
+        <ul class="text-red-500 text-sm mb-4">
+          <% resource.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      <% end %>
 
-    <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-      <div class="form-control mb-4">
-        <%= f.label :email, t('activerecord.attributes.user.email'), class: "label" %>
-        <%= f.email_field :email, autofocus: true, class: "input input-bordered w-full" %>
-      </div>
+      <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+        <div class="form-control mb-4">
+          <%= f.label :email, t('activerecord.attributes.user.email'), class: "label" %>
+          <%= f.email_field :email, autofocus: true, class: "input input-bordered w-full" %>
+        </div>
 
-      <div class="form-control mb-4">
-        <%= f.label :password, t('activerecord.attributes.user.password'), class: "label" %>
-        <%= f.password_field :password, autocomplete: "current-password", class: "input input-bordered w-full" %>
-      </div>
+        <div class="form-control mb-4">
+          <%= f.label :password, t('activerecord.attributes.user.password'), class: "label" %>
+          <%= f.password_field :password, autocomplete: "current-password", class: "input input-bordered w-full" %>
+        </div>
 
-      <div class="form-control mb-4">
-        <%= f.check_box :remember_me, class: "checkbox checkbox-primary" %>
-        <%= f.label :remember_me, t('activerecord.attributes.user.remember_me') %>
-      </div>
+        <div class="form-control mb-4 flex items-center gap-2">
+          <%= f.check_box :remember_me, class: "checkbox checkbox-primary" %>
+          <%= f.label :remember_me, t('activerecord.attributes.user.remember_me') %>
+        </div>
 
-      <div class="form-control">
-        <%= f.submit t('devise.sessions.new.sign_in'), class: "btn btn-primary w-full" %>
-      </div>
-    <% end %>
+        <div class="form-control">
+          <%= f.submit t('devise.sessions.new.sign_in'), class: "btn btn-primary w-full" %>
+        </div>
+      <% end %>
 
-    <div class="divider"><%= t('devise.or') %></div>
+      <div class="divider"><%= t('devise.or') %></div>
 
-    <p class="text-center">
-      <%= link_to t('devise.shared.links.sign_up'), new_user_registration_path, class: "text-blue-500 hover:underline" %>
-    </p>
+      <p class="text-center">
+        <%= link_to t('devise.shared.links.sign_up'), new_user_registration_path, class: "text-blue-500 hover:underline" %>
+      </p>
+    </div>
   </div>
 </div>
