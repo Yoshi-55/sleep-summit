@@ -58,11 +58,13 @@
                             <h4 class="font-bold text-sm">
                               <%= record[:day].is_a?(Date) ? record[:day].strftime("%m-%d (%a)") : '--' %>
                             </h4>
+                            <!-- 操作系統コメントアウト
                             <% if record[:id].present? %>
                               <button onclick="event.stopPropagation(); openSleepRecordModal('edit', <%= record[:id] %>, '<%= record[:wake_times].present? ? Time.parse(record[:wake_times].first).strftime('%Y-%m-%dT%H:%M') : '' %>', '<%= record[:bed_times].present? ? Time.parse(record[:bed_times].last).strftime('%Y-%m-%dT%H:%M') : '' %>')" class="btn btn-xs btn-outline">編集</button>
                             <% else %>
                               <button onclick="event.stopPropagation(); openSleepRecordModal('new', null, null, null, '<%= record[:day] %>')" class="btn btn-xs btn-outline btn-primary">追加</button>
                             <% end %>
+                            -->
                           </div>
                           <div class="text-xs text-base-content/70 flex gap-4">
                             <span class="flex items-center gap-1">
@@ -146,7 +148,7 @@
                       <th class="px-4 py-3 text-sm font-semibold text-base-content/70"><%= t('dashboard.index.daily_sleep_hours') %></th>
                       <th class="px-4 py-3 text-sm font-semibold text-base-content/70"><%= t('dashboard.index.cumulative_wake_hours') %></th>
                       <th class="px-4 py-3 text-sm font-semibold text-base-content/70"><%= t('dashboard.index.cumulative_sleep_hours') %></th>
-                      <th class="px-4 py-3 text-sm font-semibold text-base-content/70">操作</th>
+                      <%# <th class="px-4 py-3 text-sm font-semibold text-base-content/70">操作</th> %>
                     </tr>
                   </thead>
                   <tbody>
@@ -189,12 +191,14 @@
                         <td class="px-4 py-3 text-info text-sm font-semibold">
                           <%= record[:cumulative_sleep_hours] || '-' %>
                         </td>
+                        <!-- 操作系統コメントアウト
                         <td class="px-4 py-3">
                           <% if record[:id].present? %>
                             <button onclick="openSleepRecordModal('edit', <%= record[:id] %>, '<%= record[:wake_times].present? ? Time.parse(record[:wake_times].first).strftime('%Y-%m-%dT%H:%M') : '' %>', '<%= record[:bed_times].present? ? Time.parse(record[:bed_times].last).strftime('%Y-%m-%dT%H:%M') : '' %>')" class="btn btn-xs btn-outline whitespace-nowrap">編集</button>
                           <% else %>
                             <button onclick="openSleepRecordModal('new', null, null, null, '<%= record[:day] %>')" class="btn btn-xs btn-outline btn-primary whitespace-nowrap">追加</button>
                           <% end %>
+                        -->
                         </td>
                       </tr>
                     <% end %>
