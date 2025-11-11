@@ -63,3 +63,7 @@
 .mobile-footer {
   background-color: oklch(24.353% 0 0) !important;
 }
+/* ナビバーメニューの背景色を変更 */
+.navbar-menu {
+  background-color: oklch(24.353% 0 0) !important;
+}
