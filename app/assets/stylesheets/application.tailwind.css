@@ -58,3 +58,8 @@
 .table thead {
   background-color: oklch(37% 0 0 / 0.2) !important;
 }
+
+/* モバイルフッターの背景色を変更 */
+.mobile-footer {
+  background-color: oklch(24.353% 0 0) !important;
+}
