@@ -36,6 +36,7 @@ class SleepRecordsController < ApplicationController
     session[:return_to] = request.referer
   end
 
+
   private
 
   def set_sleep_record
@@ -72,9 +73,9 @@ class SleepRecordsController < ApplicationController
 
     if @sleep_record.save
       return_path = session.delete(:return_to) || authenticated_root_path
-      redirect_to return_path, notice: I18n.t("sleep_records.create.record_created")
+      render json: { success: true, redirect_url: return_path }, status: :ok
     else
-      render :new, status: :unprocessable_entity
+      render json: { errors: @sleep_record.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
@@ -99,9 +100,9 @@ class SleepRecordsController < ApplicationController
 
     if @sleep_record.update(attributes)
       return_path = session.delete(:return_to) || authenticated_root_path
-      redirect_to return_path, notice: I18n.t("sleep_records.update.record_updated")
+      render json: { success: true, redirect_url: return_path }, status: :ok
     else
-      render :edit, status: :unprocessable_entity
+      render json: { errors: @sleep_record.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
