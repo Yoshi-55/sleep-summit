@@ -112,16 +112,23 @@
         document.getElementById('modal_wake_date').value = date;
         document.getElementById('modal_wake_time_only').value = '07:00';
         updateWakeTimeHidden();
+
+        // 就寝時刻は同日の22:00を初期値として設定
+        document.getElementById('modal_bed_date').value = date;
+        document.getElementById('modal_bed_time_only').value = '22:00';
+        updateBedTimeHidden();
       } else {
         const now = new Date();
         document.getElementById('modal_wake_date').value = now.toISOString().split('T')[0];
         document.getElementById('modal_wake_time_only').value = now.toTimeString().slice(0, 5);
         updateWakeTimeHidden();
-      }
 
-      document.getElementById('modal_bed_date').value = '';
-      document.getElementById('modal_bed_time_only').value = '';
-      document.getElementById('modal_bed_time').value = '';
+        // 就寝時刻は同日の22:00を初期値として設定
+        const bedDateStr = now.toISOString().split('T')[0];
+        document.getElementById('modal_bed_date').value = bedDateStr;
+        document.getElementById('modal_bed_time_only').value = '22:00';
+        updateBedTimeHidden();
+      }
     } else if (mode === 'edit') {
       title.textContent = '<%= t('modals.sleep_record.title_edit') %>';
       form.action = `/sleep_records/${recordId}`;

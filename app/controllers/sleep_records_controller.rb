@@ -33,6 +33,10 @@ class SleepRecordsController < ApplicationController
   end
 
   def edit
+    # 当日以降のレコードは編集不可
+    if @sleep_record.wake_time.to_date >= Time.current.to_date
+      return redirect_with_flash(:alert, I18n.t("sleep_records.edit.cannot_edit_today_or_later"))
+    end
     session[:return_to] = request.referer
   end
 
@@ -68,6 +72,11 @@ class SleepRecordsController < ApplicationController
     attributes = {}
     attributes[:wake_time] = Time.zone.parse(wake_time_param) if wake_time_param.present?
     attributes[:bed_time] = Time.zone.parse(bed_time_param) if bed_time_param.present?
+
+    # 当日以降のレコードは作成不可
+    if attributes[:wake_time] && attributes[:wake_time].to_date >= Time.current.to_date
+      return render json: { errors: [ I18n.t("sleep_records.create.cannot_create_today_or_later") ] }, status: :unprocessable_entity
+    end
 
     @sleep_record = current_user.sleep_records.build(attributes)
 

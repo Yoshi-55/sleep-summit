@@ -124,6 +124,7 @@ ja:
       wake_time_label: "起床時刻"
       bed_time_label: "就寝時刻"
       future_time_note: "※未来の時刻は設定できません"
+      cannot_edit_today_or_later: "当日以降の記録は編集できません"
       submit: "更新"
       cancel: "キャンセル"
     create:
@@ -131,6 +132,7 @@ ja:
       need_previous_bed_time: "前回の就寝時刻を先に記録してください"
       wake_time_recorded: "起床時刻を記録しました"
       wake_time_failed: "起床時刻の記録に失敗しました: %{errors}"
+      cannot_create_today_or_later: "当日以降の記録は作成できません。過去の日付で記録してください"
       record_created: "記録を作成しました"
     update:
       no_unwoken_record: "未就寝レコードがありません"
