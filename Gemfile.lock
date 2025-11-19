@@ -165,6 +165,7 @@ GEM
     groupdate (6.7.0)
       activesupport (>= 7.1)
     hashie (5.0.0)
+    htmlbeautifier (1.4.3)
     i18n (1.14.7)
       concurrent-ruby (~> 1.0)
     io-console (0.8.1)
@@ -472,6 +473,7 @@ DEPENDENCIES
   factory_bot_rails
   google-apis-calendar_v3
   groupdate
+  htmlbeautifier
   jbuilder
   jsbundling-rails
   meta-tags
