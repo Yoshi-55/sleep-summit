@@ -39,5 +39,4 @@ class SleepRecord < ApplicationRecord
       errors.add(:wake_time, "前回の就寝時刻（#{previous_record.bed_time.strftime('%m月%d日 %H:%M')}）より後に設定してください")
     end
   end
-
 end
