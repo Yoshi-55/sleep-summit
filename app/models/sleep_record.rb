@@ -5,7 +5,6 @@ class SleepRecord < ApplicationRecord
   validate :bed_time_after_wake_time
   validate :times_not_in_future
   validate :wake_time_after_previous_bed_time
-  validate :bed_time_before_next_wake_time
 
   scope :unbedded, -> { where(bed_time: nil) }
   scope :with_wake_time, -> { where.not(wake_time: nil) }
@@ -14,10 +13,10 @@ class SleepRecord < ApplicationRecord
   private
 
   def times_not_in_future
-    if wake_time.present? && wake_time > Time.current
+    if wake_time.present? && wake_time.to_date > Time.current.to_date
       errors.add(:wake_time, "未来の時刻は設定できません")
     end
-    if bed_time.present? && bed_time > Time.current
+    if bed_time.present? && bed_time.to_date > Time.current.to_date
       errors.add(:bed_time, "未来の時刻は設定できません")
     end
   end
@@ -41,12 +40,4 @@ class SleepRecord < ApplicationRecord
     end
   end
 
-  def bed_time_before_next_wake_time
-    return if bed_time.blank?
-    # 次のレコードの起床時刻より前に就寝しているか確認
-    next_record = user.sleep_records.where.not(id: id).where("wake_time > ?", wake_time || bed_time).order(wake_time: :asc).first
-    if next_record&.wake_time && bed_time > next_record.wake_time
-      errors.add(:bed_time, "次回の起床時刻（#{next_record.wake_time.strftime('%m月%d日 %H:%M')}）より前に設定してください")
-    end
-  end
 end
