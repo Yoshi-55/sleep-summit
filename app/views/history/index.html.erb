@@ -181,7 +181,6 @@
                     <td class="px-4 py-3 text-info text-sm font-semibold">
                       <%= record[:cumulative_sleep_hours] || '-' %>
                     </td>
-                    <!-- 操作系統コメントアウト
                     <td class="px-4 py-3">
                       <% if record[:id].present? %>
                         <button onclick="openSleepRecordModal('edit', <%= record[:id] %>, '<%= record[:wake_times].present? ? Time.parse(record[:wake_times].first).strftime('%Y-%m-%dT%H:%M') : '' %>', '<%= record[:bed_times].present? ? Time.parse(record[:bed_times].last).strftime('%Y-%m-%dT%H:%M') : '' %>')" class="btn btn-xs btn-outline whitespace-nowrap">編集</button>
@@ -189,7 +188,6 @@
                         <button onclick="openSleepRecordModal('new', null, null, null, '<%= record[:day] %>')" class="btn btn-xs btn-outline btn-primary whitespace-nowrap">追加</button>
                       <% end %>
                     </td>
-                    -->
                   </tr>
                 <% end %>
               </tbody>
