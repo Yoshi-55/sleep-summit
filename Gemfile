@@ -71,6 +71,8 @@ group :development, :test do
 
   # Environment variables
   gem "dotenv-rails"
+
+  gem "htmlbeautifier"
 end
 
 group :development do
