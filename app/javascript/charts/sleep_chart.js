@@ -7,6 +7,10 @@ document.addEventListener("turbo:load", () => {
   const chartElements = Array.from(document.querySelectorAll('[id^="sleep-chart"]'));
   chartElements.forEach(chartElement => {
     if (!chartElement.dataset.series) return;
+
+    // 既存チャートをクリア（Turbo再読み込み時の重複防止）
+    chartElement.innerHTML = '';
+
     const seriesData = JSON.parse(chartElement.dataset.series);
 
     new Chartkick.LineChart(chartElement, seriesData, {
@@ -39,11 +43,14 @@ document.addEventListener("turbo:load", () => {
           area: {
             marker: {
               enabled: true,
-              radius: 3.5,
-              symbol: "circle"
+              radius: 4.5,
+              symbol: "circle",
+              states: {
+                hover: { radiusPlus: 1.5 }
+              }
             },
-            lineWidth: 3,
-            fillOpacity: 0.3,
+            lineWidth: 2.5,
+            fillOpacity: 0.25,
             threshold: 0,
             negativeFillColor: "rgba(0,0,0,0)"
           }
