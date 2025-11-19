@@ -46,7 +46,11 @@ RSpec.describe "SleepRecords", type: :request do
         record.reload
         expect(record.wake_time).to be_within(1.minute).of(new_wake_time)
         expect(record.bed_time).to be_within(1.minute).of(new_bed_time)
-        expect(response).to redirect_to(authenticated_root_path)
+        expect(response).to have_http_status(:ok)
+        expect(response.content_type).to include('application/json')
+        json = JSON.parse(response.body)
+        expect(json['success']).to be(true)
+        expect(json['redirect_url']).to eq(authenticated_root_path)
       end
 
       it "未来の時刻は保存できない" do
@@ -111,7 +115,11 @@ RSpec.describe "SleepRecords", type: :request do
       created_record = SleepRecord.last
       expect(created_record.wake_time).to be_within(1.minute).of(past_wake_time)
       expect(created_record.bed_time).to be_within(1.minute).of(past_bed_time)
-      expect(response).to redirect_to(authenticated_root_path)
+      expect(response).to have_http_status(:ok)
+      expect(response.content_type).to include('application/json')
+      json = JSON.parse(response.body)
+      expect(json['success']).to be(true)
+      expect(json['redirect_url']).to eq(authenticated_root_path)
     end
 
     it "未来の時刻は保存できない" do
