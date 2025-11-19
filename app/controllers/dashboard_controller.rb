@@ -11,21 +11,22 @@ class DashboardController < ApplicationController
 
     aggregator = SleepRecordAggregator.new(@week_records)
     week_days = (week_start.to_date..week_end.to_date).to_a
-    @weekly_records = aggregator.build_cumulative(week_days)
+    @weekly_records = aggregator.build_cumulative(week_days, exclude_prev_record: true)
 
     @series = SleepRecordChartBuilder.new(@week_records).build_series(range: week_start..week_end)
 
     # 日ごと集計して平均を計算（累計 ÷ 記録のある日数）
-    valid_days = @weekly_records.select { |d| d[:daily_sleep_hours].present? && d[:daily_wake_hours].present? }
+    valid_wake_days = @weekly_records.select { |d| d[:day].is_a?(Date) && d[:daily_wake_hours].present? }
+    valid_sleep_days = @weekly_records.select { |d| d[:day].is_a?(Date) && d[:daily_sleep_hours].present? }
 
-    @weekly_average_sleep_hours = if valid_days.any?
-      (valid_days.sum { |d| d[:daily_sleep_hours] } / valid_days.size).round(2)
+    @weekly_average_wake_hours = if valid_wake_days.any?
+      (valid_wake_days.sum { |d| d[:daily_wake_hours] } / valid_wake_days.size).round(2)
     else
       0.0
     end
 
-    @weekly_average_wake_hours = if valid_days.any?
-      (valid_days.sum { |d| d[:daily_wake_hours] } / valid_days.size).round(2)
+    @weekly_average_sleep_hours = if valid_sleep_days.any?
+      (valid_sleep_days.sum { |d| d[:daily_sleep_hours] } / valid_sleep_days.size).round(2)
     else
       0.0
     end
