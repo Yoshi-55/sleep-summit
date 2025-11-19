@@ -75,7 +75,7 @@ class SleepRecordsController < ApplicationController
 
     # 当日以降のレコードは作成不可
     if attributes[:wake_time] && attributes[:wake_time].to_date >= Time.current.to_date
-      return render json: { errors: [I18n.t("sleep_records.create.cannot_create_today_or_later")] }, status: :unprocessable_entity
+      return render json: { errors: [ I18n.t("sleep_records.create.cannot_create_today_or_later") ] }, status: :unprocessable_entity
     end
 
     @sleep_record = current_user.sleep_records.build(attributes)
