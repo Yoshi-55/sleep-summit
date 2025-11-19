@@ -39,11 +39,11 @@ class SleepRecordAggregator
     wake_total
   end
 
-  def build_cumulative(days_range)
+  def build_cumulative(days_range, exclude_prev_record: false)
     return [] if @records.empty?
     sorted = @records.select { |r| r.wake_time.present? }.sort_by(&:wake_time)
 
-    prev_record = if sorted.first
+    prev_record = if !exclude_prev_record && sorted.first
       user = sorted.first.user
       range_start = days_range.first
       if range_start == range_start.beginning_of_month
