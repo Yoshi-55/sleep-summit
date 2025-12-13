@@ -109,9 +109,17 @@ class SleepRecordsController < ApplicationController
 
     if @sleep_record.update(attributes)
       return_path = session.delete(:return_to) || authenticated_root_path
-      render json: { success: true, redirect_url: return_path }, status: :ok
+      if request.accept.include?("application/json") || request.format.json?
+        render json: { success: true, redirect_url: return_path }, status: :ok
+      else
+        redirect_to return_path, notice: I18n.t("sleep_records.update.sleep_record_updated")
+      end
     else
-      render json: { errors: @sleep_record.errors.full_messages }, status: :unprocessable_entity
+      if request.accept.include?("application/json") || request.format.json?
+        render json: { errors: @sleep_record.errors.full_messages }, status: :unprocessable_entity
+      else
+        redirect_to session.delete(:return_to) || authenticated_root_path, alert: I18n.t("sleep_records.update.sleep_record_failed", errors: @sleep_record.errors.full_messages.join(", "))
+      end
     end
   end
 
