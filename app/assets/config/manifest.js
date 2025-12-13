@@ -3,3 +3,4 @@
 
 //= link bg-summit.svg
 //= link fadein.css
+//= link sleep_record_modal.js
