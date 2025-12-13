@@ -41,7 +41,7 @@ RSpec.describe "SleepRecords", type: :request do
             wake_time: new_wake_time.strftime("%Y-%m-%dT%H:%M"),
             bed_time: new_bed_time.strftime("%Y-%m-%dT%H:%M")
           }
-        }
+        }, headers: { "Accept" => "application/json" }
 
         record.reload
         expect(record.wake_time).to be_within(1.minute).of(new_wake_time)
@@ -65,7 +65,7 @@ RSpec.describe "SleepRecords", type: :request do
             wake_time: future_time.strftime("%Y-%m-%dT%H:%M"),
             bed_time: record.bed_time.strftime("%Y-%m-%dT%H:%M")
           }
-        }
+        }, headers: { "Accept" => "application/json" }
 
         expect(response).to have_http_status(:unprocessable_entity)
       end
@@ -109,7 +109,7 @@ RSpec.describe "SleepRecords", type: :request do
             wake_time: past_wake_time.strftime("%Y-%m-%dT%H:%M"),
             bed_time: past_bed_time.strftime("%Y-%m-%dT%H:%M")
           }
-        }
+        }, headers: { "Accept" => "application/json" }
       }.to change { SleepRecord.count }.by(1)
 
       created_record = SleepRecord.last
@@ -131,7 +131,7 @@ RSpec.describe "SleepRecords", type: :request do
             wake_time: future_time.strftime("%Y-%m-%dT%H:%M"),
             bed_time: (future_time + 1.hour).strftime("%Y-%m-%dT%H:%M")
           }
-        }
+        }, headers: { "Accept" => "application/json" }
       }.not_to change { SleepRecord.count }
 
       expect(response).to have_http_status(:unprocessable_entity)
