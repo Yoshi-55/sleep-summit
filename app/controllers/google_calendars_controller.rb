@@ -27,9 +27,9 @@ class GoogleCalendarsController < ApplicationController
       description: params[:description],
       location: params[:location]
     )
-      redirect_to google_calendars_path, notice: "予定を作成しました"
+      redirect_to redirect_path, notice: "予定を作成しました"
     else
-      redirect_to google_calendars_path, alert: "予定の作成に失敗しました"
+      redirect_to redirect_path, alert: "予定の作成に失敗しました"
     end
   end
 
@@ -100,5 +100,14 @@ class GoogleCalendarsController < ApplicationController
 
   def parse_datetime(date_str, time_str)
     Time.zone.parse("#{date_str} #{time_str}")
+  end
+
+  def redirect_path
+    # リファラーがダッシュボードの場合はダッシュボードに戻す
+    if request.referer&.include?("dashboard")
+      dashboard_path
+    else
+      google_calendars_path
+    end
   end
 end
