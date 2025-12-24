@@ -75,16 +75,26 @@ class SleepRecordsController < ApplicationController
 
     # 当日以降のレコードは作成不可
     if attributes[:wake_time] && attributes[:wake_time].to_date >= Time.current.to_date
-      return render json: { errors: [ I18n.t("sleep_records.create.cannot_create_today_or_later") ] }, status: :unprocessable_entity
+      respond_to do |format|
+        format.html { redirect_to session.delete(:return_to) || authenticated_root_path, alert: I18n.t("sleep_records.create.cannot_create_today_or_later") }
+        format.json { render json: { errors: [ I18n.t("sleep_records.create.cannot_create_today_or_later") ] }, status: :unprocessable_entity }
+      end
+      return
     end
 
     @sleep_record = current_user.sleep_records.build(attributes)
 
     if @sleep_record.save
       return_path = session.delete(:return_to) || authenticated_root_path
-      render json: { success: true, redirect_url: return_path }, status: :ok
+      respond_to do |format|
+        format.html { redirect_to return_path, notice: I18n.t("sleep_records.create.record_created") }
+        format.json { render json: { success: true, redirect_url: return_path }, status: :ok }
+      end
     else
-      render json: { errors: @sleep_record.errors.full_messages }, status: :unprocessable_entity
+      respond_to do |format|
+        format.html { redirect_to session.delete(:return_to) || authenticated_root_path, alert: I18n.t("sleep_records.create.record_failed", errors: @sleep_record.errors.full_messages.join(", ")) }
+        format.json { render json: { errors: @sleep_record.errors.full_messages }, status: :unprocessable_entity }
+      end
     end
   end
 
@@ -112,13 +122,13 @@ class SleepRecordsController < ApplicationController
       if request.accept.include?("application/json") || request.format.json?
         render json: { success: true, redirect_url: return_path }, status: :ok
       else
-        redirect_to return_path, notice: I18n.t("sleep_records.update.sleep_record_updated")
+        redirect_to return_path, notice: I18n.t("sleep_records.update.record_updated")
       end
     else
       if request.accept.include?("application/json") || request.format.json?
         render json: { errors: @sleep_record.errors.full_messages }, status: :unprocessable_entity
       else
-        redirect_to session.delete(:return_to) || authenticated_root_path, alert: I18n.t("sleep_records.update.sleep_record_failed", errors: @sleep_record.errors.full_messages.join(", "))
+        redirect_to session.delete(:return_to) || authenticated_root_path, alert: I18n.t("sleep_records.update.record_failed", errors: @sleep_record.errors.full_messages.join(", "))
       end
     end
   end
