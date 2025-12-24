@@ -3,11 +3,11 @@
   <%= t('dashboard.index.page_title') %>
 <% end %>
 
-    <div class="flex flex-col lg:flex-row gap-3 sm:gap-4 lg:gap-6 mb-6 sm:mb-8">
+    <div class="flex flex-col lg:flex-row lg:items-start gap-3 sm:gap-4 lg:gap-6 mb-6 sm:mb-8">
       <!-- 左カラム -->
-      <div class="w-full lg:flex-[7] flex flex-col gap-3 sm:gap-4 lg:gap-6">
+      <div class="w-full lg:w-auto lg:flex-[7_0_0%] flex flex-col gap-3 sm:gap-4 lg:gap-6">
         <!-- グラフ -->
-        <div class="card bg-base-100 border border-base-300">
+        <div class="card bg-base-100 border border-base-300 min-w-0">
           <div class="card-body p-4">
             <div class="flex items-center justify-between mb-4">
               <h3 class="text-2xl font-bold"><%= t('dashboard.index.activity_graph') %></h3>
@@ -21,7 +21,7 @@
         </div>
 
         <!-- 記録カード（モバイル） -->
-        <div class="lg:hidden card bg-base-100 border border-base-300">
+        <div class="lg:hidden card bg-base-100 border border-base-300 min-w-0">
           <div class="card-body p-4">
             <div class="space-y-3">
               <%= button_to I18n.t('dashboard.index.wake_record'), sleep_records_path,
@@ -41,9 +41,9 @@
         </div>
 
         <!-- 記録テーブル -->
-        <div class="card bg-base-100 border border-base-300">
+        <div class="card bg-base-100 border border-base-300 min-w-0">
           <details class="group [&_summary::-webkit-details-marker]:hidden">
-            <summary class="cursor-pointer p-4 font-bold text-xl bg-base-100 flex justify-between items-center rounded-t-lg">
+            <summary class="cursor-pointer p-4 font-bold text-xl bg-base-100 flex justify-between items-center group-open:rounded-t-lg rounded-lg">
               <%= t('dashboard.index.this_week_records') %>
               <span class="transition-transform duration-300 group-open:rotate-180">⤵︎</span>
             </summary>
@@ -245,7 +245,7 @@
       </div>
 
       <!-- 右カラム -->
-      <div class="hidden lg:flex w-full lg:flex-[3] flex-col gap-3 sm:gap-4 lg:gap-6">
+      <div class="hidden lg:flex lg:flex-[3_0_0%] flex-col gap-3 sm:gap-4 lg:gap-6">
 
         <!-- 記録カード -->
         <div class="card bg-base-100 border border-base-300">

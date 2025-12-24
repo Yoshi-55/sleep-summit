@@ -119,72 +119,10 @@ function setupSleepRecordForm() {
   if (form && !form.dataset.initialized) {
     form.dataset.initialized = 'true';
 
-    form.addEventListener('submit', function(e) {
-      e.preventDefault();
-
+    form.addEventListener('submit', function() {
       // 送信前に最新の値を更新
       updateWakeTimeHidden();
       updateBedTimeHidden();
-
-      const formData = new FormData(form);
-      const url = form.action;
-      const method = form.querySelector('input[name="_method"]')?.value || 'POST';
-
-      fetch(url, {
-        method: method === 'patch' ? 'PATCH' : 'POST',
-        body: formData,
-        headers: {
-          'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content,
-          'Accept': 'application/json'
-        }
-      }).then(response => {
-        console.log('Response status:', response.status, 'OK:', response.ok);
-        return response.json().then(data => {
-          console.log('Response data:', data);
-          if (data.success) {
-            // 成功時はリダイレクト
-            console.log('Redirecting to:', data.redirect_url);
-            window.location.href = data.redirect_url || '/';
-          } else if (response.status === 422 || response.status === 400 || data.errors) {
-            // バリデーションエラー
-            const errorsDiv = document.getElementById('sleep_record_errors');
-            const errorList = document.getElementById('sleep_record_error_list');
-            errorList.innerHTML = '';
-
-            if (data.errors && Array.isArray(data.errors)) {
-              data.errors.forEach(error => {
-                const li = document.createElement('li');
-                li.textContent = error;
-                errorList.appendChild(li);
-              });
-              errorsDiv.classList.remove('hidden');
-            } else if (data.errors) {
-              errorList.innerHTML = '<li>エラーが発生しました</li>';
-              errorsDiv.classList.remove('hidden');
-              console.error('Error details:', data);
-            }
-          } else {
-            // その他のエラー
-            const errorsDiv = document.getElementById('sleep_record_errors');
-            const errorList = document.getElementById('sleep_record_error_list');
-            errorList.innerHTML = '<li>予期しないエラーが発生しました</li>';
-            errorsDiv.classList.remove('hidden');
-            console.error('Response:', response, 'Data:', data);
-          }
-        }).catch(parseError => {
-          console.error('JSON parse error:', parseError);
-          const errorsDiv = document.getElementById('sleep_record_errors');
-          const errorList = document.getElementById('sleep_record_error_list');
-          errorList.innerHTML = '<li>通信エラーが発生しました（レスポンス解析失敗）</li>';
-          errorsDiv.classList.remove('hidden');
-        });
-      }).catch(error => {
-        console.error('Fetch error:', error);
-        const errorsDiv = document.getElementById('sleep_record_errors');
-        const errorList = document.getElementById('sleep_record_error_list');
-        errorList.innerHTML = '<li>通信エラーが発生しました</li>';
-        errorsDiv.classList.remove('hidden');
-      });
     });
   }
 }

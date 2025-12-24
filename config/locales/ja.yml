@@ -134,11 +134,13 @@ ja:
       wake_time_failed: "起床時刻の記録に失敗しました: %{errors}"
       cannot_create_today_or_later: "当日以降の記録は作成できません。過去の日付で記録してください"
       record_created: "記録を作成しました"
+      record_failed: "記録の作成に失敗しました: %{errors}"
     update:
       no_unwoken_record: "未就寝レコードがありません"
       bed_time_recorded: "就寝時刻を記録しました"
       bed_time_failed: "就寝時刻の記録に失敗しました: %{errors}"
       record_updated: "記録を更新しました"
+      record_failed: "記録の更新に失敗しました: %{errors}"
   pages:
     common:
       dashboard: "ダッシュボード"
