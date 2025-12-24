@@ -7,7 +7,7 @@
 
     <h2 class="text-2xl font-bold mb-6" id="sleep_record_modal_title"><%= t('modals.sleep_record.title_new') %></h2>
 
-    <%= form_with model: SleepRecord.new, id: "sleep_record_form", class: "space-y-4", data: { turbo: false } do |f| %>
+    <%= form_with model: SleepRecord.new, id: "sleep_record_form", class: "space-y-4" do |f| %>
       <div id="sleep_record_errors" class="hidden alert alert-error mb-4">
         <ul id="sleep_record_error_list"></ul>
       </div>
