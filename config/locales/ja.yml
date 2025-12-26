@@ -129,6 +129,7 @@ ja:
       cancel: "キャンセル"
     create:
       already_has_unwoken_record: "すでに未就寝レコードがあります"
+      already_has_today_record: "本日の起床記録は既に存在します"
       need_previous_bed_time: "前回の就寝時刻を先に記録してください"
       wake_time_recorded: "起床時刻を記録しました"
       wake_time_failed: "起床時刻の記録に失敗しました: %{errors}"
@@ -137,10 +138,16 @@ ja:
       record_failed: "記録の作成に失敗しました: %{errors}"
     update:
       no_unwoken_record: "未就寝レコードがありません"
+      no_today_wake_record: "本日の起床記録がありません。先に起床記録をしてください"
       bed_time_recorded: "就寝時刻を記録しました"
+      bed_time_updated: "就寝時刻を更新しました"
       bed_time_failed: "就寝時刻の記録に失敗しました: %{errors}"
       record_updated: "記録を更新しました"
       record_failed: "記録の更新に失敗しました: %{errors}"
+    destroy:
+      cannot_delete_today_or_later: "当日以降の記録は削除できません"
+      record_deleted: "記録を削除しました"
+      delete_failed: "記録の削除に失敗しました"
   pages:
     common:
       dashboard: "ダッシュボード"
@@ -183,6 +190,7 @@ ja:
       cancel: "キャンセル"
       create: "作成"
       update: "更新"
+      delete: "削除"
     mobile_calendar:
       close: "✕"
       today_schedule: "今日の予定"
