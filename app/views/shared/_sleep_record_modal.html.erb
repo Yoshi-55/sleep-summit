@@ -1,4 +1,3 @@
-<!-- 睡眠記録作成・編集モーダル -->
 <dialog id="sleep_record_modal" class="modal" data-title-new="<%= t('modals.sleep_record.title_new') %>" data-title-edit="<%= t('modals.sleep_record.title_edit') %>" data-label-create="<%= t('modals.sleep_record.create') %>" data-label-update="<%= t('modals.sleep_record.update') %>">
   <div class="modal-box max-w-2xl">
     <form method="dialog">
@@ -58,11 +57,27 @@
         <%= f.hidden_field :bed_time, id: "modal_bed_time" %>
       </div>
 
-      <div class="flex justify-end gap-2 pt-4 border-t border-base-300">
-        <button type="button" onclick="sleep_record_modal.close()" class="btn btn-outline"><%= t('modals.sleep_record.cancel') %></button>
-        <%= f.submit t('modals.sleep_record.create'), class: "btn btn-primary", id: "sleep_record_submit_btn" %>
+      <div class="flex justify-end gap-2 pt-4 border-t border-base-300" id="sleep_record_modal_footer">
+        <!-- 削除ボタン（編集時のみ表示） -->
+        <button type="button"
+                onclick="deleteSleepRecord()"
+                class="btn btn-error btn-outline hidden"
+                id="sleep_record_delete_btn">
+          <%= t('modals.sleep_record.delete') %>
+        </button>
+
+        <div class="flex gap-2">
+          <button type="button" onclick="sleep_record_modal.close()" class="btn btn-outline"><%= t('modals.sleep_record.cancel') %></button>
+          <%= f.submit t('modals.sleep_record.create'), class: "btn btn-primary", id: "sleep_record_submit_btn" %>
+        </div>
       </div>
     <% end %>
+
+    <!-- 削除フォーム -->
+    <form id="sleep_record_delete_form" method="post" style="display: none;">
+      <input type="hidden" name="_method" value="delete">
+      <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+    </form>
   </div>
   <form method="dialog" class="modal-backdrop">
     <button>close</button>

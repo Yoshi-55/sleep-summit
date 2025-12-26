@@ -1,3 +1,15 @@
+// 削除処理
+window.deleteSleepRecord = function() {
+  if (!confirm('本当に削除しますか？')) {
+    return;
+  }
+
+  const deleteForm = document.getElementById('sleep_record_delete_form');
+  if (deleteForm) {
+    deleteForm.submit();
+  }
+};
+
 // 日付と時刻を結合してhiddenフィールドに設定
 function updateWakeTimeHidden() {
   const date = document.getElementById('modal_wake_date').value;
@@ -23,6 +35,9 @@ window.openSleepRecordModal = function(mode, recordId = null, wakeTime = null, b
   const title = document.getElementById('sleep_record_modal_title');
   const submitBtn = document.getElementById('sleep_record_submit_btn');
   const errorsDiv = document.getElementById('sleep_record_errors');
+  const deleteBtn = document.getElementById('sleep_record_delete_btn');
+  const deleteForm = document.getElementById('sleep_record_delete_form');
+  const footer = document.getElementById('sleep_record_modal_footer');
 
   // エラー表示をクリア
   errorsDiv.classList.add('hidden');
@@ -32,7 +47,19 @@ window.openSleepRecordModal = function(mode, recordId = null, wakeTime = null, b
     title.textContent = modal.dataset.titleNew;
     form.action = '/sleep_records';
     form.querySelector('input[name="_method"]')?.remove();
-    submitBtn.textContent = modal.dataset.labelCreate;
+    submitBtn.value = modal.dataset.labelCreate;
+
+    // 削除ボタンを非表示、フッターを右寄せ
+    if (deleteBtn) {
+      deleteBtn.classList.add('hidden');
+    }
+    if (deleteForm) {
+      deleteForm.action = '';
+    }
+    if (footer) {
+      footer.classList.remove('justify-between');
+      footer.classList.add('justify-end');
+    }
 
     // dateパラメータがある場合、起床時刻のデフォルト値を設定
     if (date) {
@@ -71,7 +98,19 @@ window.openSleepRecordModal = function(mode, recordId = null, wakeTime = null, b
     }
     methodInput.value = 'patch';
 
-    submitBtn.textContent = modal.dataset.labelUpdate;
+    submitBtn.value = modal.dataset.labelUpdate;
+
+    // 削除ボタンを表示して、削除フォームのactionを設定、フッターを左右配置
+    if (deleteBtn) {
+      deleteBtn.classList.remove('hidden');
+    }
+    if (deleteForm) {
+      deleteForm.action = `/sleep_records/${recordId}`;
+    }
+    if (footer) {
+      footer.classList.remove('justify-end');
+      footer.classList.add('justify-between');
+    }
 
     // 起床時刻を分離
     if (wakeTime) {
