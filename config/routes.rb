@@ -21,7 +21,7 @@ Rails.application.routes.draw do
   end
 
 
-  resources :sleep_records, only: [ :new, :create, :update, :edit ]
+  resources :sleep_records, only: [ :new, :create, :update, :edit, :destroy ]
 
   # Google Calendar
   resources :google_calendars, only: [ :index, :create, :update, :destroy ] do

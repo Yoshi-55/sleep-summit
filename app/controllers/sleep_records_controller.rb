@@ -1,7 +1,7 @@
 class SleepRecordsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_unwoken_record, only: [ :create ]
-  before_action :set_sleep_record, only: [ :edit, :update ]
+  before_action :set_sleep_record, only: [ :edit, :update, :destroy ]
 
   def new
     @sleep_record = current_user.sleep_records.build
@@ -40,6 +40,18 @@ class SleepRecordsController < ApplicationController
     session[:return_to] = request.referer
   end
 
+  def destroy
+    # 当日以降のレコードは削除不可
+    if @sleep_record.wake_time.to_date >= Time.current.to_date
+      return redirect_with_flash(:alert, I18n.t("sleep_records.destroy.cannot_delete_today_or_later"))
+    end
+
+    if @sleep_record.destroy
+      redirect_with_flash(:notice, I18n.t("sleep_records.destroy.record_deleted"))
+    else
+      redirect_with_flash(:alert, I18n.t("sleep_records.destroy.delete_failed"))
+    end
+  end
 
   private
 
