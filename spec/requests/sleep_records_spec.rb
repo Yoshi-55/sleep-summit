@@ -137,4 +137,68 @@ RSpec.describe "SleepRecords", type: :request do
       expect(response).to have_http_status(:unprocessable_entity)
     end
   end
+
+  describe "DELETE /sleep_records/:id" do
+    context "過去の記録の場合" do
+      it "削除できる" do
+        wake_time = 2.days.ago.change(hour: 6, min: 0)
+        bed_time = wake_time + 1.hour
+        record = FactoryBot.create(:sleep_record, user: user, wake_time: wake_time, bed_time: bed_time)
+
+        expect {
+          delete sleep_record_path(record)
+        }.to change { SleepRecord.count }.by(-1)
+
+        expect(response).to redirect_to(authenticated_root_path)
+        expect(flash[:notice]).to eq(I18n.t('sleep_records.destroy.record_deleted'))
+      end
+    end
+
+    context "当日の記録の場合" do
+      it "削除できない" do
+        wake_time = Time.current.change(hour: 6, min: 0)
+        bed_time = wake_time + 1.hour
+        record = FactoryBot.create(:sleep_record, user: user, wake_time: wake_time, bed_time: bed_time)
+
+        expect {
+          delete sleep_record_path(record)
+        }.not_to change { SleepRecord.count }
+
+        expect(response).to redirect_to(authenticated_root_path)
+        expect(flash[:alert]).to eq(I18n.t('sleep_records.destroy.cannot_delete_today_or_later'))
+      end
+    end
+
+    context "未来の記録の場合" do
+      it "削除できない" do
+        wake_time = 1.day.from_now.change(hour: 6, min: 0)
+        bed_time = wake_time + 1.hour
+        # バリデーションをスキップして未来の記録を作成
+        record = FactoryBot.build(:sleep_record, user: user, wake_time: wake_time, bed_time: bed_time)
+        record.save(validate: false)
+
+        expect {
+          delete sleep_record_path(record)
+        }.not_to change { SleepRecord.count }
+
+        expect(response).to redirect_to(authenticated_root_path)
+        expect(flash[:alert]).to eq(I18n.t('sleep_records.destroy.cannot_delete_today_or_later'))
+      end
+    end
+
+    context "他のユーザーの記録の場合" do
+      it "削除できない（404エラー）" do
+        other_user = FactoryBot.create(:user, email: "other@example.com")
+        wake_time = 2.days.ago.change(hour: 6, min: 0)
+        bed_time = wake_time + 1.hour
+        other_record = FactoryBot.create(:sleep_record, user: other_user, wake_time: wake_time, bed_time: bed_time)
+
+        expect {
+          delete sleep_record_path(other_record)
+        }.not_to change { SleepRecord.count }
+
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+  end
 end
