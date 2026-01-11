@@ -1,5 +1,6 @@
 class DashboardController < ApplicationController
   before_action :authenticate_user!
+  before_action :set_today_events
 
   def index
     week_start = Date.current.beginning_of_week(:sunday).beginning_of_day
@@ -15,29 +16,20 @@ class DashboardController < ApplicationController
 
     @series = SleepRecordChartBuilder.new(@week_records).build_series(range: week_start..week_end)
 
-    # 日ごと集計して平均を計算（累計 ÷ 記録のある日数）
-    valid_wake_days = @weekly_records.select { |d| d[:day].is_a?(Date) && d[:daily_wake_hours].present? }
-    valid_sleep_days = @weekly_records.select { |d| d[:day].is_a?(Date) && d[:daily_sleep_hours].present? }
+    averages = aggregator.average_daily_hours(@weekly_records, exclude_today: true)
+    @weekly_average_wake_hours = averages[:wake]
+    @weekly_average_sleep_hours = averages[:sleep]
 
-    @weekly_average_wake_hours = if valid_wake_days.any?
-      (valid_wake_days.sum { |d| d[:daily_wake_hours] } / valid_wake_days.size).round(2)
-    else
-      0.0
-    end
-
-    @weekly_average_sleep_hours = if valid_sleep_days.any?
-      (valid_sleep_days.sum { |d| d[:daily_sleep_hours] } / valid_sleep_days.size).round(2)
-    else
-      0.0
-    end
-
-    valid_wake_records  = @week_records.select { |r| r.wake_time.present? }
-    valid_sleep_records = @week_records.select { |r| r.wake_time.present? && r.bed_time.present? }
+    valid_wake_records = @week_records.select { |r| r.wake_time.present? && r.wake_time.to_date < Date.current }
+    valid_sleep_records = @week_records.select { |r| r.wake_time.present? && r.bed_time.present? && r.wake_time.to_date < Date.current }
 
     @weekly_average_wake_time = SleepRecordAggregator.new(valid_wake_records).average_time(:wake_time)
-    @weekly_average_bed_time  = SleepRecordAggregator.new(valid_sleep_records).average_time(:bed_time)
+    @weekly_average_bed_time = SleepRecordAggregator.new(valid_sleep_records).average_time(:bed_time)
+  end
 
-    # Google Calendar連携
+  private
+
+  def set_today_events
     if current_user.google_authenticated?
       begin
         calendar_service = GoogleCalendarService.new(current_user)

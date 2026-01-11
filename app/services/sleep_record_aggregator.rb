@@ -15,18 +15,24 @@ class SleepRecordAggregator
 
   def average_time(column)
     return nil if @records.empty?
-    total_seconds = @records.sum do |r|
+
+    seconds_list = @records.map do |r|
       t = r.send(column)
-      next 0 unless t
-      sec = t.hour * 3600 + t.min * 60 + t.sec
-      sec += 24 * 3600 if column == :bed_time && t.hour < 6
-      sec
+      next nil unless t
+      t.hour * 3600 + t.min * 60 + t.sec
+    end.compact
+
+    return nil if seconds_list.empty?
+
+    # 就寝時刻の場合、深夜0-6時を翌日扱いにする
+    if column == :bed_time
+      seconds_list.map! { |sec| sec < 6 * 3600 ? sec + 24 * 3600 : sec }
     end
-    avg_sec = total_seconds / @records.size
-    avg_sec -= 24 * 3600 if avg_sec >= 24 * 3600
-    hours = (avg_sec / 3600).to_i
-    minutes = ((avg_sec % 3600) / 60).to_i
-    sprintf("%02d:%02d", hours, minutes)
+
+    avg_sec = seconds_list.sum / seconds_list.size
+    avg_sec %= 24 * 3600  # 24時間を超えた分を切り捨て
+
+    sprintf("%02d:%02d", avg_sec / 3600, (avg_sec % 3600) / 60)
   end
 
   def total_sleep_hours
@@ -73,6 +79,24 @@ class SleepRecordAggregator
     end
   end
 
+  def average_daily_hours(daily_records, exclude_today: true)
+    valid_wake_days = daily_records.select do |d|
+      d[:day].is_a?(Date) &&
+        (!exclude_today || d[:day] < Date.current) &&
+        d[:daily_wake_hours].present?
+    end
+
+    valid_sleep_days = daily_records.select do |d|
+      d[:day].is_a?(Date) &&
+        (!exclude_today || d[:day] < Date.current) &&
+        d[:daily_sleep_hours].present?
+    end
+
+    {
+      wake: valid_wake_days.any? ? (valid_wake_days.sum { |d| d[:daily_wake_hours] } / valid_wake_days.size).round(2) : 0.0,
+      sleep: valid_sleep_days.any? ? (valid_sleep_days.sum { |d| d[:daily_sleep_hours] } / valid_sleep_days.size).round(2) : 0.0
+    }
+  end
 
   private
 
