@@ -7,26 +7,23 @@ Rails.application.routes.draw do
     root to: "dashboard#index", as: :authenticated_root
   end
   root "home#index"
-
   get "dashboard", to: "dashboard#index", as: :dashboard
-
   get "history", to: "history#index", as: :history
 
-  get "profile", to: "users#show", as: :profile
-  get "profile/edit", to: "users#edit", as: :edit_profile
-  resource :profile, only: [ :update ], controller: "users"
+  resource :profile, only: [ :show, :edit, :update ], controller: "users"
 
-  if Rails.env.production?
-    get "/seed_sample_data", to: "seeds#sample_data"
+  resources :sleep_records, only: [ :new, :create, :update, :edit, :destroy ] do
+    collection do
+      post :record_wake
+    end
+    member do
+      patch :record_bed
+    end
   end
-
-
-  resources :sleep_records, only: [ :new, :create, :update, :edit, :destroy ]
 
   # Google Calendar
-  resources :google_calendars, only: [ :index, :create, :update, :destroy ] do
-    delete :disconnect, on: :collection
-  end
+  resource :google_calendar_connection, only: [ :destroy ], path: "google_calendars/connection"
+  resources :google_calendars, only: [ :index, :create, :update, :destroy ]
 
   # Pages
   get "terms", to: "pages#terms", as: :terms

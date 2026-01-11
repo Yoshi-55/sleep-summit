@@ -81,11 +81,6 @@ class GoogleCalendarsController < ApplicationController
     end
   end
 
-  def disconnect
-    current_user.disconnect_google
-    redirect_to dashboard_path, notice: "Googleカレンダーとの連携を解除しました"
-  end
-
   private
 
   def check_google_authenticated
