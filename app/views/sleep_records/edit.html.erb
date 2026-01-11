@@ -13,7 +13,7 @@
         <%= form_with model: @sleep_record, local: true do |f| %>
           <%= render 'shared/error_messages', object: @sleep_record %>
 
-          <div class="form-control mb-4">
+          <div class="mb-4">
             <%= f.label :wake_time, t('sleep_records.edit.wake_time_label'), class: "label" %>
             <%= f.datetime_local_field :wake_time,
                 class: "input input-bordered w-full",
@@ -24,7 +24,7 @@
             </label>
           </div>
 
-          <div class="form-control mb-6">
+          <div class="mb-6">
             <%= f.label :bed_time, t('sleep_records.edit.bed_time_label'), class: "label" %>
             <%= f.datetime_local_field :bed_time,
                 class: "input input-bordered w-full",

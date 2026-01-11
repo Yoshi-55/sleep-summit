@@ -323,7 +323,7 @@ function openEditModal(eventId, summary, startDate, startTime, endTime, location
 
     <%= form_with url: "", method: :patch, id: "edit_event_form", class: "space-y-4", data: { turbo: false } do |f| %>
       <!-- タイトル（常に表示） -->
-      <div class="form-control">
+      <div>
         <%= text_field_tag :summary, nil, class: "input input-bordered input-lg w-full border-0 border-b border-base-300 rounded-none px-0 focus:border-primary focus:outline-none", placeholder: t('google_calendars.edit_modal.title_placeholder'), required: true %>
       </div>
 

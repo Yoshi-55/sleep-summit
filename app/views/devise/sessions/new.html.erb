@@ -18,22 +18,22 @@
       <% end %>
 
       <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-        <div class="form-control mb-4">
+        <div class="mb-4">
           <%= f.label :email, t('activerecord.attributes.user.email'), class: "label" %>
           <%= f.email_field :email, autofocus: true, class: "input input-bordered w-full" %>
         </div>
 
-        <div class="form-control mb-4">
+        <div class="mb-4">
           <%= f.label :password, t('activerecord.attributes.user.password'), class: "label" %>
           <%= f.password_field :password, autocomplete: "current-password", class: "input input-bordered w-full" %>
         </div>
 
-        <div class="form-control mb-4 flex items-center gap-2">
+        <div class="mb-4 flex items-center gap-2">
           <%= f.check_box :remember_me, class: "checkbox checkbox-primary" %>
           <%= f.label :remember_me, t('activerecord.attributes.user.remember_me') %>
         </div>
 
-        <div class="form-control">
+        <div>
           <%= f.submit t('devise.sessions.new.sign_in'), class: "btn btn-primary w-full" %>
         </div>
       <% end %>
