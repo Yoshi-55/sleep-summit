@@ -1,0 +1,172 @@
+<div class="card bg-base-100 border border-base-300 min-w-0">
+  <details class="group [&_summary::-webkit-details-marker]:hidden">
+    <summary class="cursor-pointer p-4 font-bold text-xl bg-base-100 flex justify-between items-center group-open:rounded-t-lg rounded-lg">
+      <%= title %>
+      <span class="transition-transform duration-300 group-open:rotate-180">⤵︎</span>
+    </summary>
+    <div class="p-4">
+      <!-- モバイル用カード表示 -->
+      <div class="md:hidden space-y-2">
+        <% records.each_with_index do |record, idx| %>
+          <div class="card bg-base-100 border border-base-300 shadow-sm">
+            <details class="group">
+              <summary class="cursor-pointer p-3 flex justify-between items-center list-none">
+                <div class="flex-1">
+                  <div class="flex items-center gap-3 mb-1">
+                    <h4 class="font-bold text-sm">
+                      <%= record[:day].is_a?(Date) ? record[:day].strftime("%m-%d (%a)") : '--' %>
+                    </h4>
+                    <% if record[:id].present? %>
+                      <% if record[:day].is_a?(Date) && record[:day].to_date < Time.current.to_date %>
+                        <button onclick="event.stopPropagation(); openSleepRecordModal('edit', <%= record[:id] %>, '<%= record[:wake_times].present? ? Time.parse(record[:wake_times].first).strftime('%Y-%m-%dT%H:%M') : '' %>', '<%= record[:bed_times].present? ? Time.parse(record[:bed_times].last).strftime('%Y-%m-%dT%H:%M') : '' %>')" class="btn btn-xs btn-outline">編集</button>
+                      <% end %>
+                    <% else %>
+                      <% if record[:day].is_a?(Date) && record[:day].to_date < Time.current.to_date %>
+                        <button onclick="event.stopPropagation(); openSleepRecordModal('new', null, null, null, '<%= record[:day] %>')" class="btn btn-xs btn-outline btn-primary">追加</button>
+                      <% end %>
+                    <% end %>
+                  </div>
+                  <div class="text-xs text-base-content/70 flex gap-4">
+                    <span class="flex items-center gap-1">
+                      <i class="ph-fill ph-sun text-warning"></i>
+                      <% if record[:wake_times].present? %>
+                        <%= Time.parse(record[:wake_times].first).strftime("%H:%M") %>
+                      <% else %>
+                        -
+                      <% end %>
+                    </span>
+                    <span class="flex items-center gap-1">
+                      <i class="ph-fill ph-moon text-info"></i>
+                      <% if record[:bed_times].present? %>
+                        <%= Time.parse(record[:bed_times].last).strftime("%H:%M") %>
+                      <% else %>
+                        -
+                      <% end %>
+                    </span>
+                  </div>
+                </div>
+                <span class="transition-transform duration-300 group-open:rotate-180 text-base-content/50">▼</span>
+              </summary>
+
+              <div class="px-3 pb-3 pt-2 border-t border-base-300">
+                <div class="grid grid-cols-2 gap-3 text-sm">
+                  <div>
+                    <div class="text-xs text-base-content/70 mb-1"><%= t('dashboard.index.wake_time') %></div>
+                    <% if record[:wake_times].present? %>
+                      <% record[:wake_times].each do |time| %>
+                        <span class="badge badge-success badge-sm mb-1 text-xs">
+                          <%= Time.parse(time).strftime("%H:%M") %>
+                        </span>
+                      <% end %>
+                    <% else %>
+                      <span class="text-base-content/40">-</span>
+                    <% end %>
+                  </div>
+
+                  <div>
+                    <div class="text-xs text-base-content/70 mb-1"><%= t('dashboard.index.bed_time') %></div>
+                    <% if record[:bed_times].present? %>
+                      <% record[:bed_times].each do |time| %>
+                        <span class="badge badge-secondary badge-sm mb-1 text-xs">
+                          <%= Time.parse(time).strftime("%H:%M") %>
+                        </span>
+                      <% end %>
+                    <% else %>
+                      <span class="text-base-content/40">-</span>
+                    <% end %>
+                  </div>
+
+                  <div>
+                    <div class="text-xs text-base-content/70 mb-1"><%= t('dashboard.index.cumulative_wake_hours') %></div>
+                    <div class="text-accent text-sm font-semibold">
+                      <%= record[:cumulative_wake_hours] || '-' %>
+                    </div>
+                  </div>
+
+                  <div>
+                    <div class="text-xs text-base-content/70 mb-1"><%= t('dashboard.index.cumulative_sleep_hours') %></div>
+                    <div class="text-info text-sm font-semibold">
+                      <%= record[:cumulative_sleep_hours] || '-' %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </details>
+          </div>
+        <% end %>
+      </div>
+
+      <!-- デスクトップ用テーブル表示 -->
+      <div class="hidden md:block overflow-x-auto">
+        <table class="table table-zebra w-full border-t border-base-300 text-sm">
+          <thead class="bg-base-200">
+            <tr>
+              <th class="px-4 py-3 text-sm font-semibold text-base-content/70"><%= t('dashboard.index.date') %></th>
+              <th class="px-4 py-3 text-sm font-semibold text-base-content/70"><%= t('dashboard.index.wake_time') %></th>
+              <th class="px-4 py-3 text-sm font-semibold text-base-content/70"><%= t('dashboard.index.bed_time') %></th>
+              <th class="px-4 py-3 text-sm font-semibold text-base-content/70"><%= t('dashboard.index.daily_wake_hours') %></th>
+              <th class="px-4 py-3 text-sm font-semibold text-base-content/70"><%= t('dashboard.index.daily_sleep_hours') %></th>
+              <th class="px-4 py-3 text-sm font-semibold text-base-content/70"><%= t('dashboard.index.cumulative_wake_hours') %></th>
+              <th class="px-4 py-3 text-sm font-semibold text-base-content/70"><%= t('dashboard.index.cumulative_sleep_hours') %></th>
+              <th class="px-4 py-3 text-sm font-semibold text-base-content/70">操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% records.each_with_index do |record, idx| %>
+              <tr class="hover">
+                <td class="px-4 py-3 whitespace-nowrap">
+                  <%= record[:day].is_a?(Date) ? record[:day].strftime("%m-%d (%a)") : '--' %>
+                </td>
+                <td class="px-4 py-3">
+                  <% if record[:wake_times].present? %>
+                    <% record[:wake_times].each do |time| %>
+                      <span class="badge badge-success badge-sm mb-1 text-xs">
+                        <%= Time.parse(time).strftime("%m/%d_%H:%M") %>
+                      </span>
+                    <% end %>
+                  <% else %>
+                    <span class="text-base-content/40">-</span>
+                  <% end %>
+                </td>
+                <td class="px-4 py-3">
+                  <% if record[:bed_times].present? %>
+                    <% record[:bed_times].each do |time| %>
+                      <span class="badge badge-secondary badge-sm mb-1 text-xs">
+                        <%= Time.parse(time).strftime("%m/%d_%H:%M") %>
+                      </span>
+                    <% end %>
+                  <% else %>
+                    <span class="text-base-content/40">-</span>
+                  <% end %>
+                </td>
+                <td class="px-4 py-3 text-accent font-semibold">
+                  <%= record[:daily_wake_hours] ? sprintf("%.2f", record[:daily_wake_hours]) : '-' %>
+                </td>
+                <td class="px-4 py-3 text-info font-semibold">
+                  <%= record[:daily_sleep_hours] ? sprintf("%.2f", record[:daily_sleep_hours]) : '-' %>
+                </td>
+                <td class="px-4 py-3 text-accent text-sm font-semibold">
+                  <%= record[:cumulative_wake_hours] || '-' %>
+                </td>
+                <td class="px-4 py-3 text-info text-sm font-semibold">
+                  <%= record[:cumulative_sleep_hours] || '-' %>
+                </td>
+                <td class="px-4 py-3">
+                  <% if record[:id].present? %>
+                    <% if record[:day].is_a?(Date) && record[:day].to_date < Time.current.to_date %>
+                      <button onclick="openSleepRecordModal('edit', <%= record[:id] %>, '<%= record[:wake_times].present? ? Time.parse(record[:wake_times].first).strftime('%Y-%m-%dT%H:%M') : '' %>', '<%= record[:bed_times].present? ? Time.parse(record[:bed_times].last).strftime('%Y-%m-%dT%H:%M') : '' %>')" class="btn btn-xs btn-outline whitespace-nowrap">編集</button>
+                    <% end %>
+                  <% else %>
+                    <% if record[:day].is_a?(Date) && record[:day].to_date < Time.current.to_date %>
+                      <button onclick="openSleepRecordModal('new', null, null, null, '<%= record[:day] %>')" class="btn btn-xs btn-outline btn-primary whitespace-nowrap">追加</button>
+                    <% end %>
+                  <% end %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </details>
+</div>

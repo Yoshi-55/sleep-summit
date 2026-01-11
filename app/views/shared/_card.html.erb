@@ -1,0 +1,8 @@
+<div class="card bg-base-100 border border-base-300 <%= local_assigns[:class] %>">
+  <div class="card-body p-4">
+    <% if local_assigns[:title].present? %>
+      <h3 class="card-title text-2xl font-bold"><%= title %></h3>
+    <% end %>
+    <%= yield %>
+  </div>
+</div>
