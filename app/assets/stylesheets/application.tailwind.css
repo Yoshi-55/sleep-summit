@@ -115,11 +115,11 @@
 
   /* フォーム関連 */
   .form-field {
-    @apply form-control mb-4;
+    @apply mb-4;
   }
 
   .input-standard {
-    @apply input input-bordered w-full;
+    @apply input w-full;
   }
 
   /* ボタン関連 */
