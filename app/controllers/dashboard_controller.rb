@@ -1,8 +1,11 @@
 class DashboardController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_today_events
+  before_action :set_today_events, unless: :skip_calendar_fetch?
 
   def index
+    # カレンダー取得がスキップされた場合は空配列を設定
+    @today_events ||= []
+
     week_start = Date.current.beginning_of_week(:sunday).beginning_of_day
     week_end   = Date.current.end_of_week(:sunday).end_of_day
 
@@ -28,6 +31,14 @@ class DashboardController < ApplicationController
   end
 
   private
+
+  def skip_calendar_fetch?
+    # 起床・就寝記録後のリダイレクトではカレンダー取得をスキップ
+    flash[:notice].present? && (
+      flash[:notice].include?(I18n.t("sleep_records.create.wake_time_recorded")) ||
+      flash[:notice].include?(I18n.t("sleep_records.update.bed_time_recorded"))
+    )
+  end
 
   def set_today_events
     if current_user.google_authenticated?
