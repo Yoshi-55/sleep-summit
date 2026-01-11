@@ -1,0 +1,26 @@
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
+  <div class="card bg-base-100 border border-base-300 text-center p-3 sm:p-4">
+    <div class="text-[10px] sm:text-xs text-base-content/70 mb-1 sm:mb-2 leading-tight"><%= average_wake_hours_label %></div>
+    <div class="text-lg sm:text-xl lg:text-2xl font-bold text-success">
+      <%= average_wake_hours ? sprintf("%.2f", average_wake_hours) : '-' %>h
+    </div>
+  </div>
+  <div class="card bg-base-100 border border-base-300 text-center p-3 sm:p-4">
+    <div class="text-[10px] sm:text-xs text-base-content/70 mb-1 sm:mb-2 leading-tight"><%= average_sleep_hours_label %></div>
+    <div class="text-lg sm:text-xl lg:text-2xl font-bold text-info">
+      <%= average_sleep_hours ? sprintf("%.2f", average_sleep_hours) : '-' %>h
+    </div>
+  </div>
+  <div class="card bg-base-100 border border-base-300 text-center p-3 sm:p-4">
+    <div class="text-[10px] sm:text-xs text-base-content/70 mb-1 sm:mb-2 leading-tight"><%= average_wake_time_label %></div>
+    <div class="text-lg sm:text-xl lg:text-2xl font-bold text-primary">
+      <%= average_wake_time || "--:--" %>
+    </div>
+  </div>
+  <div class="card bg-base-100 border border-base-300 text-center p-3 sm:p-4">
+    <div class="text-[10px] sm:text-xs text-base-content/70 mb-1 sm:mb-2 leading-tight"><%= average_bed_time_label %></div>
+    <div class="text-lg sm:text-xl lg:text-2xl font-bold text-secondary">
+      <%= average_bed_time || "--:--" %>
+    </div>
+  </div>
+</div>
