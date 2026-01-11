@@ -11,19 +11,5 @@
       <i class="ph-fill ph-clock-counter-clockwise text-2xl"></i>
       <span class="text-xs mt-1"><%= t('sidebar.history') %></span>
     <% end %>
-
-    <% if ENV["GOOGLE_CLIENT_ID"].present? && ENV["GOOGLE_CLIENT_SECRET"].present? && current_user&.google_authenticated? %>
-      <button onclick="mobile_calendar_modal.showModal()"
-              class="flex flex-col items-center justify-center flex-1 py-2.5 transition text-base-content/70">
-        <i class="ph-fill ph-calendar text-2xl"></i>
-        <span class="text-xs mt-1"><%= t('footer_nav.today_schedule') %></span>
-      </button>
-
-      <%= link_to google_calendars_path,
-        class: "flex flex-col items-center justify-center flex-1 py-2.5 transition #{current_page?(google_calendars_path) ? 'text-primary font-bold' : 'text-base-content/70'}" do %>
-        <i class="ph-fill ph-calendar-blank text-2xl"></i>
-        <span class="text-xs mt-1"><%= t('footer_nav.calendar') %></span>
-      <% end %>
-    <% end %>
   </nav>
 </div>

@@ -1,7 +1,5 @@
 Rails.application.routes.draw do
-  devise_for :users, controllers: {
-    omniauth_callbacks: "users/omniauth_callbacks"
-  }
+  devise_for :users
 
   authenticated :user do
     root to: "dashboard#index", as: :authenticated_root
@@ -20,10 +18,6 @@ Rails.application.routes.draw do
       patch :record_bed
     end
   end
-
-  # Google Calendar
-  resource :google_calendar_connection, only: [ :destroy ], path: "google_calendars/connection"
-  resources :google_calendars, only: [ :index, :create, :update, :destroy ]
 
   # Pages
   get "terms", to: "pages#terms", as: :terms

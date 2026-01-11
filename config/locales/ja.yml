@@ -41,12 +41,6 @@ ja:
     show:
       page_title: "プロフィール"
       user_name: "ユーザー名"
-      google_integration: "Google連携"
-      google_connected: "Googleカレンダーと連携済み"
-      google_disconnect: "連携を解除"
-      google_disconnect_confirm: "Googleカレンダーとの連携を解除しますか？"
-      google_not_connected: "Googleカレンダーと未連携"
-      google_connect: "Googleカレンダーと連携"
       account_management: "アカウント管理"
       delete_account: "アカウントの削除"
       delete_warning_title: "警告"
@@ -78,10 +72,6 @@ ja:
   sidebar:
     dashboard: "記録"
     history: "履歴"
-    calendar: "カレンダー"
-  footer_nav:
-    today_schedule: "今日の予定"
-    calendar: "カレンダー"
   home:
     headline: "毎日の習慣が、<br>綺麗な山をつくる。"
     subheadline: "起きた時間と眠る時間を簡単記録、<br>続けるほど山は育っていく。"
@@ -89,28 +79,9 @@ ja:
     login: "ログイン"
     description: |
       Sleep Summitは、起床と睡眠の記録をもとに毎日の生活リズムを山の形で表現。<br>
-      健康的な生活習慣を続けるほど美しい山が描かれ、視覚的にあなたの健康をサポートします。<br>
-      また、Googleカレンダーとの連携機能により、予定管理も行うことができます。
+      健康的な生活習慣を続けるほど美しい山が描かれ、視覚的にあなたの健康をサポートします。
     terms: "利用規約"
     privacy: "プライバシーポリシー"
-  google_calendars:
-    index:
-      page_title: "カレンダー"
-      no_title: "(タイトルなし)"
-      all_day: "終日"
-      day_schedule: "%{date}の予定"
-      no_events: "予定がありません"
-      add_event: "予定を追加"
-    event_modal:
-      edit: "編集"
-      delete: "削除"
-      delete_confirm: "この予定を削除しますか？"
-    edit_modal:
-      title_placeholder: "タイトルを追加"
-      location_placeholder: "場所を追加"
-      description_placeholder: "説明を追加"
-      cancel: "キャンセル"
-      save: "保存"
   sleep_records:
     new:
       page_title: "睡眠記録を追加"
@@ -166,19 +137,6 @@ ja:
       description: "ご質問、ご意見、不具合報告などお気軽にお問い合わせください。"
       open_form: "お問い合わせフォームを開く"
   modals:
-    new_event:
-      title: "新規予定作成モーダル（Googleカレンダー風）"
-      close: "✕"
-      summary_placeholder: "タイトルを追加"
-      start_datetime: "開始日時"
-      end_time: "終了時刻"
-      end_time_note: "※終了日は開始日と同じです"
-      location_label: "場所（任意）"
-      location_placeholder: "場所を追加"
-      description_label: "説明（任意）"
-      description_placeholder: "説明を追加"
-      cancel: "キャンセル"
-      save: "保存"
     sleep_record:
       title_new: "睡眠記録を追加"
       title_edit: "睡眠記録を編集"
@@ -191,11 +149,3 @@ ja:
       create: "作成"
       update: "更新"
       delete: "削除"
-    mobile_calendar:
-      close: "✕"
-      today_schedule: "今日の予定"
-      events_count: "%{count}件"
-      no_title: "(タイトルなし)"
-      all_day: "終日"
-      no_events: "今日の予定はありません"
-      add_event: "予定を追加"

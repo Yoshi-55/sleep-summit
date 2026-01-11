@@ -273,17 +273,6 @@ Devise.setup do |config|
   # up on your models and hooks.
   # config.omniauth :github, 'APP_ID', 'APP_SECRET', scope: 'user,public_repo'
 
-  if ENV["GOOGLE_CLIENT_ID"].present? && ENV["GOOGLE_CLIENT_SECRET"].present?
-    config.omniauth :google_oauth2,
-                    ENV["GOOGLE_CLIENT_ID"],
-                    ENV["GOOGLE_CLIENT_SECRET"],
-                    {
-                      scope: "email,profile,https://www.googleapis.com/auth/calendar.events",
-                      access_type: "offline",
-                      prompt: "consent"
-                    }
-  end
-
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or
   # change the failure app, you can configure them inside the config.warden block.

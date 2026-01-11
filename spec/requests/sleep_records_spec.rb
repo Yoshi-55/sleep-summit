@@ -29,7 +29,6 @@ RSpec.describe "SleepRecords", type: :request do
   end
 
   describe "PATCH /sleep_records/:id" do
-
     context "編集フォームからの更新" do
       it "起床・就寝時刻を編集できる" do
         wake_time = 2.days.ago.change(hour: 6, min: 0)

@@ -1,11 +1,7 @@
 class DashboardController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_today_events, unless: :skip_calendar_fetch?
 
   def index
-    # カレンダー取得がスキップされた場合は空配列を設定
-    @today_events ||= []
-
     week_start = Date.current.beginning_of_week(:sunday).beginning_of_day
     week_end   = Date.current.end_of_week(:sunday).end_of_day
 
@@ -28,29 +24,5 @@ class DashboardController < ApplicationController
 
     @weekly_average_wake_time = SleepRecordAggregator.new(valid_wake_records).average_time(:wake_time)
     @weekly_average_bed_time = SleepRecordAggregator.new(valid_sleep_records).average_time(:bed_time)
-  end
-
-  private
-
-  def skip_calendar_fetch?
-    # 起床・就寝記録後のリダイレクトではカレンダー取得をスキップ
-    flash[:notice].present? && (
-      flash[:notice].include?(I18n.t("sleep_records.create.wake_time_recorded")) ||
-      flash[:notice].include?(I18n.t("sleep_records.update.bed_time_recorded"))
-    )
-  end
-
-  def set_today_events
-    if current_user.google_authenticated?
-      begin
-        calendar_service = GoogleCalendarService.new(current_user)
-        @today_events = calendar_service.fetch_today_events
-      rescue StandardError => e
-        Rails.logger.error "Google Calendar fetch error: #{e.message}"
-        @today_events = []
-      end
-    else
-      @today_events = []
-    end
   end
 end
