@@ -6,7 +6,7 @@
       </form>
 
       <%= form_with url: google_calendars_path, method: :post, id: "new_event_form", class: "space-y-4", data: { turbo: false } do |f| %>
-        <div class="form-control">
+        <div>
           <%= text_field_tag :summary, nil, class: "input input-bordered input-lg w-full border-0 border-b border-base-300 rounded-none px-0 focus:border-primary focus:outline-none", placeholder: t('modals.new_event.summary_placeholder'), required: true %>
         </div>
 
