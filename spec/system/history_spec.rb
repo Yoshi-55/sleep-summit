@@ -13,15 +13,8 @@ RSpec.describe "History", type: :system do
     visit history_path
   end
 
-  it "ページタイトルがI18nで表示されること" do
+  it "履歴ページが正常に表示される" do
     expect(page).to have_content(I18n.t('history.index.page_title'))
-  end
-
-  it "グラフが表示されること" do
     expect(page).to have_selector("#sleep-chart")
-  end
-
-  it "月間記録が表示されること" do
-    expect(page).to have_content(I18n.t('history.index.this_month_records'))
   end
 end

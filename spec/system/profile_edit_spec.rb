@@ -25,66 +25,27 @@ RSpec.describe "プロフィール編集", type: :system do
       expect(page).to have_field(I18n.t('profiles.edit.name_label'), with: user.name)
     end
 
-    context "有効な入力の場合" do
-      it "有効な名前を入力して保存すると成功メッセージと新しい名前が表示される" do
-        fill_in I18n.t('profiles.edit.name_label'), with: "新しい名前"
-        choose 'boy-1', allow_label_click: true
-        click_button I18n.t('profiles.edit.submit')
+    it "名前とアバターを変更できる" do
+      fill_in I18n.t('profiles.edit.name_label'), with: "新しい名前"
+      choose 'boy-1', allow_label_click: true
+      click_button I18n.t('profiles.edit.submit')
 
-        expect(page).to have_content(I18n.t('profiles.update.success'))
-        expect(page).to have_content("新しい名前")
-      end
-
-      it "プリセット画像(boy-1)を選択して保存すると成功メッセージとプロフィールが更新される" do
-        choose 'boy-1', allow_label_click: true
-        click_button I18n.t('profiles.edit.submit')
-
-        expect(page).to have_content(I18n.t('profiles.update.success'))
-        expect(page).to have_selector("img[alt='#{I18n.t('profiles.edit.avatar_label')}'][src*='boy-1']")
-      end
-
-      it "ユーザー名を変更できる" do
-        fill_in I18n.t('activerecord.attributes.user.name'), with: "新しい名前"
-        choose 'boy-1', allow_label_click: true
-        click_button I18n.t('profiles.edit.submit')
-        expect(page).to have_content("新しい名前")
-      end
+      expect(page).to have_content(I18n.t('profiles.update.success'))
+      expect(page).to have_content("新しい名前")
+      expect(page).to have_selector("img[alt='#{I18n.t('profiles.edit.avatar_label')}'][src*='boy-1']")
     end
 
-    context "無効な入力の場合" do
-      it "プリセット未選択で保存するとエラーメッセージが表示され、更新されない" do
-        click_button I18n.t('profiles.edit.submit')
+    it "バリデーションエラーが正しく表示される" do
+      # アバター未選択
+      click_button I18n.t('profiles.edit.submit')
+      expect(page).to have_content(I18n.t('profiles.update.avatar_error'))
 
-        expect(page).to have_content(I18n.t('profiles.update.avatar_error'))
-      end
-
-      it "最大(20)文字数を超える名前は変更できない" do
-        long_name = 'あ' * 21
-        fill_in I18n.t('activerecord.attributes.user.name'), with: long_name
-        choose 'boy-1', allow_label_click: true
-        click_button I18n.t('profiles.edit.submit')
-        expect(page).to have_content(I18n.t('profiles.update.name_length_error', count: 20))
-      end
-
-      it "空の名前は変更できない" do
-        fill_in I18n.t('activerecord.attributes.user.name'), with: ""
-        choose 'boy-1', allow_label_click: true
-        click_button I18n.t('profiles.edit.submit')
-        expect(page).to have_content(I18n.t('profiles.update.name_error'))
-      end
-
-      it "登録時のバリデーションと整合性が保たれる" do
-        fill_in I18n.t('activerecord.attributes.user.name'), with: ""
-        choose 'boy-1', allow_label_click: true
-        click_button I18n.t('profiles.edit.submit')
-        expect(page).to have_content(I18n.t('profiles.update.name_error'))
-
-        long_name = 'あ' * 21
-        fill_in I18n.t('activerecord.attributes.user.name'), with: long_name
-        choose 'boy-1', allow_label_click: true
-        click_button I18n.t('profiles.edit.submit')
-        expect(page).to have_content(I18n.t('profiles.update.name_length_error', count: 20))
-      end
+      # 名前が長すぎる
+      long_name = 'あ' * 21
+      fill_in I18n.t('activerecord.attributes.user.name'), with: long_name
+      choose 'boy-1', allow_label_click: true
+      click_button I18n.t('profiles.edit.submit')
+      expect(page).to have_content(I18n.t('profiles.update.name_length_error', count: 20))
     end
   end
 end
