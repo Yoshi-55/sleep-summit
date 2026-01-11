@@ -49,17 +49,12 @@ window.openSleepRecordModal = function(mode, recordId = null, wakeTime = null, b
     form.querySelector('input[name="_method"]')?.remove();
     submitBtn.value = modal.dataset.labelCreate;
 
-    // 削除ボタンを非表示、フッターを右寄せ
-    if (deleteBtn) {
-      deleteBtn.classList.add('hidden');
-    }
+    // 削除ボタンを非表示、フッターを右寄せ（ヘルパー関数を使用）
+    window.toggleModalElement(deleteBtn, false);
     if (deleteForm) {
       deleteForm.action = '';
     }
-    if (footer) {
-      footer.classList.remove('justify-between');
-      footer.classList.add('justify-end');
-    }
+    window.setModalFooterLayout(footer, false);
 
     // dateパラメータがある場合、起床時刻のデフォルト値を設定
     if (date) {
@@ -100,17 +95,12 @@ window.openSleepRecordModal = function(mode, recordId = null, wakeTime = null, b
 
     submitBtn.value = modal.dataset.labelUpdate;
 
-    // 削除ボタンを表示して、削除フォームのactionを設定、フッターを左右配置
-    if (deleteBtn) {
-      deleteBtn.classList.remove('hidden');
-    }
+    // 削除ボタンを表示して、削除フォームのactionを設定、フッターを左右配置（ヘルパー関数を使用）
+    window.toggleModalElement(deleteBtn, true);
     if (deleteForm) {
       deleteForm.action = `/sleep_records/${recordId}`;
     }
-    if (footer) {
-      footer.classList.remove('justify-end');
-      footer.classList.add('justify-between');
-    }
+    window.setModalFooterLayout(footer, true);
 
     // 起床時刻を分離
     if (wakeTime) {

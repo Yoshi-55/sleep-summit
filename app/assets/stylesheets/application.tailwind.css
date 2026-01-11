@@ -67,3 +67,68 @@
 .navbar-menu {
   background-color: oklch(24.353% 0 0) !important;
 }
+
+/* カスタムコンポーネントクラス */
+@layer components {
+  /* アイコン関連 */
+  .icon-standard {
+    @apply h-5 w-5 text-base-content/70 flex-shrink-0;
+  }
+
+  .icon-small {
+    @apply h-4 w-4;
+  }
+
+  .icon-tiny {
+    @apply h-3 w-3;
+  }
+
+  /* テキスト関連 */
+  .text-label {
+    @apply text-xs text-base-content/70;
+  }
+
+  .text-label-light {
+    @apply text-xs text-base-content/60;
+  }
+
+  .text-section-title {
+    @apply text-2xl font-bold mb-4;
+  }
+
+  .text-card-title {
+    @apply text-lg font-bold;
+  }
+
+  /* レイアウト・スペーシング関連 */
+  .section-spacer {
+    @apply mb-8;
+  }
+
+  .element-spacer {
+    @apply mb-4;
+  }
+
+  .event-info-item {
+    @apply flex items-start gap-2;
+  }
+
+  /* フォーム関連 */
+  .form-field {
+    @apply form-control mb-4;
+  }
+
+  .input-standard {
+    @apply input input-bordered w-full;
+  }
+
+  /* ボタン関連 */
+  .btn-modal-close {
+    @apply btn btn-sm btn-circle btn-ghost absolute right-2 top-2;
+  }
+
+  /* モーダル関連 */
+  .modal-container {
+    @apply modal-box max-w-2xl;
+  }
+}
