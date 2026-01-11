@@ -17,18 +17,15 @@ class HistoryController < ApplicationController
 
     @series = SleepRecordChartBuilder.new(sleep_records).build_series(range: start_date.beginning_of_day..end_date.end_of_day)
 
-    # 日ごと集計して平均を計算（累計 ÷ 記録のある日数）
-    valid_wake_days = @monthly_records.select { |d| d[:day].is_a?(Date) && d[:day] < Date.current && d[:daily_wake_hours].present? }
-    valid_sleep_days = @monthly_records.select { |d| d[:day].is_a?(Date) && d[:day] < Date.current && d[:daily_sleep_hours].present? }
+    averages = aggregator.average_daily_hours(@monthly_records, exclude_today: true)
+    @month_average_wake_hours = averages[:wake]
+    @month_average_sleep_hours = averages[:sleep]
 
-    @month_average_wake_hours = valid_wake_days.any? ? (valid_wake_days.sum { |d| d[:daily_wake_hours] } / valid_wake_days.size).round(2) : 0.0
-    @month_average_sleep_hours = valid_sleep_days.any? ? (valid_sleep_days.sum { |d| d[:daily_sleep_hours] } / valid_sleep_days.size).round(2) : 0.0
-
-    valid_wake_records  = finished_records.select { |r| r.wake_time.present? }
-    valid_sleep_records = finished_records.select { |r| r.wake_time.present? && r.bed_time.present? }
+    valid_wake_records = finished_records.select { |r| r.wake_time.present? && r.wake_time.to_date < Date.current }
+    valid_sleep_records = finished_records.select { |r| r.wake_time.present? && r.bed_time.present? && r.wake_time.to_date < Date.current }
 
     @month_average_wake_time = SleepRecordAggregator.new(valid_wake_records).average_time(:wake_time)
-    @month_average_bed_time  = SleepRecordAggregator.new(valid_sleep_records).average_time(:bed_time)
+    @month_average_bed_time = SleepRecordAggregator.new(valid_sleep_records).average_time(:bed_time)
 
     @selected_year  = year
     @selected_month = month
