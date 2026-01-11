@@ -1,6 +1,5 @@
 class SleepRecordsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_unwoken_record, only: [ :create ]
   before_action :set_sleep_record, only: [ :edit, :update, :destroy ]
 
   def new
@@ -16,20 +15,39 @@ class SleepRecordsController < ApplicationController
   end
 
   def create
-    if params[:sleep_record].present?
-      create_from_form
+    create_from_form
+  end
+
+  def record_wake
+    @unwoken_record = current_user.sleep_records.unbedded.first
+    return redirect_with_flash(:alert, I18n.t("sleep_records.create.already_has_unwoken_record")) if @unwoken_record
+
+    last_record = current_user.sleep_records.order(:wake_time).last
+    if last_record && last_record.bed_time.nil?
+      return redirect_with_flash(:alert, I18n.t("sleep_records.create.need_previous_bed_time"))
+    end
+
+    sleep_record = current_user.sleep_records.build(wake_time: Time.current)
+    if sleep_record.save
+      redirect_with_flash(:notice, I18n.t("sleep_records.create.wake_time_recorded"))
     else
-      return redirect_with_flash(:alert, I18n.t("sleep_records.create.already_has_unwoken_record")) if @unwoken_record
-      create_wake_record
+      redirect_with_flash(:alert, I18n.t("sleep_records.create.wake_time_failed", errors: sleep_record.errors.full_messages.join(", ")))
+    end
+  end
+
+  def record_bed
+    unwoken_record = current_user.sleep_records.unbedded.first
+    return redirect_with_flash(:alert, I18n.t("sleep_records.update.no_unwoken_record")) unless unwoken_record
+
+    if unwoken_record.update(bed_time: Time.current)
+      redirect_with_flash(:notice, I18n.t("sleep_records.update.bed_time_recorded"))
+    else
+      redirect_with_flash(:alert, I18n.t("sleep_records.update.bed_time_failed", errors: unwoken_record.errors.full_messages.join(", ")))
     end
   end
 
   def update
-    if params[:record_type] == "bed_time"
-      update_bed_time
-    else
-      update_sleep_record
-    end
+    update_sleep_record
   end
 
   def edit
@@ -57,24 +75,6 @@ class SleepRecordsController < ApplicationController
 
   def set_sleep_record
     @sleep_record = current_user.sleep_records.find(params[:id])
-  end
-
-  def set_unwoken_record
-    @unwoken_record = current_user.sleep_records.unbedded.first
-  end
-
-  def create_wake_record
-    last_record = current_user.sleep_records.order(:wake_time).last
-    if last_record && last_record.bed_time.nil?
-      return redirect_with_flash(:alert, I18n.t("sleep_records.create.need_previous_bed_time"))
-    end
-
-    sleep_record = current_user.sleep_records.build(wake_time: Time.current)
-    if sleep_record.save
-      redirect_with_flash(:notice, I18n.t("sleep_records.create.wake_time_recorded"))
-    else
-      redirect_with_flash(:alert, I18n.t("sleep_records.create.wake_time_failed", errors: sleep_record.errors.full_messages.join(", ")))
-    end
   end
 
   def create_from_form
@@ -107,17 +107,6 @@ class SleepRecordsController < ApplicationController
         format.html { redirect_to session.delete(:return_to) || authenticated_root_path, alert: I18n.t("sleep_records.create.record_failed", errors: @sleep_record.errors.full_messages.join(", ")) }
         format.json { render json: { errors: @sleep_record.errors.full_messages }, status: :unprocessable_entity }
       end
-    end
-  end
-
-  def update_bed_time
-    unwoken_record = current_user.sleep_records.unbedded.first
-    return redirect_with_flash(:alert, I18n.t("sleep_records.update.no_unwoken_record")) unless unwoken_record
-
-    if unwoken_record.update(bed_time: Time.current)
-      redirect_with_flash(:notice, I18n.t("sleep_records.update.bed_time_recorded"))
-    else
-      redirect_with_flash(:alert, I18n.t("sleep_records.update.bed_time_failed", errors: unwoken_record.errors.full_messages.join(", ")))
     end
   end
 
