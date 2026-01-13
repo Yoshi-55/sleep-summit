@@ -15,14 +15,14 @@ RSpec.describe "Dashboard", type: :system do
 
   it "起床→就寝の記録フローが正常に動作すること" do
     # 起床記録
-    find('button[data-test="mobile-wake-button"], button[data-test="desktop-wake-button"]', match: :first).click
-    expect(page).to have_content(I18n.t('dashboard.index.wake_record'))
+    click_button I18n.t('dashboard.index.wake_record'), match: :first
+    expect(page).to have_content(I18n.t('sleep_records.create.wake_time_recorded'))
 
     # 就寝記録ボタンが有効になる
     expect(page).to have_button(I18n.t('dashboard.index.bed_record'), disabled: false)
 
     # 就寝記録
-    find('button[data-test="mobile-bed-button"], button[data-test="desktop-bed-button"]', match: :first).click
-    expect(page).to have_content(I18n.t('dashboard.index.bed_record'))
+    click_button I18n.t('dashboard.index.bed_record'), match: :first
+    expect(page).to have_content(I18n.t('sleep_records.update.bed_time_recorded'))
   end
 end
