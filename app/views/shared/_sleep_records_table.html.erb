@@ -18,7 +18,7 @@
                     </h4>
                     <% if record[:id].present? %>
                       <% if record[:day].is_a?(Date) && record[:day].to_date < Time.current.to_date %>
-                        <button onclick="event.stopPropagation(); openSleepRecordModal('edit', <%= record[:id] %>, '<%= record[:wake_times].present? ? Time.parse(record[:wake_times].first).strftime('%Y-%m-%dT%H:%M') : '' %>', '<%= record[:bed_times].present? ? Time.parse(record[:bed_times].last).strftime('%Y-%m-%dT%H:%M') : '' %>')" class="btn btn-xs btn-outline">編集</button>
+                        <button onclick="event.stopPropagation(); openSleepRecordModal('edit', <%= record[:id] %>, '<%= record[:wake_times].present? ? Time.parse(record[:wake_times].first).strftime('%Y-%m-%dT%H:%M') : '' %>', '<%= record[:bed_times].present? ? Time.parse(record[:bed_times].last).strftime('%Y-%m-%dT%H:%M') : '' %>', <%= record[:mood].present? ? "'#{record[:mood]}'" : 'null' %>)" class="btn btn-xs btn-outline">編集</button>
                       <% end %>
                     <% else %>
                       <% if record[:day].is_a?(Date) && record[:day].to_date < Time.current.to_date %>
@@ -77,6 +77,15 @@
                   </div>
 
                   <div>
+                    <div class="text-xs text-base-content/70 mb-1"><%= t('dashboard.index.mood') %></div>
+                    <% if record[:mood].present? %>
+                      <%= mood_icon(record[:mood]) %>
+                    <% else %>
+                      <span class="text-base-content/40">-</span>
+                    <% end %>
+                  </div>
+
+                  <div>
                     <div class="text-xs text-base-content/70 mb-1"><%= t('dashboard.index.cumulative_wake_hours') %></div>
                     <div class="text-accent text-sm font-semibold">
                       <%= record[:cumulative_wake_hours] || '-' %>
@@ -104,6 +113,7 @@
               <th class="px-4 py-3 text-sm font-semibold text-base-content/70"><%= t('dashboard.index.date') %></th>
               <th class="px-4 py-3 text-sm font-semibold text-base-content/70"><%= t('dashboard.index.wake_time') %></th>
               <th class="px-4 py-3 text-sm font-semibold text-base-content/70"><%= t('dashboard.index.bed_time') %></th>
+              <th class="px-4 py-3 text-sm font-semibold text-base-content/70"><%= t('dashboard.index.mood') %></th>
               <th class="px-4 py-3 text-sm font-semibold text-base-content/70"><%= t('dashboard.index.daily_wake_hours') %></th>
               <th class="px-4 py-3 text-sm font-semibold text-base-content/70"><%= t('dashboard.index.daily_sleep_hours') %></th>
               <th class="px-4 py-3 text-sm font-semibold text-base-content/70"><%= t('dashboard.index.cumulative_wake_hours') %></th>
@@ -139,6 +149,13 @@
                     <span class="text-base-content/40">-</span>
                   <% end %>
                 </td>
+                <td class="px-4 py-3 text-center">
+                  <% if record[:mood].present? %>
+                    <%= mood_icon(record[:mood]) %>
+                  <% else %>
+                    <span class="text-base-content/40">-</span>
+                  <% end %>
+                </td>
                 <td class="px-4 py-3 text-accent font-semibold">
                   <%= record[:daily_wake_hours] ? sprintf("%.2f", record[:daily_wake_hours]) : '-' %>
                 </td>
@@ -154,7 +171,7 @@
                 <td class="px-4 py-3">
                   <% if record[:id].present? %>
                     <% if record[:day].is_a?(Date) && record[:day].to_date < Time.current.to_date %>
-                      <button onclick="openSleepRecordModal('edit', <%= record[:id] %>, '<%= record[:wake_times].present? ? Time.parse(record[:wake_times].first).strftime('%Y-%m-%dT%H:%M') : '' %>', '<%= record[:bed_times].present? ? Time.parse(record[:bed_times].last).strftime('%Y-%m-%dT%H:%M') : '' %>')" class="btn btn-xs btn-outline whitespace-nowrap">編集</button>
+                      <button onclick="openSleepRecordModal('edit', <%= record[:id] %>, '<%= record[:wake_times].present? ? Time.parse(record[:wake_times].first).strftime('%Y-%m-%dT%H:%M') : '' %>', '<%= record[:bed_times].present? ? Time.parse(record[:bed_times].last).strftime('%Y-%m-%dT%H:%M') : '' %>', <%= record[:mood].present? ? "'#{record[:mood]}'" : 'null' %>)" class="btn btn-xs btn-outline whitespace-nowrap">編集</button>
                     <% end %>
                   <% else %>
                     <% if record[:day].is_a?(Date) && record[:day].to_date < Time.current.to_date %>

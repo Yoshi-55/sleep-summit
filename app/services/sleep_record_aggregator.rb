@@ -108,6 +108,7 @@ class SleepRecordAggregator
       day: first.wake_time.to_date,
       wake_times: [ format_time(first.wake_time) ],
       bed_times: last.bed_time ? [ format_time(last.bed_time) ] : [],
+      mood: first.mood,
       daily_sleep_hours: daily_sleep(first, all_records),
       daily_wake_hours: daily_wake(first, last),
       cumulative_sleep_hours: format_cumulative(cumulative_sleep),

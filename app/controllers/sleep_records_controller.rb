@@ -27,7 +27,10 @@ class SleepRecordsController < ApplicationController
       return redirect_with_flash(:alert, I18n.t("sleep_records.create.need_previous_bed_time"))
     end
 
-    sleep_record = current_user.sleep_records.build(wake_time: Time.current)
+    attributes = { wake_time: Time.current }
+    attributes[:mood] = params[:sleep_record][:mood] if params[:sleep_record] && params[:sleep_record][:mood].present?
+
+    sleep_record = current_user.sleep_records.build(attributes)
     if sleep_record.save
       redirect_with_flash(:notice, I18n.t("sleep_records.create.wake_time_recorded"))
     else
@@ -39,7 +42,10 @@ class SleepRecordsController < ApplicationController
     unwoken_record = current_user.sleep_records.unbedded.first
     return redirect_with_flash(:alert, I18n.t("sleep_records.update.no_unwoken_record")) unless unwoken_record
 
-    if unwoken_record.update(bed_time: Time.current)
+    attributes = { bed_time: Time.current }
+    attributes[:mood] = params[:sleep_record][:mood] if params[:sleep_record] && params[:sleep_record][:mood].present?
+
+    if unwoken_record.update(attributes)
       redirect_with_flash(:notice, I18n.t("sleep_records.update.bed_time_recorded"))
     else
       redirect_with_flash(:alert, I18n.t("sleep_records.update.bed_time_failed", errors: unwoken_record.errors.full_messages.join(", ")))
@@ -84,6 +90,7 @@ class SleepRecordsController < ApplicationController
     attributes = {}
     attributes[:wake_time] = Time.zone.parse(wake_time_param) if wake_time_param.present?
     attributes[:bed_time] = Time.zone.parse(bed_time_param) if bed_time_param.present?
+    attributes[:mood] = params[:sleep_record][:mood] if params[:sleep_record][:mood].present?
 
     # 当日以降のレコードは作成不可
     if attributes[:wake_time] && attributes[:wake_time].to_date >= Time.current.to_date
@@ -117,6 +124,7 @@ class SleepRecordsController < ApplicationController
     attributes = {}
     attributes[:wake_time] = Time.zone.parse(wake_time_param) if wake_time_param.present?
     attributes[:bed_time] = Time.zone.parse(bed_time_param) if bed_time_param.present?
+    attributes[:mood] = params[:sleep_record][:mood] if params[:sleep_record][:mood].present?
 
     if @sleep_record.update(attributes)
       return_path = session.delete(:return_to) || authenticated_root_path
@@ -135,7 +143,7 @@ class SleepRecordsController < ApplicationController
   end
 
   def sleep_record_params
-    params.require(:sleep_record).permit(:wake_time, :bed_time)
+    params.require(:sleep_record).permit(:wake_time, :bed_time, :mood)
   end
 
   def redirect_with_flash(type, message)
