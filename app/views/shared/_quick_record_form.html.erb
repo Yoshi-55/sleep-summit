@@ -1,0 +1,86 @@
+<div class="space-y-4" id="quick-record-form-<%= device %>">
+  <!-- 起床・就寝ボタン -->
+  <div class="space-y-3">
+    <%= form_with url: record_wake_sleep_records_path, method: :post, local: true, id: "wake-form-#{device}" do |f| %>
+      <input type="hidden" name="sleep_record[mood]" id="<%= device %>_wake_mood_value">
+      <%= f.submit I18n.t('dashboard.index.wake_record'),
+          class: "btn btn-primary btn-lg w-full #{'btn-disabled' if unwoken_record.present?}",
+          disabled: unwoken_record.present?,
+          data: { test: "#{device}-wake-button" },
+          onclick: "copyMemoToWakeForm('#{device}')" %>
+    <% end %>
+
+    <% if unwoken_record %>
+      <%= form_with url: record_bed_sleep_record_path(unwoken_record), method: :patch, local: true, id: "bed-form-#{device}" do |f| %>
+        <input type="hidden" name="sleep_record[mood]" id="<%= device %>_bed_mood_value">
+        <%= f.submit I18n.t('dashboard.index.bed_record'),
+            class: "btn btn-secondary btn-lg w-full",
+            data: { test: "#{device}-bed-button" },
+            onclick: "copyMemoToBedForm('#{device}')" %>
+      <% end %>
+    <% else %>
+      <button type="button" class="btn btn-secondary btn-lg w-full btn-disabled" disabled data-test="<%= device %>-bed-button">
+        <%= I18n.t('dashboard.index.bed_record') %>
+      </button>
+    <% end %>
+  </div>
+
+  <!-- 気分 -->
+  <div class="divider text-sm"><%= t('sleep_records.form.mood_label') %></div>
+  <div class="form-control">
+    <div class="flex flex-col items-center gap-2">
+      <span class="text-6xl" id="<%= device %>_mood_emoji">😐</span>
+      <input type="range" min="1" max="5" value="3" step="1" id="<%= device %>_mood_range" class="range range-primary range-sm w-full" oninput="update<%= device.capitalize %>MoodDisplay(this.value)">
+    </div>
+    <input type="hidden" name="<%= device %>_mood" id="<%= device %>_mood_value" value="">
+    <div class="w-full flex justify-between px-1 mt-1 text-xs text-base-content/70">
+      <span>悪い</span>
+      <span>最高</span>
+    </div>
+  </div>
+</div>
+
+<script>
+// スライダー値をhidden fieldに設定して絵文字も更新
+window['update<%= device.capitalize %>MoodDisplay'] = function(value) {
+  const moodKeys = {
+    1: 'very_bad',
+    2: 'bad',
+    3: 'neutral',
+    4: 'good',
+    5: 'very_good'
+  };
+  const moodEmojis = {
+    1: '😢',
+    2: '😕',
+    3: '😐',
+    4: '🙂',
+    5: '😊'
+  };
+
+  document.getElementById('<%= device %>_mood_value').value = moodKeys[value] || '';
+  const emojiElement = document.getElementById('<%= device %>_mood_emoji');
+  if (emojiElement) {
+    emojiElement.textContent = moodEmojis[value] || '😐';
+  }
+};
+
+// 初期値を設定
+document.addEventListener('DOMContentLoaded', function() {
+  window['update<%= device.capitalize %>MoodDisplay'](3);
+});
+
+document.addEventListener('turbo:load', function() {
+  window['update<%= device.capitalize %>MoodDisplay'](3);
+});
+
+function copyMemoToWakeForm(device) {
+  const moodValue = document.getElementById(`${device}_mood_value`).value;
+  document.getElementById(`${device}_wake_mood_value`).value = moodValue || '';
+}
+
+function copyMemoToBedForm(device) {
+  const moodValue = document.getElementById(`${device}_mood_value`).value;
+  document.getElementById(`${device}_bed_mood_value`).value = moodValue || '';
+}
+</script>

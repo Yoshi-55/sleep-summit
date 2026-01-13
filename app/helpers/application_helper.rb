@@ -25,4 +25,15 @@ module ApplicationHelper
       }
     }
   end
+
+  def mood_icon(mood)
+    icons = {
+      "very_bad" => "😢",
+      "bad" => "😕",
+      "neutral" => "😐",
+      "good" => "🙂",
+      "very_good" => "😊"
+    }
+    content_tag(:span, icons[mood.to_s], class: "text-2xl", title: t("sleep_records.moods.#{mood}"))
+  end
 end

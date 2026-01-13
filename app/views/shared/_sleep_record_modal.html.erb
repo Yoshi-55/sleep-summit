@@ -57,6 +57,21 @@
         <%= f.hidden_field :bed_time, id: "modal_bed_time" %>
       </div>
 
+      <!-- 気分 -->
+      <div class="divider"><%= t('sleep_records.form.mood_label') %></div>
+
+      <div class="form-control">
+        <div class="flex flex-col items-center gap-2">
+          <span class="text-7xl" id="modal_mood_emoji">😐</span>
+          <input type="range" min="1" max="5" value="3" step="1" id="modal_mood_range" class="range range-primary w-full" oninput="updateModalMoodDisplay(this.value)">
+        </div>
+        <%= f.hidden_field :mood, id: "modal_mood_hidden" %>
+        <div class="w-full flex justify-between px-1 mt-2 text-sm text-base-content/70">
+          <span>悪い</span>
+          <span>最高</span>
+        </div>
+      </div>
+
       <div class="flex justify-end gap-2 pt-4 border-t border-base-300" id="sleep_record_modal_footer">
         <!-- 削除ボタン（編集時のみ表示） -->
         <button type="button"

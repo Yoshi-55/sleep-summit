@@ -18,6 +18,7 @@ ja:
       cumulative_sleep_hours: "週累計睡眠（h）"
       wake_record: "起床記録"
       bed_record: "就寝記録"
+      mood: "気分"
   history:
     index:
       page_title: "履歴"
@@ -37,6 +38,7 @@ ja:
       daily_sleep_hours: "睡眠時間（h）"
       cumulative_wake_hours: "月累計活動（h）"
       cumulative_sleep_hours: "月累計睡眠（h）"
+      mood: "気分"
   profiles:
     show:
       page_title: "プロフィール"
@@ -83,6 +85,14 @@ ja:
     terms: "利用規約"
     privacy: "プライバシーポリシー"
   sleep_records:
+    form:
+      mood_label: "気分"
+    moods:
+      very_bad: "とても悪い"
+      bad: "悪い"
+      neutral: "普通"
+      good: "良い"
+      very_good: "とても良い"
     new:
       page_title: "睡眠記録を追加"
       wake_time_label: "起床時刻"

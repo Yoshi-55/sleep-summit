@@ -1,7 +1,16 @@
 class SleepRecord < ApplicationRecord
   belongs_to :user
 
+  enum :mood, {
+    very_bad: 1,
+    bad: 2,
+    neutral: 3,
+    good: 4,
+    very_good: 5
+  }, prefix: true
+
   validates :wake_time, presence: true
+  validates :mood, inclusion: { in: moods.keys, allow_nil: true }
   validate :bed_time_after_wake_time
   validate :times_not_in_future
   validate :wake_time_after_previous_bed_time

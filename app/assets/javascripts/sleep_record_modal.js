@@ -1,3 +1,25 @@
+// ヘルパー関数: 要素の表示/非表示を切り替え
+window.toggleModalElement = function(element, show) {
+  if (!element) return;
+  if (show) {
+    element.classList.remove('hidden');
+  } else {
+    element.classList.add('hidden');
+  }
+};
+
+// ヘルパー関数: モーダルフッターのレイアウトを設定
+window.setModalFooterLayout = function(footer, hasDeleteButton) {
+  if (!footer) return;
+  if (hasDeleteButton) {
+    footer.classList.remove('justify-end');
+    footer.classList.add('justify-between');
+  } else {
+    footer.classList.remove('justify-between');
+    footer.classList.add('justify-end');
+  }
+};
+
 // 削除処理
 window.deleteSleepRecord = function() {
   if (!confirm('本当に削除しますか？')) {
@@ -29,7 +51,7 @@ function updateBedTimeHidden() {
   }
 }
 
-window.openSleepRecordModal = function(mode, recordId = null, wakeTime = null, bedTime = null, date = null) {
+window.openSleepRecordModal = function(mode, recordId = null, wakeTime = null, bedTime = null, date = null, mood = null) {
   const modal = document.getElementById('sleep_record_modal');
   const form = document.getElementById('sleep_record_form');
   const title = document.getElementById('sleep_record_modal_title');
@@ -79,6 +101,9 @@ window.openSleepRecordModal = function(mode, recordId = null, wakeTime = null, b
       document.getElementById('modal_bed_time_only').value = '22:00';
       updateBedTimeHidden();
     }
+
+    // メモフィールドをクリア
+    clearMemoFields();
   } else if (mode === 'edit') {
     title.textContent = modal.dataset.titleEdit;
     form.action = `/sleep_records/${recordId}`;
@@ -121,10 +146,72 @@ window.openSleepRecordModal = function(mode, recordId = null, wakeTime = null, b
       document.getElementById('modal_bed_time_only').value = '';
       document.getElementById('modal_bed_time').value = '';
     }
+
+    // メモフィールドを設定
+    setMemoFields(mood);
   }
 
   modal.showModal();
 };
+
+// スライダーの表示を更新（現在は不要だが、互換性のため残す）
+window.updateMoodDisplay = function(value) {
+  // 何もしない（表示は絵文字のみ）
+};
+
+// モーダルのスライダー値をenumキーに変換して絵文字も更新
+window.updateModalMoodDisplay = function(value) {
+  const moodKeys = {
+    1: 'very_bad',
+    2: 'bad',
+    3: 'neutral',
+    4: 'good',
+    5: 'very_good'
+  };
+  const moodEmojis = {
+    1: '😢',
+    2: '😕',
+    3: '😐',
+    4: '🙂',
+    5: '😊'
+  };
+
+  document.getElementById('modal_mood_hidden').value = moodKeys[value] || '';
+  const emojiElement = document.getElementById('modal_mood_emoji');
+  if (emojiElement) {
+    emojiElement.textContent = moodEmojis[value] || '😐';
+  }
+};
+
+// 気分フィールドをクリア
+function clearMemoFields() {
+  const moodRange = document.getElementById('modal_mood_range');
+  if (moodRange) {
+    moodRange.value = 3; // デフォルトは「普通」
+    updateModalMoodDisplay(3); // hidden fieldと絵文字も更新
+  }
+}
+
+// 気分フィールドを設定
+function setMemoFields(mood) {
+  const moodValues = {
+    'very_bad': 1,
+    'bad': 2,
+    'neutral': 3,
+    'good': 4,
+    'very_good': 5
+  };
+
+  const moodRange = document.getElementById('modal_mood_range');
+  if (moodRange) {
+    let moodValue = 3; // デフォルト
+    if (mood && mood !== '' && mood !== 'null' && moodValues[mood]) {
+      moodValue = moodValues[mood];
+    }
+    moodRange.value = moodValue;
+    updateModalMoodDisplay(moodValue); // hidden fieldと絵文字も更新
+  }
+}
 
 // フォーム送信時の処理
 function setupSleepRecordForm() {

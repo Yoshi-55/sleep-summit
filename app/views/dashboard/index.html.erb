@@ -19,19 +19,7 @@
 
         <!-- 記録カード（モバイル） -->
         <%= render 'shared/card', class: 'lg:hidden min-w-0' do %>
-          <div class="space-y-3">
-            <%= button_to I18n.t('dashboard.index.wake_record'), record_wake_sleep_records_path,
-                method: :post,
-                class: "btn btn-primary btn-lg w-full #{'btn-disabled' if @unwoken_record.present?}",
-                disabled: @unwoken_record.present?,
-                data: { test: 'mobile-wake-button' } %>
-            <%= button_to I18n.t('dashboard.index.bed_record'),
-                (@unwoken_record ? record_bed_sleep_record_path(@unwoken_record) : "#"),
-                method: :patch,
-                class: "btn btn-secondary btn-lg w-full #{'btn-disabled' if @unwoken_record.nil?}",
-                disabled: @unwoken_record.nil?,
-                data: { test: 'mobile-bed-button' } %>
-          </div>
+          <%= render 'shared/quick_record_form', unwoken_record: @unwoken_record, device: 'mobile' %>
         <% end %>
 
         <!-- 記録テーブル -->
@@ -57,19 +45,7 @@
 
         <!-- 記録カード -->
         <%= render 'shared/card' do %>
-          <div class="space-y-3">
-            <%= button_to I18n.t('dashboard.index.wake_record'), record_wake_sleep_records_path,
-                method: :post,
-                class: "btn btn-primary btn-lg w-full #{'btn-disabled' if @unwoken_record.present?}",
-                disabled: @unwoken_record.present?,
-                data: { test: 'desktop-wake-button' } %>
-            <%= button_to I18n.t('dashboard.index.bed_record'),
-                (@unwoken_record ? record_bed_sleep_record_path(@unwoken_record) : "#"),
-                method: :patch,
-                class: "btn btn-secondary btn-lg w-full #{'btn-disabled' if @unwoken_record.nil?}",
-                disabled: @unwoken_record.nil?,
-                data: { test: 'desktop-bed-button' } %>
-          </div>
+          <%= render 'shared/quick_record_form', unwoken_record: @unwoken_record, device: 'desktop' %>
         <% end %>
 
       </div>
